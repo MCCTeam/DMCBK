@@ -14,7 +14,7 @@ public sealed class ClientSettingsMappingTests
     [Fact]
     public void NonDefaultLocaleAndRenderDistance_ProjectOntoClientOptions()
     {
-        var config = new MccConfiguration
+        var config = new DmcbkConfiguration
         {
             ClientSettings = new ClientSettingsConfig { Locale = "fr_FR", RenderDistance = 12 },
         };
@@ -57,7 +57,7 @@ public sealed class ClientSettingsMappingTests
     [Fact]
     public void DefaultClientSettings_CarryVanillaDefaults()
     {
-        var config = new MccConfiguration();
+        var config = new DmcbkConfiguration();
 
         Assert.Equal("en_US", config.ClientSettings.Locale);
 
@@ -71,7 +71,7 @@ public sealed class ClientSettingsMappingTests
     [Fact]
     public void RenderDistance_WidensToViewDistance_WithoutLoss()
     {
-        var config = new MccConfiguration
+        var config = new DmcbkConfiguration
         {
             ClientSettings = new ClientSettingsConfig { RenderDistance = 32 },
         };

@@ -34,7 +34,7 @@ public sealed class ConnectCommandTests
     [InlineData("play.example.net:25566", "play.example.net", 25566)]
     public void ResolveServer_TakesABareAddressWhenNoConfiguredNameMatches(string value, string host, int port)
     {
-        ConfiguredServer? resolved = SessionCommandHelpers.ResolveServer(new MccConfiguration(), value);
+        ConfiguredServer? resolved = SessionCommandHelpers.ResolveServer(new DmcbkConfiguration(), value);
 
         Assert.NotNull(resolved);
         Assert.Equal(host, resolved.Host);
@@ -48,12 +48,12 @@ public sealed class ConnectCommandTests
     [InlineData("host:notaport")]
     [InlineData("host:99999")]
     public void ResolveServer_RefusesWhatIsNeitherANameNorAnAddress(string value)
-        => Assert.Null(SessionCommandHelpers.ResolveServer(new MccConfiguration(), value));
+        => Assert.Null(SessionCommandHelpers.ResolveServer(new DmcbkConfiguration(), value));
 
     [Fact]
     public void ResolveServer_PrefersAConfiguredNameOverReadingItAsAHost()
     {
-        var config = new MccConfiguration
+        var config = new DmcbkConfiguration
         {
             Servers = new ServersConfig
             {
@@ -79,11 +79,11 @@ public sealed class ConnectCommandTests
     }
 
     private static Client BuildClient()
-        => new ClientBuilder().UseCommands().UseBeacon().UseConfiguration(new MccConfiguration
+        => new ClientBuilder().UseCommands().UseBeacon().UseConfiguration(new DmcbkConfiguration
         {
             ResolvedHost = "localhost",
             ResolvedPort = 25565,
             ResolvedVersion = "auto",
-            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = MccAccountKind.Offline },
+            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = DmcbkAccountKind.Offline },
         }).Build();
 }

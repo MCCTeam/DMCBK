@@ -135,7 +135,7 @@ public sealed class ScriptsApiTests : IDisposable
         string configs = Path.Combine(_root, "configurations");
         Directory.CreateDirectory(configs);
         return new ClientBuilder().UseCommands().UseBeacon()
-            .UseConfiguration(new MccConfiguration { SourceFolder = configs })
+            .UseConfiguration(new DmcbkConfiguration { SourceFolder = configs })
             .UseUsername("Tester")
             .UseServer("localhost")
             .UseHostInterface(new SilentHost())

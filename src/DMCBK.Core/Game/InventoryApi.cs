@@ -8,7 +8,7 @@ namespace DMCBK.Core;
 
 /// <summary>
 /// The inventory/container surface: player-inventory and open-container snapshots, container clicks (pickup/quick-move/swap/clone/throw), creative slot set, close, trade selection, held-slot get/select, and the cursor stack.
-/// Requires the Inventory feature; disabled features surface <see cref="MccFeatureDisabledException"/>.
+/// Requires the Inventory feature; disabled features surface <see cref="DmcbkFeatureDisabledException"/>.
 ///
 /// <para>
 /// Also the host-facing notice that a window opened or closed (<see cref="ContainerOpened"/>/<see cref="ContainerClosed"/>), which is what lets a host announce a chest the way the legacy client did and show it without being asked.

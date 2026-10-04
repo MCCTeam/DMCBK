@@ -35,7 +35,7 @@ public sealed class ClientBrandTests
         var options = new ClientOptions();
         Client.ApplySessionOptions(
             options,
-            new MccConfiguration { Connection = new ConnectionConfig { Brand = BrandKind.Vanilla } });
+            new DmcbkConfiguration { Connection = new ConnectionConfig { Brand = BrandKind.Vanilla } });
 
         Assert.Equal("vanilla", options.ClientBrand);
     }

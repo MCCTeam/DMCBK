@@ -28,7 +28,7 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void Load_FirstRun_GeneratesAllFilesWithComments()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         ConfigurationLoadResult result = loader.Load(generateMissing: true);
 
         Assert.True(result.Generated);
@@ -51,7 +51,7 @@ public sealed class ConfigurationLoaderTests : IDisposable
     {
         // The bare `Account = [ ]` is cryptic without TOML experience, so generation includes a commented-out entry.
         // Commented out on purpose: a live example would become the active account and skip the first-run login prompt.
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         string accountsText = File.ReadAllText(ConfigurationPaths.AccountsFile(_folder));
@@ -62,11 +62,11 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void GeneratedDefaults_ParseBack_EqualDefaults()
     {
-        var loader = new MccConfigurationLoader(_folder);
-        MccConfiguration generated = loader.Load(generateMissing: true).Config;
+        var loader = new DmcbkConfigurationLoader(_folder);
+        DmcbkConfiguration generated = loader.Load(generateMissing: true).Config;
 
         // A second loader over the now-populated folder must not regenerate and must produce an equal snapshot.
-        var reader = new MccConfigurationLoader(_folder);
+        var reader = new DmcbkConfigurationLoader(_folder);
         ConfigurationLoadResult reread = reader.Load(generateMissing: true);
 
         Assert.False(reread.Generated);
@@ -81,8 +81,8 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void Reconnect_DefaultsAreGenerated_AndParseBack()
     {
-        var loader = new MccConfigurationLoader(_folder);
-        MccConfiguration generated = loader.Load(generateMissing: true).Config;
+        var loader = new DmcbkConfigurationLoader(_folder);
+        DmcbkConfiguration generated = loader.Load(generateMissing: true).Config;
 
         // Legacy default: auto-reconnect off (0 attempts), 5s fixed delay.
         Assert.Equal(0, generated.Connection.Reconnect.MaxAttempts);
@@ -97,7 +97,7 @@ public sealed class ConfigurationLoaderTests : IDisposable
         // Enabling it on disk parses back to a live policy.
         string clientPath = ConfigurationPaths.ClientFile(_folder);
         File.WriteAllText(clientPath, File.ReadAllText(clientPath).Replace("MaxAttempts = 0", "MaxAttempts = 4"));
-        MccConfiguration reread = new MccConfigurationLoader(_folder).Load(generateMissing: false).Config;
+        DmcbkConfiguration reread = new DmcbkConfigurationLoader(_folder).Load(generateMissing: false).Config;
         Assert.Equal(4, reread.Connection.Reconnect.MaxAttempts);
         Assert.NotNull(new ConfigReconnectPolicyProvider(reread.Connection.Reconnect).GetReconnectPolicy());
     }
@@ -105,14 +105,14 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void Load_ExistingFiles_DoesNotRewriteThem()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         string clientPath = ConfigurationPaths.ClientFile(_folder);
         DateTime before = File.GetLastWriteTimeUtc(clientPath);
 
         // A plain load (and a reload) must never write back.
-        var second = new MccConfigurationLoader(_folder);
+        var second = new DmcbkConfigurationLoader(_folder);
         second.Load(generateMissing: true);
         second.Reload();
 
@@ -122,7 +122,7 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void GitIgnore_IgnoresSecretsAndCache()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         string gitignore = File.ReadAllText(ConfigurationPaths.GitIgnoreFile(_folder));
@@ -133,7 +133,7 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void Secrets_LiveInAccountsFile_NotClientFile()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         string clientText = File.ReadAllText(ConfigurationPaths.ClientFile(_folder));
@@ -149,8 +149,8 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void Reload_ProducesNewSnapshot_AndFiresEvent()
     {
-        var loader = new MccConfigurationLoader(_folder);
-        MccConfiguration first = loader.Load(generateMissing: true).Config;
+        var loader = new DmcbkConfigurationLoader(_folder);
+        DmcbkConfiguration first = loader.Load(generateMissing: true).Config;
 
         // Mutate the file on disk (turn a feature gate off, since terrain now defaults on) and reload.
         string clientPath = ConfigurationPaths.ClientFile(_folder);
@@ -158,7 +158,7 @@ public sealed class ConfigurationLoaderTests : IDisposable
 
         ConfigurationReloadedEventArgs? captured = null;
         loader.Reloaded += (_, e) => captured = e;
-        MccConfiguration second = loader.Reload().Config;
+        DmcbkConfiguration second = loader.Reload().Config;
 
         Assert.NotSame(first, second);
         Assert.True(first.Gameplay.Terrain);
@@ -171,14 +171,14 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void UnknownKey_IsWarnedAndIgnored()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         string clientPath = ConfigurationPaths.ClientFile(_folder);
         // A valid-but-unknown key at the document root (before any table header) is warn-and-ignored.
         File.WriteAllText(clientPath, "NotARealSetting = 42\n" + File.ReadAllText(clientPath));
 
-        ConfigurationLoadResult reread = new MccConfigurationLoader(_folder).Load(generateMissing: false);
+        ConfigurationLoadResult reread = new DmcbkConfigurationLoader(_folder).Load(generateMissing: false);
 
         Assert.Contains(reread.Warnings, w => w.Message.Contains("NotARealSetting"));
         // Still usable: the known values survive.
@@ -188,14 +188,14 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void SaveAccount_WritesBackOnlyOnRequest()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         loader.SaveAccount(
-            new ConfiguredAccount { Name = "alt", Kind = MccAccountKind.Offline, Login = "AltHero" },
+            new ConfiguredAccount { Name = "alt", Kind = DmcbkAccountKind.Offline, Login = "AltHero" },
             makeActive: true);
 
-        MccConfiguration reread = new MccConfigurationLoader(_folder).Load(generateMissing: false).Config;
+        DmcbkConfiguration reread = new DmcbkConfigurationLoader(_folder).Load(generateMissing: false).Config;
         Assert.Equal("alt", reread.Accounts.ActiveAccount);
         Assert.Equal("AltHero", reread.ResolvedAccount.Login);
     }
@@ -203,14 +203,14 @@ public sealed class ConfigurationLoaderTests : IDisposable
     [Fact]
     public void SaveServer_UpsertsAndActivates()
     {
-        var loader = new MccConfigurationLoader(_folder);
+        var loader = new DmcbkConfigurationLoader(_folder);
         loader.Load(generateMissing: true);
 
         loader.SaveServer(
             new ConfiguredServer { Name = "smp", Host = "play.example.net", Port = 25566, Version = "1.21.5" },
             makeActive: true);
 
-        MccConfiguration reread = new MccConfigurationLoader(_folder).Load(generateMissing: false).Config;
+        DmcbkConfiguration reread = new DmcbkConfigurationLoader(_folder).Load(generateMissing: false).Config;
         Assert.Equal("smp", reread.Servers.ActiveServer);
         Assert.Equal("play.example.net", reread.ResolvedHost);
         Assert.Equal(25566, reread.ResolvedPort);

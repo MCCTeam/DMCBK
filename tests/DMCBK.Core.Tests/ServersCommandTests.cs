@@ -18,7 +18,7 @@ public sealed class ServersCommandTests : IDisposable
     public ServersCommandTests()
     {
         Directory.CreateDirectory(_folder);
-        new MccConfigurationLoader(_folder, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
+        new DmcbkConfigurationLoader(_folder, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
     }
 
     public void Dispose()
@@ -36,17 +36,17 @@ public sealed class ServersCommandTests : IDisposable
 
     private string ServersFile => ConfigurationPaths.ServersFile(_folder);
 
-    private Client BuildClient(MccConfiguration config)
+    private Client BuildClient(DmcbkConfiguration config)
         => new ClientBuilder().UseCommands().UseBeacon().UseConfiguration(config with
         {
             ResolvedHost = "localhost",
             ResolvedPort = 25565,
             ResolvedVersion = "auto",
-            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = MccAccountKind.Offline },
-        }).UseModule<DMCBK.Core.Configuration.IConfigurationStorage>(_ => new MccConfigurationLoader(config.SourceFolder ?? Path.GetTempPath())).Build();
+            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = DmcbkAccountKind.Offline },
+        }).UseModule<DMCBK.Core.Configuration.IConfigurationStorage>(_ => new DmcbkConfigurationLoader(config.SourceFolder ?? Path.GetTempPath())).Build();
 
     private Client BuildClient()
-        => BuildClient(new MccConfiguration { SourceFolder = _folder });
+        => BuildClient(new DmcbkConfiguration { SourceFolder = _folder });
 
     [Fact]
     public async Task Add_SavesEntrySelectsItAndConfirms()
@@ -137,7 +137,7 @@ public sealed class ServersCommandTests : IDisposable
     [Fact]
     public async Task Add_WithoutAConfigurationFolder_SaysSoRatherThanGuessing()
     {
-        await using Client client = BuildClient(new MccConfiguration());
+        await using Client client = BuildClient(new DmcbkConfiguration());
 
         CmdResult result = await client.Commands.DispatchAsync("servers add Home localhost");
 

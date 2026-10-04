@@ -395,12 +395,12 @@ public sealed record ConfiguredAccount
     public string Name { get; init; } = string.Empty;
 
     /// <summary>The authentication flow.</summary>
-    public MccAccountKind Kind { get; init; } = MccAccountKind.Offline;
+    public DmcbkAccountKind Kind { get; init; } = DmcbkAccountKind.Offline;
 
     /// <summary>The username (offline) or login hint/email (online).</summary>
     public string Login { get; init; } = string.Empty;
 
-    /// <summary>The Yggdrasil (authlib-injector) base URL for <see cref="MccAccountKind.Yggdrasil"/>; else null.</summary>
+    /// <summary>The Yggdrasil (authlib-injector) base URL for <see cref="DmcbkAccountKind.Yggdrasil"/>; else null.</summary>
     public string? AuthServer { get; init; }
 }
 

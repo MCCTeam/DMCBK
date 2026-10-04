@@ -5,7 +5,7 @@ using DMCBK.Core.Localization;
 namespace DMCBK.Core.Configuration;
 
 /// <summary>
-/// Pure validation/derivation: folds the mutable TOML file models into an immutable <see cref="MccConfiguration"/> snapshot, re-homing the legacy <c>OnSettingUpdate</c> clamps and derivations (cooldown/timeout/movement clamps, language normalization, badpacket-forces-terrain, account/server resolution) as pure functions with no session state.
+/// Pure validation/derivation: folds the mutable TOML file models into an immutable <see cref="DmcbkConfiguration"/> snapshot, re-homing the legacy <c>OnSettingUpdate</c> clamps and derivations (cooldown/timeout/movement clamps, language normalization, badpacket-forces-terrain, account/server resolution) as pure functions with no session state.
 /// Recoverable problems become <see cref="ConfigurationWarning"/>s, never exceptions.
 /// </summary>
 internal static partial class ConfigurationValidation
@@ -40,7 +40,7 @@ internal static partial class ConfigurationValidation
         ConfiguredAccount resolvedAccount = ResolveAccount(accountsConfig, warnings);
         (string host, ushort port, string version) = ResolveServer(connection, serversConfig, warnings);
 
-        var config = new MccConfiguration
+        var config = new DmcbkConfiguration
         {
             Connection = connection,
             Gameplay = gameplay,
@@ -455,26 +455,26 @@ internal static partial class ConfigurationValidation
         return cleaned.ToLowerInvariant();
     }
 
-    internal static MccAccountKind ParseAccountKind(string value, List<ConfigurationWarning> warnings, string accountName)
+    internal static DmcbkAccountKind ParseAccountKind(string value, List<ConfigurationWarning> warnings, string accountName)
     {
         switch ((value ?? string.Empty).Trim().ToLowerInvariant())
         {
             case "offline":
-                return MccAccountKind.Offline;
+                return DmcbkAccountKind.Offline;
             case "microsoft":
             case "microsoft-devicecode":
             case "device-code":
             case "devicecode":
-                return MccAccountKind.MicrosoftDeviceCode;
+                return DmcbkAccountKind.MicrosoftDeviceCode;
             case "microsoft-browser":
             case "browser":
-                return MccAccountKind.MicrosoftBrowser;
+                return DmcbkAccountKind.MicrosoftBrowser;
             case "yggdrasil":
-                return MccAccountKind.Yggdrasil;
+                return DmcbkAccountKind.Yggdrasil;
             default:
                 warnings.Add(new ConfigurationWarning(
                     $"Account '{accountName}' has unknown kind '{value}'; using 'offline'."));
-                return MccAccountKind.Offline;
+                return DmcbkAccountKind.Offline;
         }
     }
 
@@ -503,5 +503,5 @@ internal static partial class ConfigurationValidation
 
 /// <summary>The result of validating configuration: the immutable snapshot plus any recoverable warnings.</summary>
 internal sealed record ConfigurationValidationResult(
-    MccConfiguration Config,
+    DmcbkConfiguration Config,
     IReadOnlyList<ConfigurationWarning> Warnings);

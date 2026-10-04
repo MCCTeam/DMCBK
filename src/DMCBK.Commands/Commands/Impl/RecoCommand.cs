@@ -51,7 +51,7 @@ public sealed class RecoCommand : CommandBase
         CommandNodeBuilder<CommandContext> help = RegisterHelp(builder, CmdName, ShowUsage);
         builder.Literal(CmdName, l => l
             .Executes(ctx => Run(ctx.Source, null))
-            .ThenArgument("account", MccArguments.AccountNick(), h => h
+            .ThenArgument("account", DmcbkArguments.AccountNick(), h => h
                 .Suggests(SessionCommandHelpers.SuggestAccounts)
                 .Executes(ctx => Run(ctx.Source, ctx.GetArgument<string>("account"))))
             .ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help)));

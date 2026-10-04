@@ -29,5 +29,5 @@ public sealed record ServerSelection
 public sealed record AccountSelection
 {
     /// <summary>The account to reconnect as.</summary>
-    public required MccAccount Account { get; init; }
+    public required DmcbkAccount Account { get; init; }
 }

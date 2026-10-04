@@ -2082,7 +2082,7 @@ public static class BeaconParser
                         && !CheckSymbol(".") && !CheckSymbol("[") && !CheckSymbol("("))
                     {
                         BeaconExpr argument = ParsePostfix();
-                        return new MccExpr(SpanFrom(token.Span, argument.Span), argument);
+                        return new DmcbkExpr(SpanFrom(token.Span, argument.Span), argument);
                     }
 
                     return new IdentExpr(token.Span, token.Text);

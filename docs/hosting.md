@@ -56,7 +56,7 @@ Pass the host to `UseHostInterface`. A rich host can also implement `IHostUi` fo
 
 ## Authentication
 
-`UseUsername` creates an offline identity. Online accounts use `UseAccount` with `MccAccountKind.MicrosoftDeviceCode`, `MicrosoftBrowser` or `Yggdrasil`.
+`UseUsername` creates an offline identity. Online accounts use `UseAccount` with `DmcbkAccountKind.MicrosoftDeviceCode`, `MicrosoftBrowser` or `Yggdrasil`.
 
 1. Implement UMPK's `IAuthInteraction` in your host.
 2. Return the implementation from `IHostInterface.AuthInteraction`.

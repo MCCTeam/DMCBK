@@ -11,7 +11,7 @@ namespace DMCBK.Core.Tests;
 /// The one branch of version resolution MCC still owns: falling back to the host's <see cref="IUserPrompt"/> when the status ping fails.
 /// Parsing <c>version.protocol</c> and mapping it onto a catalog entry are now UMPK's own <c>ServerStatusParseTests</c>/<c>ServerVersionNegotiationTests</c>.
 /// </summary>
-public sealed class MccSessionFactoryTests
+public sealed class DmcbkSessionFactoryTests
 {
     [Fact]
     public async Task ResolveVersion_FallsBackToTheHostPrompt()

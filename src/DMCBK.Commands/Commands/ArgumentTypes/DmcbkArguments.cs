@@ -10,7 +10,7 @@ namespace DMCBK.Core.Commands.ArgumentTypes;
 /// A bare rename (<see cref="Location"/>, <see cref="Tuple"/>, <see cref="ItemType"/>, <see cref="EntityType"/>, <see cref="InventoryId"/>, <see cref="InventorySlot"/>) carries no suggestion-behavior loss because none of the legacy Brigadier argument types they replace offered any either.
 /// <see cref="HotbarSlot"/>, <see cref="ServerNick"/> and <see cref="AccountNick"/> DID offer live suggestions (nine slot numbers; configured server/account names); UMPK separates parsing from suggesting, so those three stay as bare type factories here and each call site attaches its own <c>.Suggests(...)</c> provider (see <c>ChangeSlotCommand</c> and <c>SessionCommandHelpers.SuggestServers</c>/<c>SuggestAccounts</c>).
 /// </summary>
-public static class MccArguments
+public static class DmcbkArguments
 {
     /// <summary>
     /// A vanilla coordinate triple: absolute, player-relative (<c>~</c>), or local (<c>^</c>, new with this swap - the legacy MCC parser never supported it).

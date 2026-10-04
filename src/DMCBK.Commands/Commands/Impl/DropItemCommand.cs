@@ -69,7 +69,7 @@ public sealed class DropItemCommand : CommandBase
             // Registering <count> first gives the integer form the win, and a non-integer token still falls through to <item> because the count parse fails on it.
             .ThenArgument("count", Count(), h => h
                 .Executes(ctx => DropHeld(ctx.Source, ctx.GetArgument<int>("count"))))
-            .ThenArgument("item", MccArguments.ItemType(), h => h
+            .ThenArgument("item", DmcbkArguments.ItemType(), h => h
                 .Executes(ctx => DropMatching(ctx.Source, ctx.GetArgument<Identifier>("item"), null))
                 .ThenArgument("count", Count(), c => c
                     .Executes(ctx => DropMatching(

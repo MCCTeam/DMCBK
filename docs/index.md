@@ -33,4 +33,4 @@ Start with a small client. Add commands, scripts or plugins when your applicatio
 | RID | A runtime identifier, such as `win-x64`, that describes an operating system and process architecture. |
 | Asset | One source or compiled archive for a plugin release. |
 
-The examples use DMCBK `0.1.0-preview.1`, UMPK `0.9.0-beta.4`, .NET 10 and C# 14. Several public type names still start with `Mcc`. Those names are part of the current DMCBK API. They do not require MCC source.
+The examples use DMCBK `0.1.0-preview.1`, UMPK `0.9.0-beta.4`, .NET 10 and C# 14. Former `Mcc`-prefixed types now use `Dmcbk`. Plugin authors do not need MCC source.

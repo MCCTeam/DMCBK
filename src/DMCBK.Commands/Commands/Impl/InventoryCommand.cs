@@ -89,21 +89,21 @@ public sealed class InventoryCommand : CommandBase
             l.ThenLiteral("inventories", h => h.Executes(ctx => ListAvailableInventories(ctx.Source)));
 
             l.ThenLiteral("search", h => h
-                .ThenArgument("item", MccArguments.ItemType(), a => a
+                .ThenArgument("item", DmcbkArguments.ItemType(), a => a
                     .Executes(ctx => SearchItem(ctx.Source, ctx.GetArgument<Identifier>("item"), null))
                     .ThenArgument("count", Arguments.Integer(1, 64), b => b
                         .Executes(ctx => SearchItem(
                             ctx.Source, ctx.GetArgument<Identifier>("item"), ctx.GetArgument<int>("count"))))));
 
             l.ThenLiteral("creativegive", h => h
-                .ThenArgument("slot", MccArguments.InventorySlot(), a => a
-                    .ThenArgument("item", MccArguments.ItemType(), b => b
+                .ThenArgument("slot", DmcbkArguments.InventorySlot(), a => a
+                    .ThenArgument("item", DmcbkArguments.ItemType(), b => b
                         .Executes(ctx => CreativeGive(ctx.Source, ctx.GetArgument<int>("slot"), ctx.GetArgument<Identifier>("item"), 1))
                         .ThenArgument("count", Arguments.Integer(1, 64), c => c
                             .Executes(ctx => CreativeGive(ctx.Source, ctx.GetArgument<int>("slot"), ctx.GetArgument<Identifier>("item"), ctx.GetArgument<int>("count")))))));
 
             l.ThenLiteral("creativedelete", h => h
-                .ThenArgument("slot", MccArguments.InventorySlot(), a => a
+                .ThenArgument("slot", DmcbkArguments.InventorySlot(), a => a
                     .Executes(ctx => CreativeDelete(ctx.Source, ctx.GetArgument<int>("slot")))));
 
             // The three ways legacy lets you name a window.
@@ -114,7 +114,7 @@ public sealed class InventoryCommand : CommandBase
             foreach (string alias in (string[])["container", "c"])
                 l.ThenLiteral(alias, h => RegisterActions(h, _ => WindowSelector.Container));
 
-            l.ThenArgument("id", MccArguments.InventoryId(), a =>
+            l.ThenArgument("id", DmcbkArguments.InventoryId(), a =>
             {
                 // Bare "/inventory <id>" is legacy's DoOpenOrList (Inventory.cs:64-65).
                 a.Executes(ctx => OpenOrList(ctx.Source, WindowSelector.ById(ctx.GetArgument<int>("id"))));
@@ -146,7 +146,7 @@ public sealed class InventoryCommand : CommandBase
         node.ThenLiteral("open", h => h.Executes(ctx => OpenWindow(ctx.Source, selector(ctx))));
         node.ThenLiteral("close", h => h.Executes(ctx => CloseWindow(ctx.Source, selector(ctx))));
         node.ThenLiteral("click", h => h
-            .ThenArgument("slot", MccArguments.InventorySlot(), a => a
+            .ThenArgument("slot", DmcbkArguments.InventorySlot(), a => a
                 .Executes(ctx => Click(ctx.Source, selector(ctx), ctx.GetArgument<int>("slot"), InventoryClickAction.Left))
                 .ThenArgument("action", Arguments.Word(), b => b
                     .Suggests(SuggestActions)
@@ -154,7 +154,7 @@ public sealed class InventoryCommand : CommandBase
                         ctx.Source, selector(ctx), ctx.GetArgument<int>("slot"),
                         ParseAction(ctx.GetArgument<string>("action")))))));
         node.ThenLiteral("drop", h => h
-            .ThenArgument("slot", MccArguments.InventorySlot(), a => a
+            .ThenArgument("slot", DmcbkArguments.InventorySlot(), a => a
                 .Executes(ctx => Drop(ctx.Source, selector(ctx), ctx.GetArgument<int>("slot"), false))
                 .ThenLiteral("all", b => b.Executes(ctx => Drop(ctx.Source, selector(ctx), ctx.GetArgument<int>("slot"), true)))));
     }

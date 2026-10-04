@@ -8,13 +8,13 @@ namespace DMCBK.Core.Configuration;
 
 /// <summary>
 /// Loads, generates, reloads and (on explicit request only) writes back the <c>configurations/</c> TOML files.
-/// The pipeline is: deserialize (warn on unknown keys) -&gt; apply overrides -&gt; validate/derive -&gt; immutable <see cref="MccConfiguration"/> snapshot.
+/// The pipeline is: deserialize (warn on unknown keys) -&gt; apply overrides -&gt; validate/derive -&gt; immutable <see cref="DmcbkConfiguration"/> snapshot.
 /// First-run generation writes any missing file with defaults and localized comments plus a <c>.gitignore</c> template.
 /// A plain load of existing files writes nothing.
 /// Reload produces a NEW snapshot and raises <see cref="Reloaded"/>; there is no live mutable global.
 /// Instance-scoped: no static state.
 /// </summary>
-public sealed class MccConfigurationLoader : IConfigurationStorage
+public sealed class DmcbkConfigurationLoader : IConfigurationStorage
 {
     private readonly string _folder;
     private readonly ILogger _logger;
@@ -23,7 +23,7 @@ public sealed class MccConfigurationLoader : IConfigurationStorage
     private DefaultConfigWriter _writer;
 
     /// <summary>Creates a loader for a configurations folder (or a client.toml path inside one).</summary>
-    public MccConfigurationLoader(
+    public DmcbkConfigurationLoader(
         string folderOrClientFile,
         IConfigCommentSource? comments = null,
         ILoggerFactory? loggerFactory = null)
@@ -59,7 +59,7 @@ public sealed class MccConfigurationLoader : IConfigurationStorage
     public event EventHandler<ConfigurationReloadedEventArgs>? Reloaded;
 
     /// <summary>The most recently produced snapshot, or null before the first load.</summary>
-    public MccConfiguration? Current { get; private set; }
+    public DmcbkConfiguration? Current { get; private set; }
 
     /// <summary>
     /// Loads the configuration.
@@ -91,7 +91,7 @@ public sealed class MccConfigurationLoader : IConfigurationStorage
     /// <summary>Reloads the configuration from disk, producing a new snapshot and raising <see cref="Reloaded"/>.</summary>
     public ConfigurationLoadResult Reload(ConfigurationOverrides? overrides = null)
     {
-        MccConfiguration? previous = Current;
+        DmcbkConfiguration? previous = Current;
         ConfigurationLoadResult result = Load(overrides, generateMissing: false);
         Reloaded?.Invoke(this, new ConfigurationReloadedEventArgs(previous, result.Config));
         return result;
@@ -124,9 +124,9 @@ public sealed class MccConfigurationLoader : IConfigurationStorage
 
         entry.Kind = account.Kind switch
         {
-            MccAccountKind.MicrosoftDeviceCode => "microsoft",
-            MccAccountKind.MicrosoftBrowser => "microsoft-browser",
-            MccAccountKind.Yggdrasil => "yggdrasil",
+            DmcbkAccountKind.MicrosoftDeviceCode => "microsoft",
+            DmcbkAccountKind.MicrosoftBrowser => "microsoft-browser",
+            DmcbkAccountKind.Yggdrasil => "yggdrasil",
             _ => "offline",
         };
         entry.Login = account.Login;

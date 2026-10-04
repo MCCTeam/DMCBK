@@ -316,7 +316,7 @@ public static class BeaconCapabilityInference
             case ParenExpr paren:
                 InferExpr(paren.Inner, found);
                 break;
-            case MccExpr mcc:
+            case DmcbkExpr mcc:
                 found.Add(BeaconCapabilities.MccRun);
                 InferExpr(mcc.Argument, found);
                 break;

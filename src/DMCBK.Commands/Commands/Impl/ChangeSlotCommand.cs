@@ -52,10 +52,10 @@ public sealed class ChangeSlotCommand : CommandBase
         builder.Literal(CmdName, l => l
             // ORDER IS LOAD-BEARING, for the reason DropItemCommand spells out: an item id is a resource location and a bare integer is a legal one, so the item node would swallow "changeslot 3" as "select whatever slot holds minecraft:3".
             // The slot number is registered first so the numeric form keeps winning, and a non-numeric token still reaches the item node because the slot parse fails on it.
-            .ThenArgument("slot", MccArguments.HotbarSlot(), h => h
+            .ThenArgument("slot", DmcbkArguments.HotbarSlot(), h => h
                 .Suggests(SuggestSlots)
                 .Executes(ctx => Run(ctx.Source, ctx.GetArgument<int>("slot"))))
-            .ThenArgument("item", MccArguments.ItemType(), h => h
+            .ThenArgument("item", DmcbkArguments.ItemType(), h => h
                 .Executes(ctx => RunByItem(ctx.Source, ctx.GetArgument<Identifier>("item"))))
             .ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help)));
     }

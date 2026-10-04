@@ -1207,8 +1207,8 @@ public sealed class ScriptsCommand : CommandBase
                         }
                     }
                 }
-                catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                    or OperationCanceledException or MccFeatureDisabledException)
+                catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                    or OperationCanceledException or DmcbkFeatureDisabledException)
                 {
                 }
 
@@ -1234,8 +1234,8 @@ public sealed class ScriptsCommand : CommandBase
                     EntitySnapshot? tracked = await client.Game.Entities.ByIdAsync(entityId, ct).ConfigureAwait(false);
                     position = tracked?.Position;
                 }
-                catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                    or OperationCanceledException or MccFeatureDisabledException)
+                catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                    or OperationCanceledException or DmcbkFeatureDisabledException)
                 {
                 }
 
@@ -1501,7 +1501,7 @@ public sealed class ScriptsCommand : CommandBase
                 {
                     events = _client.Game.Events;
                 }
-                catch (Exception ex) when (ex is MccNotInSessionException or InvalidOperationException)
+                catch (Exception ex) when (ex is DmcbkNotInSessionException or InvalidOperationException)
                 {
                     return;
                 }
@@ -2117,8 +2117,8 @@ public sealed class ScriptsCommand : CommandBase
             {
                 all = await client.Game.Entities.AllAsync(ct).ConfigureAwait(false);
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return;
             }
@@ -2127,8 +2127,8 @@ public sealed class ScriptsCommand : CommandBase
             {
                 self = (await client.Game.Movement.GetPoseAsync(ct).ConfigureAwait(false)).Position;
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
             }
 

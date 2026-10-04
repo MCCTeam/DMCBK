@@ -6,6 +6,9 @@ DMCBK, the Dotnet Minecraft Client Building Kit, helps you build Minecraft Java 
 
 Use the same client services in a background worker, desktop app or web backend. Your application owns its interface, storage paths and login prompts. Optional modules let you choose the parts you need.
 
+> [!WARNING]
+> DMCBK is still in heavy development. APIs, behavior, and documentation are subject to change. Pin the version or commit that your application uses.
+
 ## Start here
 
 1. Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).

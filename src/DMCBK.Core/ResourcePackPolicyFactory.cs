@@ -16,7 +16,7 @@ internal static class ResourcePackPolicyFactory
     private static readonly TimeSpan PromptTimeout = TimeSpan.FromSeconds(60);
 
     internal static ResourcePackPolicy Build(
-        MccConfiguration? configuration,
+        DmcbkConfiguration? configuration,
         IHostInterface host,
         HostTranslations translations,
         ILogger? logger = null)
@@ -34,7 +34,7 @@ internal static class ResourcePackPolicyFactory
         ResourcePackRequest request,
         ResourcePackPolicyMode mode,
         bool loadTranslations,
-        MccConfiguration? configuration,
+        DmcbkConfiguration? configuration,
         IHostInterface host,
         HostTranslations translations,
         ILogger logger)
@@ -111,10 +111,10 @@ internal static class ResourcePackPolicyFactory
     }
 
     internal static ResourcePackTranslationLoader CreateLoader(
-        MccConfiguration? configuration, HostTranslations translations, ILogger logger)
+        DmcbkConfiguration? configuration, HostTranslations translations, ILogger logger)
         => new(translations, ResolveCacheDirectory(configuration), ResolveLanguage(configuration), logger);
 
-    internal static string ResolveCacheDirectory(MccConfiguration? configuration)
+    internal static string ResolveCacheDirectory(DmcbkConfiguration? configuration)
     {
         if (configuration?.SourceFolder is { Length: > 0 } source)
         {
@@ -127,7 +127,7 @@ internal static class ResourcePackPolicyFactory
         return Path.Combine(Path.GetTempPath(), "mcc-resourcepacks");
     }
 
-    internal static string ResolveLanguage(MccConfiguration? configuration)
+    internal static string ResolveLanguage(DmcbkConfiguration? configuration)
     {
         try
         {

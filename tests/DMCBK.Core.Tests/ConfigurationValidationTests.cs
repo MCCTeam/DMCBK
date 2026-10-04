@@ -262,11 +262,11 @@ public sealed class ConfigurationValidationTests
     }
 
     [Theory]
-    [InlineData("microsoft", MccAccountKind.MicrosoftDeviceCode)]
-    [InlineData("microsoft-browser", MccAccountKind.MicrosoftBrowser)]
-    [InlineData("yggdrasil", MccAccountKind.Yggdrasil)]
-    [InlineData("offline", MccAccountKind.Offline)]
-    public void AccountKind_Parses(string kind, MccAccountKind expected)
+    [InlineData("microsoft", DmcbkAccountKind.MicrosoftDeviceCode)]
+    [InlineData("microsoft-browser", DmcbkAccountKind.MicrosoftBrowser)]
+    [InlineData("yggdrasil", DmcbkAccountKind.Yggdrasil)]
+    [InlineData("offline", DmcbkAccountKind.Offline)]
+    public void AccountKind_Parses(string kind, DmcbkAccountKind expected)
     {
         var accounts = new AccountsTomlFile();
         accounts.Account.Add(new AccountsTomlFile.AccountEntry { Name = "a", Kind = kind, Login = "u" });
@@ -300,7 +300,7 @@ public sealed class ConfigurationValidationTests
             Version = "1.16.5",
         });
 
-        MccConfiguration config = Validate(client, servers: servers).Config;
+        DmcbkConfiguration config = Validate(client, servers: servers).Config;
         Assert.Equal("play.example.net", config.ResolvedHost);
         Assert.Equal(12345, config.ResolvedPort);
         Assert.Equal("1.16.5", config.ResolvedVersion);
@@ -311,7 +311,7 @@ public sealed class ConfigurationValidationTests
     {
         var client = new ClientTomlFile();
         client.Connection.Host = "example.net:25599";
-        MccConfiguration config = Validate(client).Config;
+        DmcbkConfiguration config = Validate(client).Config;
 
         Assert.Equal("example.net", config.Connection.Host);
         Assert.Equal(25599, config.Connection.Port);

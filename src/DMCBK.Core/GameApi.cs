@@ -6,7 +6,7 @@ namespace DMCBK.Core;
 /// The live-session facade grouping the preserved feature surface (plan 1.2).
 /// It wraps the UMPK client and never exposes it to hosts.
 /// Every member is safe to call from any thread; snapshot reads marshal onto the UMPK session loop internally.
-/// Members throw <see cref="MccNotInSessionException"/> while the client is not in a live session and <see cref="MccFeatureDisabledException"/> when a required gameplay feature is disabled.
+/// Members throw <see cref="DmcbkNotInSessionException"/> while the client is not in a live session and <see cref="DmcbkFeatureDisabledException"/> when a required gameplay feature is disabled.
 /// </summary>
 public sealed class GameApi
 {
@@ -65,7 +65,7 @@ public sealed class GameApi
 
     /// <summary>
     /// The UMPK client's typed event bus for the live session.
-    /// Throws <see cref="MccNotInSessionException"/> while there is no session.
+    /// Throws <see cref="DmcbkNotInSessionException"/> while there is no session.
     /// </summary>
     /// <remarks>
     /// Re-resolved on every access, so it always names the CURRENT session's bus.

@@ -38,8 +38,8 @@ public sealed class OfflineProfileTests
         await using (client.ConfigureAwait(false))
         {
             Assert.Equal(Umpk.Client.ClientStatus.Created, client.Status);
-            await Assert.ThrowsAsync<MccNoServerConfiguredException>(() => client.StartAsync());
-            await Assert.ThrowsAsync<MccNoServerConfiguredException>(() => client.ReconnectAsync());
+            await Assert.ThrowsAsync<DmcbkNoServerConfiguredException>(() => client.StartAsync());
+            await Assert.ThrowsAsync<DmcbkNoServerConfiguredException>(() => client.ReconnectAsync());
         }
     }
 

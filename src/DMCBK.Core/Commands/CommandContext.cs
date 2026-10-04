@@ -19,7 +19,7 @@ public sealed class CommandContext : ICommandSource
         Client client,
         ICommandOutput output,
         IHostUi? ui,
-        MccConfiguration? config,
+        DmcbkConfiguration? config,
         VariableStore variables,
         ClientFeatures features,
         ICommandDispatcher commands,
@@ -48,7 +48,7 @@ public sealed class CommandContext : ICommandSource
     public IHostUi? Ui { get; }
 
     /// <summary>The configuration snapshot, or null when the client was built programmatically without one.</summary>
-    public MccConfiguration? Config { get; }
+    public DmcbkConfiguration? Config { get; }
 
     /// <summary>The <c>%var%</c> store.</summary>
     public VariableStore Variables { get; }
@@ -115,7 +115,7 @@ public sealed class CommandContext : ICommandSource
             _ when typeof(T) == typeof(Client) => Client,
             _ when typeof(T) == typeof(ICommandDispatcher) => Commands,
             _ when typeof(T) == typeof(VariableStore) => Variables,
-            _ when typeof(T) == typeof(MccConfiguration) => Config,
+            _ when typeof(T) == typeof(DmcbkConfiguration) => Config,
             _ when typeof(T) == typeof(ITranslationSource) => Translations,
             _ when typeof(T) == typeof(IRegistrySuggestionSource) => Commands.RegistrySuggestions,
             _ => Client.TryGetModule<T>(out T? module) ? module : null,
@@ -126,7 +126,7 @@ public sealed class CommandContext : ICommandSource
 
     /// <summary>
     /// Blocks on an async facade read/action and returns its result (sync-over-async at the command boundary).
-    /// Guarded by <see cref="Client.WaitForCommandWork"/>, which raises <see cref="MccSessionLoopBlockedException"/> rather than hanging when this very call is what is stopping the session loop from advancing.
+    /// Guarded by <see cref="Client.WaitForCommandWork"/>, which raises <see cref="DmcbkSessionLoopBlockedException"/> rather than hanging when this very call is what is stopping the session loop from advancing.
     /// </summary>
     internal T Run<T>(Func<CancellationToken, Task<T>> op)
     {

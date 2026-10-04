@@ -16,7 +16,7 @@ namespace DMCBK.Core;
 /// One client session over the UMPK engine: resolve the version, build the UMPK client with the mandatory registry/logger/feature wiring (optionally through a forwarding proxy), connect, send and receive chat, auto-reconnect on unexpected disconnects per a policy, and disconnect cleanly.
 /// <para>
 /// The session lifecycle itself (one attempt to reach play, then a background watch that reconnects per policy) is <see cref="UmpkClientSupervisor"/>'s job, not this class's: this is a thin facade over the supervisor plus the MCC-specific facades (commands, game API, translations, plugin host) that sit beside it.
-/// <see cref="MccSessionFactory"/> is the <see cref="IClientSessionFactory"/> that builds and releases the UMPK client for each attempt the supervisor makes.
+/// <see cref="DmcbkSessionFactory"/> is the <see cref="IClientSessionFactory"/> that builds and releases the UMPK client for each attempt the supervisor makes.
 /// </para>
 /// </summary>
 public sealed partial class Client : IAsyncDisposable
@@ -26,7 +26,7 @@ public sealed partial class Client : IAsyncDisposable
     private readonly ChatApi _chat = new();
     private readonly GameSession _gameSession = new();
     private readonly Localization.HostTranslations _translations = new();
-    private readonly MccSessionFactory _factory;
+    private readonly DmcbkSessionFactory _factory;
     private readonly UmpkClientSupervisor _supervisor;
 
     private volatile bool _testSessionAttached;
@@ -38,13 +38,13 @@ public sealed partial class Client : IAsyncDisposable
 
     internal Client(
         ServerEndpoint? endpoint,
-        MccAccount account,
+        DmcbkAccount account,
         string? tokenStorePath,
         JavaVersion? explicitVersion,
         ClientFeatures features,
         ILoggerFactory loggerFactory,
         IHostInterface host,
-        MccConfiguration? configuration,
+        DmcbkConfiguration? configuration,
         IConnectionFactory? proxyFactory,
         bool proxyForPing,
         bool pingForDisplayWhenPinned,
@@ -66,7 +66,7 @@ public sealed partial class Client : IAsyncDisposable
         // Built before the factory because the factory binds it to every session it creates, exactly as it does the chat facade: the container open/close notices come off the live client's event bus.
         var inventory = new InventoryApi(_gameSession, _translations);
 
-        _factory = new MccSessionFactory(
+        _factory = new DmcbkSessionFactory(
             account, tokenStorePath, explicitVersion, features, loggerFactory, host, configuration,
             proxyFactory, proxyForPing, pingForDisplayWhenPinned, _chat, inventory, _gameSession, _translations);
 
@@ -128,7 +128,7 @@ public sealed partial class Client : IAsyncDisposable
     /// <summary>
     /// Raised once a server-status ping produces a result: normally as part of auto-detecting the version, and additionally (best-effort) even when the version was pinned, so a host's connect-time status panel always has something to show, matching legacy pinging on every connect for the display.
     /// May fire more than once per connect attempt (an auto-reconnect re-pings).
-    /// Forwards <see cref="MccSessionFactory.StatusReceived"/> directly.
+    /// Forwards <see cref="DmcbkSessionFactory.StatusReceived"/> directly.
     /// </summary>
     public event EventHandler<ServerStatusReceivedEventArgs>? ServerStatusReceived
     {
@@ -233,7 +233,7 @@ public sealed partial class Client : IAsyncDisposable
     internal Umpk.Client.UmpkClient? BoundSessionClient => GameSession.Current;
 
     /// <summary>The configuration snapshot this client was built from, when built from configuration; else null.</summary>
-    public MccConfiguration? Configuration { get; }
+    public DmcbkConfiguration? Configuration { get; }
 
     /// <summary>
     /// The attached plugin host, once the embedding host has built and attached one (see <see cref="AttachPluginHost"/>).
@@ -294,7 +294,7 @@ public sealed partial class Client : IAsyncDisposable
     /// <summary>
     /// Resolves the version, builds the UMPK client, and connects.
     /// Returns once the play session is live and a background supervisor is watching for disconnects (to auto-reconnect per the policy).
-    /// Throws a typed exception on version-resolution (<see cref="VersionResolutionException"/>), connect (<see cref="ConnectFailedException"/>), or login (<see cref="LoginRejectedException"/>) failure, or whatever <see cref="MccSessionFactory"/> itself threw (an <see cref="MccClientException"/> or an <see cref="Umpk.Auth.AuthException"/>).
+    /// Throws a typed exception on version-resolution (<see cref="VersionResolutionException"/>), connect (<see cref="ConnectFailedException"/>), or login (<see cref="LoginRejectedException"/>) failure, or whatever <see cref="DmcbkSessionFactory"/> itself threw (an <see cref="DmcbkClientException"/> or an <see cref="Umpk.Auth.AuthException"/>).
     /// </summary>
     // Following the transfer is the client's job, not the host's: the legacy client did it inside McClient.Transfer (McClient.cs:408-430), and a host that merely logged the event would leave the user sitting on the hub wondering why the menu did nothing.
     // Guarded against overlap the same way legacy guarded it, because a transfer chain can land a second instruction while the first is still unwinding.
@@ -326,7 +326,7 @@ public sealed partial class Client : IAsyncDisposable
     /// <summary>Provides the client runtime operation.</summary>
     public Task StartAsync(CancellationToken ct = default)
     {
-        ServerEndpoint endpoint = _endpoint ?? throw new MccNoServerConfiguredException(
+        ServerEndpoint endpoint = _endpoint ?? throw new DmcbkNoServerConfiguredException(
             "No server is configured. Set one in servers.toml or client.toml, or connect to one by address.");
 
         Interlocked.Exchange(ref _dialClaimed, 1);
@@ -348,7 +348,7 @@ public sealed partial class Client : IAsyncDisposable
         // This is what makes connect and reco work from the idle state, where the client was built with no server (or with one it was told not to dial).
         if (Interlocked.Exchange(ref _dialClaimed, 1) == 0)
         {
-            ServerEndpoint endpoint = target ?? throw new MccNoServerConfiguredException(
+            ServerEndpoint endpoint = target ?? throw new DmcbkNoServerConfiguredException(
                 "No server is configured. Name one to connect to, or set one in servers.toml.");
 
             _endpoint = endpoint;
@@ -409,7 +409,7 @@ public sealed partial class Client : IAsyncDisposable
     internal TimeSpan ExitDeadline { get; set; } = TimeSpan.FromSeconds(5);
 
     /// <summary>Announces the snapshot <c>reload</c> has just applied. See <see cref="ConfigurationReloaded"/>.</summary>
-    internal void RaiseConfigurationReloaded(Configuration.MccConfiguration configuration)
+    internal void RaiseConfigurationReloaded(Configuration.DmcbkConfiguration configuration)
         => ConfigurationReloaded?.Invoke(this, new ConfigurationReloadedEventArgs(Configuration, configuration));
 
     /// <summary>
@@ -498,7 +498,7 @@ public sealed partial class Client : IAsyncDisposable
     /// Whether to install the chat-signing provider, which is what <c>signature.loginwithsecureprofile</c> controls.
     /// Defaults to on when there is no configuration at all (an embedding host that never loaded one), matching the setting's own default.
     /// </summary>
-    internal static bool SigningEnabled(MccConfiguration? configuration)
+    internal static bool SigningEnabled(DmcbkConfiguration? configuration)
         => configuration?.Chat.Signature.LoginWithSecureProfile ?? true;
 
     /// <summary>
@@ -529,7 +529,7 @@ public sealed partial class Client : IAsyncDisposable
     /// </para>
     /// </remarks>
     internal static void ApplySessionOptions(
-        ClientOptions options, MccConfiguration? configuration, TimeSpan? readIdleTimeoutOverride = null)
+        ClientOptions options, DmcbkConfiguration? configuration, TimeSpan? readIdleTimeoutOverride = null)
     {
         ArgumentNullException.ThrowIfNull(options);
         options.AutoSendPosition = true;
@@ -625,7 +625,7 @@ public sealed partial class Client : IAsyncDisposable
 
         int completed = Task.WaitAny([work, probe.Task], probeWindow);
         if (completed < 0)
-            throw new MccSessionLoopBlockedException(CommandStrings.SessionLoopBlocked);
+            throw new DmcbkSessionLoopBlockedException(CommandStrings.SessionLoopBlocked);
 
         work.GetAwaiter().GetResult();
     }

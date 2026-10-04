@@ -114,13 +114,13 @@ public sealed class LangCommandTests : IDisposable
     }
 
     #endregion
-    #region MccConfigurationLoader.TrySaveLanguage
+    #region DmcbkConfigurationLoader.TrySaveLanguage
 
     [Fact]
     public void TrySaveLanguage_RewritesTheGeneratedFileAndReloadsWithTheNewValue()
     {
         using var folder = new TempConfigFolder();
-        var loader = new MccConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance);
+        var loader = new DmcbkConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance);
         loader.Load(generateMissing: true);
 
         string before = File.ReadAllText(folder.ClientFile);
@@ -130,7 +130,7 @@ public sealed class LangCommandTests : IDisposable
         Assert.Equal(
             before.Replace("Language = \"auto\"", "Language = \"de\"", StringComparison.Ordinal),
             after);
-        Assert.Equal("de", new MccConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance)
+        Assert.Equal("de", new DmcbkConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance)
             .Load(generateMissing: true).Config.Localization.Language);
     }
 
@@ -140,7 +140,7 @@ public sealed class LangCommandTests : IDisposable
     [Fact]
     public async Task Lang_WithNoArgument_ReportsBothLanguageAxes()
     {
-        await using Client client = BuildClient(new MccConfiguration
+        await using Client client = BuildClient(new DmcbkConfiguration
         {
             Localization = new LocalizationConfig { Language = "de" },
             ClientSettings = new ClientSettingsConfig { Locale = "auto" },
@@ -157,10 +157,10 @@ public sealed class LangCommandTests : IDisposable
     public async Task Lang_WithAnUnknownTag_RefusesAndWritesNothing()
     {
         using var folder = new TempConfigFolder();
-        new MccConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
+        new DmcbkConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
         string before = File.ReadAllText(folder.ClientFile);
 
-        await using Client client = BuildClient(new MccConfiguration { SourceFolder = folder.Path });
+        await using Client client = BuildClient(new DmcbkConfiguration { SourceFolder = folder.Path });
         CmdResult result = await client.Commands.DispatchAsync("lang qq-zz");
 
         Assert.Equal(CmdStatus.Fail, result.Status);
@@ -172,9 +172,9 @@ public sealed class LangCommandTests : IDisposable
     public async Task Lang_WithATag_SavesItAndAppliesItLive()
     {
         using var folder = new TempConfigFolder();
-        new MccConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
+        new DmcbkConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
 
-        await using Client client = BuildClient(new MccConfiguration { SourceFolder = folder.Path });
+        await using Client client = BuildClient(new DmcbkConfiguration { SourceFolder = folder.Path });
         CmdResult result = await client.Commands.DispatchAsync("lang de");
 
         Assert.Equal(CmdStatus.Done, result.Status);
@@ -189,10 +189,10 @@ public sealed class LangCommandTests : IDisposable
     public async Task Lang_AfterAChange_ReportsTheLanguageInForceRatherThanTheStartupSnapshot()
     {
         using var folder = new TempConfigFolder();
-        new MccConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
+        new DmcbkConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
 
         // The snapshot the client was built from says auto and stays saying it: it is immutable.
-        await using Client client = BuildClient(new MccConfiguration { SourceFolder = folder.Path });
+        await using Client client = BuildClient(new DmcbkConfiguration { SourceFolder = folder.Path });
         await client.Commands.DispatchAsync("lang de");
 
         CmdResult result = await client.Commands.DispatchAsync("lang");
@@ -206,9 +206,9 @@ public sealed class LangCommandTests : IDisposable
     public async Task Lang_Auto_IsStoredAsAutoNotAsAResolvedTag()
     {
         using var folder = new TempConfigFolder();
-        new MccConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
+        new DmcbkConfigurationLoader(folder.Path, loggerFactory: NullLoggerFactory.Instance).Load(generateMissing: true);
 
-        await using Client client = BuildClient(new MccConfiguration { SourceFolder = folder.Path });
+        await using Client client = BuildClient(new DmcbkConfiguration { SourceFolder = folder.Path });
         await client.Commands.DispatchAsync("lang auto");
 
         Assert.Contains("Language = \"auto\"", File.ReadAllText(folder.ClientFile), StringComparison.Ordinal);
@@ -217,7 +217,7 @@ public sealed class LangCommandTests : IDisposable
     [Fact]
     public async Task Lang_WithoutAConfigurationFolder_SaysSoRatherThanGuessing()
     {
-        await using Client client = BuildClient(new MccConfiguration());
+        await using Client client = BuildClient(new DmcbkConfiguration());
 
         CmdResult result = await client.Commands.DispatchAsync("lang de");
 
@@ -229,14 +229,14 @@ public sealed class LangCommandTests : IDisposable
     /// A client over a configuration snapshot.
     /// The endpoint and account are what <see cref="ClientBuilder.Build"/> insists on; nothing here ever connects.
     /// </summary>
-    private static Client BuildClient(MccConfiguration config)
+    private static Client BuildClient(DmcbkConfiguration config)
         => new ClientBuilder().UseCommands().UseBeacon().UseConfiguration(config with
         {
             ResolvedHost = "localhost",
             ResolvedPort = 25565,
             ResolvedVersion = "auto",
-            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = MccAccountKind.Offline },
-        }).UseModule<DMCBK.Core.Configuration.IConfigurationStorage>(_ => new MccConfigurationLoader(config.SourceFolder ?? Path.GetTempPath())).Build();
+            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = DmcbkAccountKind.Offline },
+        }).UseModule<DMCBK.Core.Configuration.IConfigurationStorage>(_ => new DmcbkConfigurationLoader(config.SourceFolder ?? Path.GetTempPath())).Build();
 
     /// <summary>A throwaway configurations folder with a freshly generated set of files.</summary>
     private sealed class TempConfigFolder : IDisposable

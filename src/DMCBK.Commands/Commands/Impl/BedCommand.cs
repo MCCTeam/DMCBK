@@ -66,7 +66,7 @@ public sealed class BedCommand : CommandBase
         builder.Literal(CmdName, l => l
             .ThenLiteral("leave", h => h.Executes(ctx => DoLeaveBed(ctx.Source)))
             .ThenLiteral("sleep", h => h
-                .ThenArgument("Location", MccArguments.Location(), a => a
+                .ThenArgument("Location", DmcbkArguments.Location(), a => a
                     .Executes(ctx => DoSleepBedWithLocation(ctx.Source, ctx.GetArgument<CommandLocation>("Location"))))
                 .ThenArgument("Radius", Arguments.Double(), a => a
                     .Executes(ctx => DoSleepBedWithRadius(ctx.Source, ctx.GetArgument<double>("Radius")))))
@@ -113,7 +113,7 @@ public sealed class BedCommand : CommandBase
         {
             nearest = ctx.Run(ct => ctx.Game.World.FindNearestAsync(BedIds, Math.Max(1, (int)Math.Ceiling(radius)), ct));
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             return ctx.Result.Set(CmdStatus.FailNeedTerrain);
         }
@@ -176,7 +176,7 @@ public sealed class BedCommand : CommandBase
                 return false;
             }
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             failure = ctx.Result.Set(CmdStatus.FailNeedTerrain);
             return false;
@@ -249,7 +249,7 @@ public sealed class BedCommand : CommandBase
         {
             info = ctx.Run(ct => ctx.Game.World.GetBlockAsync(block, ct));
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             return ctx.Result.Set(CmdStatus.FailNeedTerrain);
         }
@@ -276,7 +276,7 @@ public sealed class BedCommand : CommandBase
             loaded = ctx.Run(ct => ctx.Game.World.GetBlockAsync(goal, ct)).ChunkLoaded
                 && ctx.Run(ct => ctx.Game.World.GetBlockAsync(BlockPos.Containing(start), ct)).ChunkLoaded;
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             return ctx.Result.Set(CmdStatus.FailNeedTerrain);
         }

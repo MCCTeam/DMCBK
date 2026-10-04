@@ -109,7 +109,7 @@ public sealed class MoveCommand : CommandBase
             .ThenLiteral("south", Step(Direction.South))
             .ThenLiteral("center", h => h.Executes(ctx => MoveToCenter(ctx.Source)))
             .ThenLiteral("get", h => h.Executes(ctx => GetCurrentLocation(ctx.Source)))
-            .ThenArgument("location", MccArguments.Location(), h => h
+            .ThenArgument("location", DmcbkArguments.Location(), h => h
                 .Executes(ctx => MoveToLocation(ctx.Source, ctx.GetArgument<CommandLocation>("location"), takeRisk: false))
                 .ThenLiteral("-f", f => f
                     .Executes(ctx => MoveToLocation(ctx.Source, ctx.GetArgument<CommandLocation>("location"), takeRisk: true))))
@@ -118,7 +118,7 @@ public sealed class MoveCommand : CommandBase
 
     /// <summary>
     /// Turns terrain and movement handling on or off, the port of legacy <c>SetMovementEnable</c> (Move.cs:104-117) over <c>McClient.SetTerrainEnabled</c> (McClient.cs:1355-1376).
-    /// Legacy enabling only REQUESTED terrain (it landed on the next login, respawn or world change) while disabling took effect at once, which is exactly what mutating the client's feature composition does here: UMPK composes a session's modules at build time from this very instance (MccSessionFactory.cs:221-231), so a session already running keeps its modules, while every command gate (<see cref="CommandContext.TerrainEnabled"/>) flips immediately.
+    /// Legacy enabling only REQUESTED terrain (it landed on the next login, respawn or world change) while disabling took effect at once, which is exactly what mutating the client's feature composition does here: UMPK composes a session's modules at build time from this very instance (DmcbkSessionFactory.cs:221-231), so a session already running keeps its modules, while every command gate (<see cref="CommandContext.TerrainEnabled"/>) flips immediately.
     /// <para>
     /// Physics and pathfinding move with terrain because they depend on it: UMPK's <c>ClientFeatures.Normalized()</c> forces terrain back on for either of them, and the config validator states the same rule in the other direction (ConfigurationValidation.cs:160-169).
     /// Legacy carried one flag for "Terrain and Movements" together, so the whole movement stack is what the switch owns.
@@ -251,7 +251,7 @@ public sealed class MoveCommand : CommandBase
             loaded = ctx.Run(ct => ctx.Game.World.GetBlockAsync(BlockPos.Containing(goal), ct)).ChunkLoaded
                 && ctx.Run(ct => ctx.Game.World.GetBlockAsync(BlockPos.Containing(start), ct)).ChunkLoaded;
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             // "move on" opens the command gates at once but the running session keeps the modules it was built with, so the world can still be absent until the next login.
             // That is the legacy answer too: enabling only took effect on the next login, respawn or world change.
@@ -286,7 +286,7 @@ public sealed class MoveCommand : CommandBase
             // -f relaxes the planner.
             result = ctx.Run(ct => ctx.Game.Movement.MoveToVerifiedAsync(target, takeRisk, ct));
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             return ctx.Result.Set(CmdStatus.FailNeedTerrain);
         }

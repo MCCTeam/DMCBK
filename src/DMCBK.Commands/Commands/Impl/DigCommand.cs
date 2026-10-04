@@ -58,7 +58,7 @@ public sealed class DigCommand : CommandBase
         CommandNodeBuilder<CommandContext> help = RegisterHelp(builder, CmdName, ShowUsage);
         builder.Literal(CmdName, l => l
             .Executes(ctx => DigLookAt(ctx.Source))
-            .ThenArgument("Location", MccArguments.Location(), h => h
+            .ThenArgument("Location", DmcbkArguments.Location(), h => h
                 .Executes(ctx => DigAt(ctx.Source, ctx.GetArgument<CommandLocation>("Location"))))
             .ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help)));
     }

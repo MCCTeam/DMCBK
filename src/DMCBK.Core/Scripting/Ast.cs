@@ -9,7 +9,7 @@ namespace DMCBK.Core.Beacon;
 /// A condition must be a comparison, an <c>and</c>/<c>or</c>/<c>not</c> combination, a call, or a yes/no literal; <c>if not tired</c> passes statically and the interpreter judges types at runtime.
 /// Mixed <c>+</c> operands and unknown-variable reads are runtime errors, never parse errors.
 /// <para/>
-/// Forgiven forms (one spelling taught, one forgiven): <c>log expr</c> parses as <see cref="ShowStmt"/> with <c>IsLog</c>; bare <c>mcc expr</c> (no parens) parses as <see cref="MccExpr"/>; <c>&amp;&amp;</c>/<c>||</c>/<c>!</c>, <c>==</c>/<c>!=</c>, <c>break</c>/<c>continue</c>, and <c>cancel event</c> normalize in desugar.
+/// Forgiven forms (one spelling taught, one forgiven): <c>log expr</c> parses as <see cref="ShowStmt"/> with <c>IsLog</c>; bare <c>mcc expr</c> (no parens) parses as <see cref="DmcbkExpr"/>; <c>&amp;&amp;</c>/<c>||</c>/<c>!</c>, <c>==</c>/<c>!=</c>, <c>break</c>/<c>continue</c>, and <c>cancel event</c> normalize in desugar.
 /// </remarks>
 public abstract record BeaconNode(SourceSpan Span);
 
@@ -421,7 +421,7 @@ public sealed record MapLiteral(SourceSpan Span, IReadOnlyList<BeaconMapEntry> E
 public sealed record ParenExpr(SourceSpan Span, BeaconExpr Inner) : BeaconExpr(Span);
 
 /// <summary>Bare <c>mcc expr</c> (forgiven paren-less form of the internal-command call).</summary>
-public sealed record MccExpr(SourceSpan Span, BeaconExpr Argument) : BeaconExpr(Span);
+public sealed record DmcbkExpr(SourceSpan Span, BeaconExpr Argument) : BeaconExpr(Span);
 
 /// <summary>Placeholder where a hole or operand failed to parse; never evaluated (diagnostics fail first).</summary>
 public sealed record ErrorExpr(SourceSpan Span) : BeaconExpr(Span);
@@ -657,7 +657,7 @@ public static class BeaconDesugar
             }).ToList(),
         },
         ParenExpr e => e with { Span = Respan(e.Span), Inner = DesugarExpr(e.Inner) },
-        MccExpr e => e with { Span = Respan(e.Span), Argument = DesugarExpr(e.Argument) },
+        DmcbkExpr e => e with { Span = Respan(e.Span), Argument = DesugarExpr(e.Argument) },
         _ => expr,
     };
 }

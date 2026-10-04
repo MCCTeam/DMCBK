@@ -24,12 +24,12 @@ public sealed class ConfigurationOverrideTests : IDisposable
         }
     }
 
-    private MccConfiguration Load(ConfigurationOverrides overrides)
-        => new MccConfigurationLoader(_folder).Load(overrides).Config;
+    private DmcbkConfiguration Load(ConfigurationOverrides overrides)
+        => new DmcbkConfigurationLoader(_folder).Load(overrides).Config;
 
-    private MccConfiguration Load(ConfigurationOverrides overrides, List<ConfigurationWarning> warnings)
+    private DmcbkConfiguration Load(ConfigurationOverrides overrides, List<ConfigurationWarning> warnings)
     {
-        ConfigurationLoadResult result = new MccConfigurationLoader(_folder).Load(overrides);
+        ConfigurationLoadResult result = new DmcbkConfigurationLoader(_folder).Load(overrides);
         warnings.AddRange(result.Warnings);
         return result.Config;
     }
@@ -38,7 +38,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     public void Positional_OverridesConfigVersion()
     {
         // Config default version is "auto"; a positional -v pins it.
-        MccConfiguration config = Load(new ConfigurationOverrides { Version = "1.8" });
+        DmcbkConfiguration config = Load(new ConfigurationOverrides { Version = "1.8" });
         Assert.Equal("1.8", config.ResolvedVersion);
     }
 
@@ -52,7 +52,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     public void Dotted_AutoConnect_BindsWithOrWithoutTheHyphen(string path)
     {
         var warnings = new List<ConfigurationWarning>();
-        MccConfiguration config = Load(
+        DmcbkConfiguration config = Load(
             new ConfigurationOverrides { Dotted = [new KeyValuePair<string, string>(path, "false")] }, warnings);
 
         Assert.False(config.Connection.AutoConnect);
@@ -66,7 +66,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     [Fact]
     public void Dotted_Beats_Positional()
     {
-        MccConfiguration config = Load(new ConfigurationOverrides
+        DmcbkConfiguration config = Load(new ConfigurationOverrides
         {
             Version = "1.12.2",
             Dotted = [new KeyValuePair<string, string>("connection.version", "1.16.5")],
@@ -78,7 +78,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     [Fact]
     public void Positional_OverridesAddressAndUsername()
     {
-        MccConfiguration config = Load(new ConfigurationOverrides
+        DmcbkConfiguration config = Load(new ConfigurationOverrides
         {
             Username = "SteveCLI",
             Address = "play.example.net:25599",
@@ -94,13 +94,13 @@ public sealed class ConfigurationOverrideTests : IDisposable
     {
         // "<user> -" means offline.
         // Still honored.
-        MccConfiguration config = Load(new ConfigurationOverrides
+        DmcbkConfiguration config = Load(new ConfigurationOverrides
         {
             Username = "Steve",
             Password = "-",
         });
 
-        Assert.Equal(MccAccountKind.Offline, config.ResolvedAccount.Kind);
+        Assert.Equal(DmcbkAccountKind.Offline, config.ResolvedAccount.Kind);
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
         // The sentinel used to silently downgrade an explicit --auth to offline, which then failed against an online-mode server as an opaque connect error.
         // The explicit flag now wins.
         var warnings = new List<ConfigurationWarning>();
-        MccConfiguration config = Load(
+        DmcbkConfiguration config = Load(
             new ConfigurationOverrides
             {
                 Username = "steve@example.com",
@@ -118,26 +118,26 @@ public sealed class ConfigurationOverrideTests : IDisposable
             },
             warnings);
 
-        Assert.Equal(MccAccountKind.MicrosoftDeviceCode, config.ResolvedAccount.Kind);
+        Assert.Equal(DmcbkAccountKind.MicrosoftDeviceCode, config.ResolvedAccount.Kind);
         Assert.Contains(warnings, w => w.Message.Contains("offline password sentinel", StringComparison.Ordinal));
     }
 
     [Fact]
     public void AuthMode_WithoutDashPassword_SetsOnlineKind()
     {
-        MccConfiguration config = Load(new ConfigurationOverrides
+        DmcbkConfiguration config = Load(new ConfigurationOverrides
         {
             Username = "steve@example.com",
             AuthMode = "microsoft",
         });
 
-        Assert.Equal(MccAccountKind.MicrosoftDeviceCode, config.ResolvedAccount.Kind);
+        Assert.Equal(DmcbkAccountKind.MicrosoftDeviceCode, config.ResolvedAccount.Kind);
     }
 
     [Fact]
     public void Dotted_BindsFeatureGate()
     {
-        MccConfiguration config = Load(new ConfigurationOverrides
+        DmcbkConfiguration config = Load(new ConfigurationOverrides
         {
             Dotted = [new KeyValuePair<string, string>("gameplay.terrain", "true")],
         });
@@ -148,7 +148,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     [Fact]
     public void Dotted_UnknownPath_WarnsAndIgnores()
     {
-        ConfigurationLoadResult result = new MccConfigurationLoader(_folder).Load(new ConfigurationOverrides
+        ConfigurationLoadResult result = new DmcbkConfigurationLoader(_folder).Load(new ConfigurationOverrides
         {
             Dotted = [new KeyValuePair<string, string>("connection.nonsense", "x")],
         });
@@ -162,7 +162,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     public void Dotted_BindsLoggingSaveColorCodes()
     {
         // The field was honoured by the file sink but had no CLI override path, so it could only ever be set by editing the file.
-        ConfigurationLoadResult result = new MccConfigurationLoader(_folder).Load(new ConfigurationOverrides
+        ConfigurationLoadResult result = new DmcbkConfigurationLoader(_folder).Load(new ConfigurationOverrides
         {
             Dotted = [new KeyValuePair<string, string>("logging.savecolorcodes", "true")],
         });
@@ -174,7 +174,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     [Fact]
     public void Dotted_BindsLoggingLogFile()
     {
-        ConfigurationLoadResult result = new MccConfigurationLoader(_folder).Load(new ConfigurationOverrides
+        ConfigurationLoadResult result = new DmcbkConfigurationLoader(_folder).Load(new ConfigurationOverrides
         {
             Dotted =
             [
@@ -205,7 +205,7 @@ public sealed class ConfigurationOverrideTests : IDisposable
     [Fact]
     public void SignatureStandingToggles_HaveHonestDefaults()
     {
-        MccConfiguration config = Load(new ConfigurationOverrides());
+        DmcbkConfiguration config = Load(new ConfigurationOverrides());
 
         // Signed-and-checked standings are marked by default, matching the legacy client.
         Assert.True(config.Chat.Signature.MarkLegallySignedMsg);

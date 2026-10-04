@@ -522,7 +522,7 @@ public static class BeaconLint
                 && (functions.Contains(ident.Name) || string.Equals(ident.Name, "mcc", StringComparison.Ordinal))
                 => ident.Name + "(...)",
             CallPrimExpr prim => $"call \"{prim.Target}\"()",
-            MccExpr => "mcc ...",
+            DmcbkExpr => "mcc ...",
             _ => null,
         };
 
@@ -811,7 +811,7 @@ public static class BeaconLint
                 case ParenExpr paren:
                     CollectCallExpr(paren.Inner, into);
                     break;
-                case MccExpr mcc:
+                case DmcbkExpr mcc:
                     CollectCallExpr(mcc.Argument, into);
                     break;
                 default:

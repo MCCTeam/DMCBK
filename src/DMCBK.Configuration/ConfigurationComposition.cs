@@ -8,7 +8,7 @@ public static class ConfigurationComposition
         ConfigurationOverrides? overrides = null, bool generateMissing = false)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
-        var loader = new MccConfigurationLoader(path);
+        var loader = new DmcbkConfigurationLoader(path);
         builder.UseConfiguration(loader.Load(overrides, generateMissing).Config);
         return builder.UseConfigurationStorage(path);
     }
@@ -18,6 +18,6 @@ public static class ConfigurationComposition
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
         string absolute = Path.GetFullPath(path);
-        return builder.UseModule<IConfigurationStorage>(_ => new MccConfigurationLoader(absolute));
+        return builder.UseModule<IConfigurationStorage>(_ => new DmcbkConfigurationLoader(absolute));
     }
 }

@@ -2,7 +2,7 @@
 
 Core can use code-only configuration. `UseServer`, `UseAccount` and `UseFeatures` supply typed values. It does not create files as a side effect of construction.
 
-The Configuration package adds TOML files and persistence. Its public API currently uses names such as `MccConfigurationLoader` and `MccConfiguration`. These types live in DMCBK assemblies.
+The Configuration package adds TOML files and persistence. Its public API currently uses names such as `DmcbkConfigurationLoader` and `DmcbkConfiguration`. These types live in DMCBK assemblies.
 
 ## Load files explicitly
 

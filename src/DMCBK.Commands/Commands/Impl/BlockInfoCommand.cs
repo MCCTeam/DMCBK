@@ -62,7 +62,7 @@ public sealed class BlockInfoCommand : CommandBase
         builder.Literal(CmdName, l => l
             .Executes(ctx => Run(ctx.Source, null, false))
             .ThenLiteral("-s", h => h.Executes(ctx => Run(ctx.Source, null, true)))
-            .ThenArgument("Location", MccArguments.Location(), h => h
+            .ThenArgument("Location", DmcbkArguments.Location(), h => h
                 .Executes(ctx => Run(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), false))
                 .ThenLiteral("-s", a => a.Executes(ctx => Run(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), true))))
             .ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help)));

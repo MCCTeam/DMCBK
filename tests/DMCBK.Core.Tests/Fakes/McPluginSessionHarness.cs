@@ -33,7 +33,7 @@ internal static class McPluginSessionHarness
         Microsoft.Extensions.Logging.ILoggerFactory loggerFactory,
         IHostInterface? hostInterface = null,
         IConnectionFactory? connections = null,
-        MccConfiguration? configuration = null,
+        DmcbkConfiguration? configuration = null,
         JavaVersion? version = null)
     {
         ArgumentNullException.ThrowIfNull(server);

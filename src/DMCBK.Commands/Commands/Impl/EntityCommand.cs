@@ -118,12 +118,12 @@ public sealed class EntityCommand : CommandBase
             {
                 n.Executes(ctx => GetClosestEntity(ctx.Source));
                 n.ThenArgument("EntityID", Arguments.Integer(), a => RegisterIdActions(a));
-                n.ThenArgument("EntityType", MccArguments.EntityType(), a => RegisterTypeActions(a, near: true));
+                n.ThenArgument("EntityType", DmcbkArguments.EntityType(), a => RegisterTypeActions(a, near: true));
             });
 
             // The id selector ignores "near" in legacy too: both paths call the same OperateWithId.
             l.ThenArgument("EntityID", Arguments.Integer(), a => RegisterIdActions(a));
-            l.ThenArgument("EntityType", MccArguments.EntityType(), a => RegisterTypeActions(a, near: false));
+            l.ThenArgument("EntityType", DmcbkArguments.EntityType(), a => RegisterTypeActions(a, near: false));
 
             l.ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help));
         });

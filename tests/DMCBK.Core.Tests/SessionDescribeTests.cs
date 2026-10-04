@@ -260,11 +260,11 @@ public sealed class SessionDescribeTests
     {
         // The defect: this reached SignatureConfig and stopped there, so turning it off did nothing.
         // It now decides whether the signing provider (which IS the profile key) is installed at all.
-        var off = new MccConfiguration
+        var off = new DmcbkConfiguration
         {
             Chat = new ChatConfig { Signature = new SignatureConfig { LoginWithSecureProfile = false } },
         };
-        var on = new MccConfiguration
+        var on = new DmcbkConfiguration
         {
             Chat = new ChatConfig { Signature = new SignatureConfig { LoginWithSecureProfile = true } },
         };

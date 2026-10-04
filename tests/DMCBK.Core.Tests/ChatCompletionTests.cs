@@ -284,12 +284,12 @@ public sealed class ChatCompletionTests
 
     private static Client BuildClientWithPrefix(InternalCommandPrefix prefix)
         => new ClientBuilder().UseCommands().UseBeacon()
-            .UseConfiguration(new MccConfiguration
+            .UseConfiguration(new DmcbkConfiguration
             {
                 ResolvedHost = "localhost",
                 ResolvedPort = 25565,
                 ResolvedVersion = "auto",
-                ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = MccAccountKind.Offline },
+                ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = DmcbkAccountKind.Offline },
                 Permissions = new PermissionsConfig { CommandPrefix = prefix },
             })
             .UseHostInterface(new StubHost())

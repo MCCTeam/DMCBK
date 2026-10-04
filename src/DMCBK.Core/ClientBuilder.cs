@@ -17,13 +17,13 @@ namespace DMCBK.Core;
 public sealed partial class ClientBuilder
 {
     private ServerEndpoint? _endpoint;
-    private MccAccount? _account;
+    private DmcbkAccount? _account;
     private string? _tokenStorePath;
     private JavaVersion? _version;
     private ClientFeatures _features = new();
     private ILoggerFactory _loggerFactory = NullLoggerFactory.Instance;
     private IHostInterface _host = new NullHostInterface();
-    private MccConfiguration? _configuration;
+    private DmcbkConfiguration? _configuration;
     private IConnectionFactory? _proxyFactory;
     private bool _proxyForPing;
     private bool _pingForDisplayWhenPinned;
@@ -47,7 +47,7 @@ public sealed partial class ClientBuilder
     }
 
     /// <summary>Sets the account (offline or online) to log in as.</summary>
-    public ClientBuilder UseAccount(MccAccount account)
+    public ClientBuilder UseAccount(DmcbkAccount account)
     {
         ArgumentNullException.ThrowIfNull(account);
         _account = account;
@@ -58,7 +58,7 @@ public sealed partial class ClientBuilder
     public ClientBuilder UseUsername(string username)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(username);
-        _account = MccAccount.Offline(username);
+        _account = DmcbkAccount.Offline(username);
         return this;
     }
 
@@ -157,7 +157,7 @@ public sealed partial class ClientBuilder
     /// Applies an immutable configuration snapshot, mapping its resolved endpoint, version, account and feature gates onto the builder inputs.
     /// Later explicit <c>Use*</c> calls still override these values.
     /// </summary>
-    public ClientBuilder UseConfiguration(MccConfiguration config)
+    public ClientBuilder UseConfiguration(DmcbkConfiguration config)
     {
         ArgumentNullException.ThrowIfNull(config);
         _configuration = config;
@@ -187,7 +187,7 @@ public sealed partial class ClientBuilder
         else
             _version = null;
 
-        MccAccount? account = ToAccount(config.ResolvedAccount);
+        DmcbkAccount? account = ToAccount(config.ResolvedAccount);
         if (account is not null)
             _account = account;
 
@@ -221,14 +221,14 @@ public sealed partial class ClientBuilder
         };
     }
 
-    private static MccAccount? ToAccount(ConfiguredAccount account)
+    private static DmcbkAccount? ToAccount(ConfiguredAccount account)
     {
         string user = string.IsNullOrWhiteSpace(account.Login) ? account.Name : account.Login;
         if (string.IsNullOrWhiteSpace(user))
             return null;
 
-        if (account.Kind == MccAccountKind.Offline)
-            return MccAccount.Offline(user);
+        if (account.Kind == DmcbkAccountKind.Offline)
+            return DmcbkAccount.Offline(user);
 
         Uri? authServer = null;
         if (!string.IsNullOrWhiteSpace(account.AuthServer))
@@ -238,22 +238,22 @@ public sealed partial class ClientBuilder
                 : new Uri($"https://{account.AuthServer}");
         }
 
-        return new MccAccount { Kind = account.Kind, User = user, AuthServerBaseUrl = authServer };
+        return new DmcbkAccount { Kind = account.Kind, User = user, AuthServerBaseUrl = authServer };
     }
 
     /// <summary>
     /// Builds the client.
     /// An account is required; a server is not.
     /// Built without one, the client is idle: commands, plugins and everything that does not need a session run, and it dials as soon as something names a server (<see cref="Client.ReconnectAsync"/>, which is what <c>connect</c> calls).
-    /// Until then <see cref="Client.StartAsync"/> throws <see cref="MccNoServerConfiguredException"/>.
+    /// Until then <see cref="Client.StartAsync"/> throws <see cref="DmcbkNoServerConfiguredException"/>.
     /// </summary>
     public Client Build()
     {
         ServerEndpoint? endpoint = _endpoint;
-        MccAccount account = _account
+        DmcbkAccount account = _account
             ?? throw new InvalidOperationException("An account is required; call UseAccount or UseUsername.");
 
-        if (account.Kind == MccAccountKind.Offline && account.User.Length > 16)
+        if (account.Kind == DmcbkAccountKind.Offline && account.User.Length > 16)
             throw new InvalidOperationException("An offline username must be at most 16 characters.");
 
         IConnectionFactory? proxyFactory = _proxyFactory;

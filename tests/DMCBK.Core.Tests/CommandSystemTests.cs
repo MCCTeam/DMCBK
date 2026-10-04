@@ -29,7 +29,7 @@ public sealed class CommandSystemTests
         return builder.Build();
     }
 
-    private static Client BuildClientWithConfig(MccConfiguration config, ICommandOutput? output = null)
+    private static Client BuildClientWithConfig(DmcbkConfiguration config, ICommandOutput? output = null)
         => new ClientBuilder().UseCommands().UseBeacon()
             .UseConfiguration(config)
             .UseHostInterface(new TestHost(output))
@@ -164,7 +164,7 @@ public sealed class CommandSystemTests
     [Fact]
     public async Task Routing_NoneMode_TreatsEveryLineAsCommand()
     {
-        MccConfiguration config = BuildConfig(InternalCommandPrefix.None);
+        DmcbkConfiguration config = BuildConfig(InternalCommandPrefix.None);
         await using Client client = BuildClientWithConfig(config);
         InputRouting routing = await client.Commands.HandleInputAsync("set flag=on");
         Assert.Equal(InputAction.CommandExecuted, routing.Action);
@@ -930,13 +930,13 @@ public sealed class CommandSystemTests
             => builder.Literal(CmdName, literal => literal.Executes(ctx => ctx.Source.Result.Ok("ok")));
     }
 
-    private static MccConfiguration BuildConfig(InternalCommandPrefix prefix)
+    private static DmcbkConfiguration BuildConfig(InternalCommandPrefix prefix)
         => new()
         {
             ResolvedHost = "localhost",
             ResolvedPort = 25565,
             ResolvedVersion = "auto",
-            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = MccAccountKind.Offline },
+            ResolvedAccount = new ConfiguredAccount { Name = "Tester", Kind = DmcbkAccountKind.Offline },
             Permissions = new PermissionsConfig { CommandPrefix = prefix },
         };
 

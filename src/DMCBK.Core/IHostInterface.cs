@@ -16,7 +16,7 @@ public interface IHostInterface
 
     /// <summary>
     /// The host seam that renders interactive login steps (UMPK's <see cref="IAuthInteraction"/>).
-    /// Null means the host cannot drive an interactive login; the core then fails an online account with <see cref="MccAuthInteractionUnavailableException"/>.
+    /// Null means the host cannot drive an interactive login; the core then fails an online account with <see cref="DmcbkAuthInteractionUnavailableException"/>.
     /// Offline accounts never use it.
     /// </summary>
     IAuthInteraction? AuthInteraction { get; }

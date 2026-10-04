@@ -2,7 +2,7 @@ using Tomlet.Attributes;
 
 namespace DMCBK.Core.Configuration.Toml;
 
-// Mutable, TOML-facing model of client.toml. Deserialized by Tomlet, then folded into the immutable MccConfiguration snapshot by ConfigurationValidation.
+// Mutable, TOML-facing model of client.toml. Deserialized by Tomlet, then folded into the immutable DmcbkConfiguration snapshot by ConfigurationValidation.
 // Enums are kept as strings here so the validator owns case-insensitive parsing and warn-and-default handling for unknown values.
 // Comment attributes carry
 // $CorpusKey$ placeholders that DefaultConfigWriter expands from the owned ConfigComments corpus.

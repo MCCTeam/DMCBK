@@ -493,7 +493,7 @@ public sealed class PluginSdkDefectTests
         }
 
         Assert.True(sawItselfOnTheLoop, "A real posted work item must report IsCurrent, or the guard never arms.");
-        Assert.IsType<MccSessionLoopBlockedException>(captured);
+        Assert.IsType<DmcbkSessionLoopBlockedException>(captured);
         Assert.Contains("session event handler", captured!.Message, StringComparison.Ordinal);
     }
 
@@ -683,13 +683,13 @@ public sealed class PluginSdkDefectTests
         // The defect was not a wrong line, it was NO CALLER: five bindings and zero consumers.
         // A formatter test cannot see that, so assert the call site exists by looking for the token in the session builder's IL.
         // False negatives are impossible here; that is the property that matters.
-        // MccSessionFactory.CreateAsync, not Client, since the run-EstablishSessionAsync-equivalent session-build logic (including this wiring) moved there when Client started running the session on UmpkClientSupervisor.
+        // DmcbkSessionFactory.CreateAsync, not Client, since the run-EstablishSessionAsync-equivalent session-build logic (including this wiring) moved there when Client started running the session on UmpkClientSupervisor.
         MethodInfo target = typeof(PacketDebugLogger)
             .GetMethod(nameof(PacketDebugLogger.TryAttach), BindingFlags.Static | BindingFlags.NonPublic)!;
 
         Assert.True(
-            CallsMethod(typeof(MccSessionFactory), target),
-            "MccSessionFactory no longer calls PacketDebugLogger.TryAttach, so logging.packetdebugmessages has no consumer again.");
+            CallsMethod(typeof(DmcbkSessionFactory), target),
+            "DmcbkSessionFactory no longer calls PacketDebugLogger.TryAttach, so logging.packetdebugmessages has no consumer again.");
     }
 
     /// <summary>

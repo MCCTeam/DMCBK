@@ -404,7 +404,7 @@ public sealed class AcceptanceRegressionTests
 
         Assert.Equal(CmdStatus.Fail, result.Status);
         CommandFaultedEventArgs fault = Assert.Single(faults);
-        var snapshotFault = Assert.IsType<MccFeatureDisabledException>(fault.Exception);
+        var snapshotFault = Assert.IsType<DmcbkFeatureDisabledException>(fault.Exception);
         Assert.Equal(CommandStrings.Error(snapshotFault.Message), result.Message);
         Assert.Empty(output.Lines);
         Assert.DoesNotContain(McStrings.Get("cmd.inventory.close_fail"), result.Message, StringComparison.Ordinal);

@@ -5,7 +5,7 @@
 // This host is free to use System.Console (a worker host is a console app); the architectural law is that the CORE stays UI-free, which this project - alongside DependencyGuardTests - demonstrates independently of the full CLI.
 //
 // What it does, end to end, entirely FROM CODE (no configurations/ folder, no interactive prompts):
-//   1. Build an MccConfiguration-free client via the fluent ClientBuilder: offline account, a server
+//   1. Build a DmcbkConfiguration-free client via the fluent ClientBuilder: offline account, a server
 // host/port, and either a pinned version or ping-based auto-detection.
 //   2. Connect (StartAsync returns once the play session is live).
 //   3. Log every inbound chat line to the console (rendered to plain text through the core translation service,
@@ -83,7 +83,7 @@ internal static class Program
 
         #endregion
         #region 3. Build the client FROM CODE
-        // No configurations/ folder, no MccConfiguration snapshot: a pure builder-driven construction, which is the second thing this sample proves (the CLI drives the config-folder path; embedders can skip it).
+        // No configurations/ folder, no DmcbkConfiguration snapshot: a pure builder-driven construction, which is the second thing this sample proves (the CLI drives the config-folder path; embedders can skip it).
         var builder = new ClientBuilder()
             .UseServer(host, port)
             .UseUsername(username)                 // offline account sugar; use UseAccount(...) for online flows
@@ -158,7 +158,7 @@ internal static class Program
             Console.Error.WriteLine($"Authentication failed: {ex.Message}");
             return ExitLoginRejected;
         }
-        catch (MccAuthInteractionUnavailableException ex)
+        catch (DmcbkAuthInteractionUnavailableException ex)
         {
             Console.Error.WriteLine($"Authentication failed: {ex.Message}");
             return ExitLoginRejected;
@@ -229,7 +229,7 @@ internal static class Program
             // The 60s lifetime guard fired mid-action; treat as an unexpected drop.
             result = ExitConnectionLost;
         }
-        catch (MccClientException ex)
+        catch (DmcbkClientException ex)
         {
             Console.Error.WriteLine($"Scripted action failed: {ex.Message}");
             result = ExitActionFailed;

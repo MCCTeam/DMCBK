@@ -1942,7 +1942,7 @@ public sealed class BeaconInterpreter
             case ParenExpr paren:
                 return await EvaluateExprAsync(paren.Inner, scope, verbs, ct).ConfigureAwait(false);
 
-            case MccExpr mcc:
+            case DmcbkExpr mcc:
                 {
                     Spend(scope, mcc.Span);
                     BeaconValue argument = await EvaluateExprAsync(mcc.Argument, scope, verbs, ct).ConfigureAwait(false);

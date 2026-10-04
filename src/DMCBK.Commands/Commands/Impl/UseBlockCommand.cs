@@ -54,7 +54,7 @@ public sealed class UseBlockCommand : CommandBase
     {
         CommandNodeBuilder<CommandContext> help = RegisterHelp(builder, CmdName, ShowUsage);
         builder.Literal(CmdName, l => l
-            .ThenArgument("Location", MccArguments.Location(), h => h
+            .ThenArgument("Location", DmcbkArguments.Location(), h => h
                 .Executes(ctx => Run(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), Hand.Main))
                 .ThenLiteral("mainhand", a => a.Executes(ctx => Run(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), Hand.Main)))
                 .ThenLiteral("offhand", a => a.Executes(ctx => Run(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), Hand.Off))))

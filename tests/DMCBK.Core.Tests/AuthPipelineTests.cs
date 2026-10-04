@@ -15,26 +15,26 @@ public sealed class AuthPipelineTests
     [Fact]
     public void Offline_Account_IsNotOnline()
     {
-        MccAccount account = MccAccount.Offline("steve");
-        Assert.Equal(MccAccountKind.Offline, account.Kind);
+        DmcbkAccount account = DmcbkAccount.Offline("steve");
+        Assert.Equal(DmcbkAccountKind.Offline, account.Kind);
         Assert.Equal("steve", account.User);
         Assert.False(account.IsOnline);
     }
 
     [Theory]
-    [InlineData(MccAccountKind.MicrosoftDeviceCode)]
-    [InlineData(MccAccountKind.MicrosoftBrowser)]
-    [InlineData(MccAccountKind.Yggdrasil)]
-    public void OnlineKinds_AreOnline(MccAccountKind kind)
-        => Assert.True(new MccAccount { Kind = kind, User = "u" }.IsOnline);
+    [InlineData(DmcbkAccountKind.MicrosoftDeviceCode)]
+    [InlineData(DmcbkAccountKind.MicrosoftBrowser)]
+    [InlineData(DmcbkAccountKind.Yggdrasil)]
+    public void OnlineKinds_AreOnline(DmcbkAccountKind kind)
+        => Assert.True(new DmcbkAccount { Kind = kind, User = "u" }.IsOnline);
 
     [Theory]
-    [InlineData(MccAccountKind.Offline, AuthFlowKind.Offline)]
-    [InlineData(MccAccountKind.MicrosoftDeviceCode, AuthFlowKind.MicrosoftDeviceCode)]
-    [InlineData(MccAccountKind.MicrosoftBrowser, AuthFlowKind.MicrosoftBrowser)]
-    [InlineData(MccAccountKind.Yggdrasil, AuthFlowKind.Yggdrasil)]
-    public void ToFlowKind_MapsEveryAccountKind(MccAccountKind kind, AuthFlowKind expected)
-        => Assert.Equal(expected, MccAuthMapping.ToFlowKind(kind));
+    [InlineData(DmcbkAccountKind.Offline, AuthFlowKind.Offline)]
+    [InlineData(DmcbkAccountKind.MicrosoftDeviceCode, AuthFlowKind.MicrosoftDeviceCode)]
+    [InlineData(DmcbkAccountKind.MicrosoftBrowser, AuthFlowKind.MicrosoftBrowser)]
+    [InlineData(DmcbkAccountKind.Yggdrasil, AuthFlowKind.Yggdrasil)]
+    public void ToFlowKind_MapsEveryAccountKind(DmcbkAccountKind kind, AuthFlowKind expected)
+        => Assert.Equal(expected, DmcbkAuthMapping.ToFlowKind(kind));
 
     /// <summary>
     /// The one branch MCC still owns for the Yggdrasil URL mapping: which account kinds resolve to a provider base at all (only Yggdrasil; offline and Microsoft accounts always use Mojang defaults), and that the delegation to <see cref="Umpk.Auth.YggdrasilEndpoints.EnsureTrailingSlash"/> actually runs end to end.
@@ -43,17 +43,17 @@ public sealed class AuthPipelineTests
     [Fact]
     public void ProviderBaseUrl_IsNullForNonYggdrasilAndSlashTerminatedForYggdrasil()
     {
-        Assert.Null(MccAuthMapping.ProviderBaseUrl(MccAccount.Offline("steve")));
-        Assert.Null(MccAuthMapping.ProviderBaseUrl(new MccAccount { Kind = MccAccountKind.MicrosoftDeviceCode, User = "u" }));
+        Assert.Null(DmcbkAuthMapping.ProviderBaseUrl(DmcbkAccount.Offline("steve")));
+        Assert.Null(DmcbkAuthMapping.ProviderBaseUrl(new DmcbkAccount { Kind = DmcbkAccountKind.MicrosoftDeviceCode, User = "u" }));
 
-        var yggdrasil = new MccAccount
+        var yggdrasil = new DmcbkAccount
         {
-            Kind = MccAccountKind.Yggdrasil,
+            Kind = DmcbkAccountKind.Yggdrasil,
             User = "u",
             AuthServerBaseUrl = new Uri("https://auth.example/api/yggdrasil"),
         };
 
-        Assert.Equal(new Uri("https://auth.example/api/yggdrasil/"), MccAuthMapping.ProviderBaseUrl(yggdrasil));
+        Assert.Equal(new Uri("https://auth.example/api/yggdrasil/"), DmcbkAuthMapping.ProviderBaseUrl(yggdrasil));
     }
 
     [Fact]
@@ -64,11 +64,11 @@ public sealed class AuthPipelineTests
         // Default host (NullHostInterface) exposes no auth interaction; the guard fires before any network.
         await using Client client = new ClientBuilder().UseCommands().UseBeacon()
             .UseServer("127.0.0.1", 1)
-            .UseAccount(new MccAccount { Kind = MccAccountKind.MicrosoftDeviceCode, User = "steve@example.com" })
+            .UseAccount(new DmcbkAccount { Kind = DmcbkAccountKind.MicrosoftDeviceCode, User = "steve@example.com" })
             .UseVersion(version)
             .Build();
 
-        await Assert.ThrowsAsync<MccAuthInteractionUnavailableException>(() => client.StartAsync());
+        await Assert.ThrowsAsync<DmcbkAuthInteractionUnavailableException>(() => client.StartAsync());
         Assert.Equal(ClientStatus.Disconnected, client.Status);
     }
 

@@ -14,7 +14,7 @@ namespace DMCBK.Core;
 
 /// <summary>
 /// The world/terrain surface: typed block lookup, block search, a per-chunk loaded-state grid, a view raycast honoring the negotiated protocol's block shapes, world time, world border, dimension info, and block interaction (dig/place/use).
-/// Requires the Terrain feature; disabled features surface <see cref="MccFeatureDisabledException"/>.
+/// Requires the Terrain feature; disabled features surface <see cref="DmcbkFeatureDisabledException"/>.
 /// </summary>
 public sealed class WorldApi
 {

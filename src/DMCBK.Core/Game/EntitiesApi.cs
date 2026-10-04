@@ -7,7 +7,7 @@ namespace DMCBK.Core;
 /// <summary>
 /// The entity surface: snapshots of tracked entities (all/by-id/by-uuid/of-type/nearby/nearest) with identity, kinematics, pose, custom name, equipment, effects, and the rider graph, plus attack/interact actions.
 /// Entity types resolve to real registry identifiers because the client always wires static registries (H1).
-/// Requires the Entities feature; disabled features surface <see cref="MccFeatureDisabledException"/>.
+/// Requires the Entities feature; disabled features surface <see cref="DmcbkFeatureDisabledException"/>.
 /// </summary>
 public sealed class EntitiesApi
 {

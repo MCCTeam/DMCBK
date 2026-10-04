@@ -215,7 +215,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 _client.WaitForCommandWork(work);
                 return work.GetAwaiter().GetResult().Protocol;
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
                 or OperationCanceledException)
             {
                 return null;
@@ -231,7 +231,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -246,7 +246,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -261,7 +261,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -319,7 +319,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                     .Select(e => new BeaconEffectInfo(e.EffectId, e.Level, e.Duration / 20))
                     .ToList();
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
                 or OperationCanceledException)
             {
                 return [];
@@ -346,7 +346,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 dayTime = time.DayTime;
                 day = time.Day;
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
                 or OperationCanceledException)
             {
             }
@@ -368,7 +368,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             return work.GetAwaiter().GetResult().Entries
                 .Select(e => e.Name).Take(Math.Max(0, limit)).ToList();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return [];
@@ -386,7 +386,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 _client.WaitForCommandWork(work);
                 return work.GetAwaiter().GetResult().TpsEstimate;
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
                 or OperationCanceledException)
             {
                 return null;
@@ -427,7 +427,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             BlockInfo info = work.GetAwaiter().GetResult();
             return info.ChunkLoaded ? new BeaconBlockInfo(info.BlockId, info.StateId) : null;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -445,7 +445,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 .FindBlocksAsync(nameOrId, radius, maxResults, ct).ConfigureAwait(false);
             return found.Select(p => new BeaconBlockPos(p.X, p.Y, p.Z)).ToList();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException or ArgumentOutOfRangeException)
         {
             return [];
@@ -461,7 +461,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -477,7 +477,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -493,7 +493,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
             or OperationCanceledException)
         {
             return null;
@@ -511,8 +511,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 .FindSignsAsync(needle, radius, maxResults, ct).ConfigureAwait(false);
             return found.Select(s => new BeaconSignInfo(s.Position.X, s.Position.Y, s.Position.Z, s.Text)).ToList();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or ArgumentOutOfRangeException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or ArgumentOutOfRangeException or DmcbkFeatureDisabledException)
         {
             return [];
         }
@@ -535,7 +535,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                     board.Teams.Select(t => new BeaconTeamInfo(
                         t.Name, t.DisplayName, t.Members.ToList())).ToList());
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
                 or OperationCanceledException)
             {
                 return BeaconScoreboard.Empty;
@@ -557,7 +557,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
                     .Select(b => new BeaconBossBarInfo(b.Title, b.Progress, b.Color))
                     .ToList();
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
                 or OperationCanceledException)
             {
                 return [];
@@ -574,8 +574,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return null;
         }
@@ -620,8 +620,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             return await _client.Game.Entities.NearbyAsync(64, ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return [];
         }
@@ -655,8 +655,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 _client.WaitForCommandWork(work);
                 return work.GetAwaiter().GetResult();
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return 0;
             }
@@ -701,8 +701,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Inventory.SelectHeldSlotAsync(slot, ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return false;
         }
@@ -724,8 +724,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Inventory.DropAsync(held, stack, ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return false;
         }
@@ -768,8 +768,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 .ClickAsync(new ClickAction.Pickup(target, MouseButton.Left), ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return false;
         }
@@ -788,8 +788,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 .ClickAsync(new ClickAction.Pickup(slot, button), ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException or ArgumentOutOfRangeException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException or ArgumentOutOfRangeException)
         {
             return false;
         }
@@ -805,8 +805,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             RecipeBookSnapshot book = work.GetAwaiter().GetResult();
             return book.Recipes.Concat(book.RecipeIds.Select(id => id.ToString())).ToList();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return [];
         }
@@ -822,8 +822,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 .PlaceRecipeByNameAsync(Umpk.Identifier.Parse(recipe.Trim()), false, null, ct)
                 .ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException or FormatException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException or FormatException)
         {
             return false;
         }
@@ -842,8 +842,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
 
                 return ToBeaconContainer(container);
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return null;
             }
@@ -894,8 +894,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Inventory.PickupAsync(slot, MouseButton.Left, ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return false;
         }
@@ -945,8 +945,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Inventory.QuickMoveAsync(windowSlot, ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return false;
         }
@@ -960,8 +960,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Movement
                 .NavigateToAsync(new BlockPos((int)x, (int)y, (int)z), 1, ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("move_goto", ex.Message);
         }
@@ -982,8 +982,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 await _client.Game.Movement.NavigateToAsync(
                     BlockPos.Containing(position.Value), 2, ct).ConfigureAwait(false);
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 throw Refused("move_follow", ex.Message);
             }
@@ -1018,8 +1018,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             await _client.Game.Movement.LookAtAsync(new Vec3d(x, y, z), ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("look_at", ex.Message);
         }
@@ -1037,8 +1037,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             await _client.Game.Entities.AttackAsync(id.Value, ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("attack", ex.Message);
         }
@@ -1079,8 +1079,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             _client.WaitForCommandWork(work);
             return work.GetAwaiter().GetResult().Select(ProjectEntity).ToList();
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return [];
         }
@@ -1096,8 +1096,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             EntitySnapshot? found = work.GetAwaiter().GetResult();
             return found is null ? null : ProjectEntity(found);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return null;
         }
@@ -1118,8 +1118,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             throw;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("attack", ex.Message);
         }
@@ -1140,8 +1140,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             throw;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("interact", ex.Message);
         }
@@ -1223,8 +1223,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             {
                 container = GetOpenContainerSnapshot();
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return null;
             }
@@ -1262,8 +1262,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             container = await _client.Game.Inventory.GetOpenContainerAsync(ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("trade.select", ex.Message);
         }
@@ -1283,8 +1283,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Inventory.SelectTradeAsync(tradeIndex, ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("trade.select", ex.Message);
         }
@@ -1305,8 +1305,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             {
                 container = await _client.Game.Inventory.GetOpenContainerAsync(ct).ConfigureAwait(false);
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 throw Refused("trade.buy", ex.Message);
             }
@@ -1350,8 +1350,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 await _client.Game.Inventory.PickupAsync(target.Value, MouseButton.Left, ct).ConfigureAwait(false);
                 done++;
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 throw Refused("trade.buy", ex.Message);
             }
@@ -1371,8 +1371,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             {
                 container = await _client.Game.Inventory.GetOpenContainerAsync(ct).ConfigureAwait(false);
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return false;
             }
@@ -1400,8 +1400,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             {
                 container = GetOpenContainerSnapshot();
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return null;
             }
@@ -1433,8 +1433,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             container = await _client.Game.Inventory.GetOpenContainerAsync(ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("enchant.choose", ex.Message);
         }
@@ -1451,8 +1451,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             await _client.Game.Inventory.ClickContainerButtonAsync(slot, container.WindowId, ct).ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("enchant.choose", ex.Message);
         }
@@ -1466,7 +1466,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             await _client.StopAsync().ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException)
         {
             throw Refused("disconnect", ex.Message);
         }
@@ -1479,8 +1479,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             await _client.Game.World.UseItemAsync(ct: ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("use_in_hand", ex.Message);
         }
@@ -1501,8 +1501,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 _ => new BeaconDigResult(false, "unconfirmed (no air read and no refusal arrived)"),
             };
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("world.dig", ex.Message);
         }
@@ -1526,8 +1526,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 .ConfigureAwait(false);
             return true;
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("world.place", ex.Message);
         }
@@ -1547,8 +1547,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 : new BeaconRaycastHit(
                     hit.Position.X, hit.Position.Y, hit.Position.Z, hit.BlockId, hit.Distance);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException or ArgumentOutOfRangeException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException or ArgumentOutOfRangeException)
         {
             return null;
         }
@@ -1566,8 +1566,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
 
             return ToBeaconContainer(container);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             return null;
         }
@@ -1598,8 +1598,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
                 _client.WaitForCommandWork(work);
                 snapshot = work.GetAwaiter().GetResult();
             }
-            catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-                or OperationCanceledException or MccFeatureDisabledException)
+            catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+                or OperationCanceledException or DmcbkFeatureDisabledException)
             {
                 return null;
             }
@@ -1658,8 +1658,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             snapshot = await _client.Game.Dialogs.GetCurrentAsync(ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("dialog.answer", ex.Message);
         }
@@ -1692,8 +1692,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
             outcome = await _client.Game.Dialogs
                 .ClickAsync(buttonOneBased - 1, submitted, ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("dialog.answer", ex.Message);
         }
@@ -1721,8 +1721,8 @@ public sealed class BeaconClientHost : IBeaconHostServices
         {
             await _client.Game.Dialogs.CancelAsync(ct).ConfigureAwait(false);
         }
-        catch (Exception ex) when (ex is MccClientException or InvalidOperationException
-            or OperationCanceledException or MccFeatureDisabledException)
+        catch (Exception ex) when (ex is DmcbkClientException or InvalidOperationException
+            or OperationCanceledException or DmcbkFeatureDisabledException)
         {
             throw Refused("dialog.close", ex.Message);
         }

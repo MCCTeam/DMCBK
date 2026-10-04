@@ -64,7 +64,7 @@ public sealed class ConnectPlan : EventArgs
 
     /// <summary>
     /// Stops this attempt.
-    /// The connect fails with <see cref="MccConnectVetoedException"/> carrying <paramref name="reason"/>, and no automatic retry follows, because a refusal the client made itself will be made again.
+    /// The connect fails with <see cref="DmcbkConnectVetoedException"/> carrying <paramref name="reason"/>, and no automatic retry follows, because a refusal the client made itself will be made again.
     /// A second veto does not replace the first reason.
     /// </summary>
     public void Veto(string reason)
@@ -81,10 +81,10 @@ public sealed class ConnectPlan : EventArgs
 /// A <see cref="Client.BeforeConnect"/> handler stopped the attempt.
 /// <see cref="Reason"/> is what the handler said, which is the only thing the user can act on.
 /// </summary>
-public sealed class MccConnectVetoedException : MccClientException
+public sealed class DmcbkConnectVetoedException : DmcbkClientException
 {
     /// <summary>Creates the exception.</summary>
-    public MccConnectVetoedException(string reason)
+    public DmcbkConnectVetoedException(string reason)
         : base(reason)
     {
         Reason = reason;

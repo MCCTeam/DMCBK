@@ -8,7 +8,7 @@ namespace DMCBK.Core;
 /// <summary>
 /// The movement/pathfinding surface: straight-line <see cref="MoveToAsync"/> (Physics feature), planner-driven <see cref="NavigateAsync"/> (Pathfinding feature), current position/rotation, look and rotation setters, sneak/sprint toggles, and arm swing.
 /// The move/navigate tasks complete on arrival and fault on failure.
-/// Disabled features surface <see cref="MccFeatureDisabledException"/>.
+/// Disabled features surface <see cref="DmcbkFeatureDisabledException"/>.
 /// </summary>
 public sealed class MovementApi
 {

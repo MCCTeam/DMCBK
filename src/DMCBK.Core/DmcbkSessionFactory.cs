@@ -17,7 +17,7 @@ namespace DMCBK.Core;
 /// The <see cref="IClientSessionFactory"/> behind every <see cref="Client"/> session: everything the old hand-rolled state machine's <c>EstablishSessionAsync</c> did MINUS supervision, which <see cref="Umpk.Client.UmpkClientSupervisor"/> now owns instead.
 /// One factory instance backs one client's whole lifetime (initial connect and every reconnect), which is why the target server/version/account are mutable fields rather than constructor arguments: <see cref="PrepareReconnect"/> is how <see cref="Client.ReconnectAsync"/> updates them before handing the dial to the supervisor.
 /// </summary>
-internal sealed class MccSessionFactory : IClientSessionFactory
+internal sealed class DmcbkSessionFactory : IClientSessionFactory
 {
     private static readonly TimeSpan PingTimeout = TimeSpan.FromSeconds(10);
 
@@ -30,7 +30,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
     private readonly ILoggerFactory _loggerFactory;
     private readonly ILogger _logger;
     private readonly IHostInterface _host;
-    private readonly MccConfiguration? _configuration;
+    private readonly DmcbkConfiguration? _configuration;
     private readonly IConnectionFactory? _proxyFactory;
     private readonly bool _proxyForPing;
     private readonly bool _pingForDisplayWhenPinned;
@@ -42,7 +42,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
     private readonly object _gate = new();
 
     private JavaVersion? _pinnedVersion;
-    private MccAccount _account;
+    private DmcbkAccount _account;
     private TimeSpan? _readIdleTimeoutOverride;
     private MinecraftAuthFlow? _authFlow;
     private YggdrasilSessionService? _sessionService;
@@ -55,14 +55,14 @@ internal sealed class MccSessionFactory : IClientSessionFactory
     /// </summary>
     internal Action<UmpkClient, int>? SessionClientCreated { get; set; }
 
-    internal MccSessionFactory(
-        MccAccount account,
+    internal DmcbkSessionFactory(
+        DmcbkAccount account,
         string? tokenStorePath,
         JavaVersion? explicitVersion,
         ClientFeatures features,
         ILoggerFactory loggerFactory,
         IHostInterface host,
-        MccConfiguration? configuration,
+        DmcbkConfiguration? configuration,
         IConnectionFactory? proxyFactory,
         bool proxyForPing,
         bool pingForDisplayWhenPinned,
@@ -151,7 +151,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
     {
         ArgumentNullException.ThrowIfNull(attempt);
 
-        MccAccount account;
+        DmcbkAccount account;
         JavaVersion? pinned;
         lock (_gate)
         {
@@ -162,14 +162,14 @@ internal sealed class MccSessionFactory : IClientSessionFactory
         // Fail fast: an online account needs a host-provided auth interaction to drive the interactive login.
         if (account.IsOnline && _host.AuthInteraction is null)
         {
-            throw new MccAuthInteractionUnavailableException(
+            throw new DmcbkAuthInteractionUnavailableException(
                 $"The {account.Kind} account requires an interactive login, but the host provides no auth interaction.");
         }
 
         // The plan is offered before anything reaches the network, so a redirect moves the version ping and the login as well as the socket, and a veto costs nothing.
         ConnectPlan plan = RaiseBeforeConnect(attempt);
         if (plan.VetoReason is { } vetoed)
-            throw new MccConnectVetoedException(vetoed);
+            throw new DmcbkConnectVetoedException(vetoed);
 
         ServerEndpoint endpoint = plan.ToEndpoint();
         if (endpoint != attempt.Endpoint)
@@ -364,7 +364,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
     }
 
     /// <summary>The client-settings announce this configuration produces, or UMPK's defaults without one.</summary>
-    private static ClientInformationOptions ClientInformationFor(MccConfiguration? configuration)
+    private static ClientInformationOptions ClientInformationFor(DmcbkConfiguration? configuration)
         => configuration is null
             ? new ClientInformationOptions()
             : configuration.ClientSettings.ToClientInformation(
@@ -473,7 +473,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
         _ => "version detection failed",
     };
 
-    private async Task<AuthOutcome> AuthenticateAsync(MccAccount account, SessionAttempt attempt, CancellationToken ct)
+    private async Task<AuthOutcome> AuthenticateAsync(DmcbkAccount account, SessionAttempt attempt, CancellationToken ct)
     {
         if (!account.IsOnline)
             return new AuthOutcome(OfflineIdentity.ComputeProfile(account.User), null, null, null, null);
@@ -485,8 +485,8 @@ internal sealed class MccSessionFactory : IClientSessionFactory
 
         var options = new MinecraftAuthOptions
         {
-            FlowKind = MccAuthMapping.ToFlowKind(account.Kind),
-            YggdrasilBaseUrl = MccAuthMapping.ProviderBaseUrl(account),
+            FlowKind = DmcbkAuthMapping.ToFlowKind(account.Kind),
+            YggdrasilBaseUrl = DmcbkAuthMapping.ProviderBaseUrl(account),
             TokenStore = CreateTokenStore(),
             Logger = _loggerFactory.CreateLogger("DMCBK.Core.Auth"),
         };
@@ -497,7 +497,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
             JavaSession session = await ResumeOrLoginAsync(flow, account, interaction, ct).ConfigureAwait(false);
             var credentials = new ProfileCredentials(session.Profile, session.AccessToken);
             var authenticator = new YggdrasilSessionService(
-                new SessionServiceOptions { BaseUrl = MccAuthMapping.SessionBaseUrl(account) });
+                new SessionServiceOptions { BaseUrl = DmcbkAuthMapping.SessionBaseUrl(account) });
 
             return new AuthOutcome(session.Profile, authenticator, credentials, flow, session);
         }
@@ -509,7 +509,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
     }
 
     private async Task<JavaSession> ResumeOrLoginAsync(
-        MinecraftAuthFlow flow, MccAccount account, IAuthInteraction interaction, CancellationToken ct)
+        MinecraftAuthFlow flow, DmcbkAccount account, IAuthInteraction interaction, CancellationToken ct)
     {
         JavaSession? resumed = await flow.TryResumeAsync(account.User, ct).ConfigureAwait(false);
         if (resumed is not null)
@@ -529,7 +529,7 @@ internal sealed class MccSessionFactory : IClientSessionFactory
 
         // The browser flow above never configures BrowserRedirectUri, so it always takes the hosted redirect page: the authorization code is carried from that page to this process by hand, and nothing stops a user pasting a code issued to someone else.
         // That session would then be cached under the configured login and resumed unprompted on every later start, so the substitution has to be called out once, here.
-        if (account.Kind == MccAccountKind.MicrosoftBrowser)
+        if (account.Kind == DmcbkAccountKind.MicrosoftBrowser)
         {
             _logger.LogWarning(
                 "This sign-in returns its code through the hosted redirect page, so the code is "

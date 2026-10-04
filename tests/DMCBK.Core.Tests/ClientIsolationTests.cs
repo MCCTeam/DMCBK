@@ -65,9 +65,9 @@ public sealed class ClientIsolationTests
         var defaultUi = System.Globalization.CultureInfo.DefaultThreadCurrentUICulture;
         var ambient = System.Globalization.CultureInfo.CurrentCulture;
         await using Client first = new ClientBuilder().UseUsername("first").UseConfiguration(
-            new Configuration.MccConfiguration { Localization = new Configuration.LocalizationConfig { Language = "de-DE" } }).Build();
+            new Configuration.DmcbkConfiguration { Localization = new Configuration.LocalizationConfig { Language = "de-DE" } }).Build();
         await using Client second = new ClientBuilder().UseUsername("second").UseConfiguration(
-            new Configuration.MccConfiguration { Localization = new Configuration.LocalizationConfig { Language = "en-US" } }).Build();
+            new Configuration.DmcbkConfiguration { Localization = new Configuration.LocalizationConfig { Language = "en-US" } }).Build();
         Assert.Equal("de-DE", first.UiCulture.Name);
         Assert.Equal("en-US", second.UiCulture.Name);
         Assert.Same(defaultCulture, System.Globalization.CultureInfo.DefaultThreadCurrentCulture);

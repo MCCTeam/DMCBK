@@ -9,7 +9,7 @@ namespace DMCBK.Core.Configuration;
 /// The <c>Resolved*</c> members are derived by the validator: they fold the account/server selection and the connection block into the single effective endpoint, version and account the client actually uses.
 /// This keeps the builder mapping trivial and lets the resolution be unit-tested without a session.
 /// </remarks>
-public sealed record MccConfiguration
+public sealed record DmcbkConfiguration
 {
     /// <summary>Connection address and policy (client.toml).</summary>
     public ConnectionConfig Connection { get; init; } = new();

@@ -18,7 +18,7 @@ public interface ICommandDispatcher
     /// <summary>The displayed prefix.</summary>
     string ActivePrefix { get; }
     /// <summary>The current configuration.</summary>
-    MccConfiguration? CurrentConfiguration { get; }
+    DmcbkConfiguration? CurrentConfiguration { get; }
     /// <summary>The variable store.</summary>
     VariableStore Variables { get; }
     /// <summary>The host status glyphs.</summary>
@@ -34,7 +34,7 @@ public interface ICommandDispatcher
     /// <summary>Registers a command with an explicit disposal scope.</summary>
     IDisposable RegisterScopedCommand(CommandBase command);
     /// <summary>Applies a new configuration snapshot.</summary>
-    void ReloadConfiguration(MccConfiguration config);
+    void ReloadConfiguration(DmcbkConfiguration config);
     /// <summary>Routes a host input line.</summary>
     Task<InputRouting> HandleInputAsync(string line, CancellationToken ct = default);
     /// <summary>Dispatches an internal command.</summary>

@@ -14,7 +14,7 @@ namespace DMCBK.Core.Commands.Impl;
 /// <summary>Shared helpers for the connect/reco config-backed selection and the plugin management commands.</summary>
 internal static class SessionCommandHelpers
 {
-    public static ConfiguredServer? FindServer(MccConfiguration config, string name)
+    public static ConfiguredServer? FindServer(DmcbkConfiguration config, string name)
     {
         foreach (ConfiguredServer server in config.Servers.Servers)
         {
@@ -29,7 +29,7 @@ internal static class SessionCommandHelpers
     /// The server <c>connect</c> was given: a name from servers.toml, or a bare <c>host</c> or <c>host:port</c>.
     /// The command has documented the address form since it was written and only ever matched names, so an address answered "Invalid server IP" no matter how well formed it was.
     /// </summary>
-    public static ConfiguredServer? ResolveServer(MccConfiguration config, string value)
+    public static ConfiguredServer? ResolveServer(DmcbkConfiguration config, string value)
     {
         ArgumentNullException.ThrowIfNull(config);
         if (FindServer(config, value) is { } configured)
@@ -50,7 +50,7 @@ internal static class SessionCommandHelpers
         return new ConfiguredServer { Name = address, Host = address[..colon], Port = port };
     }
 
-    public static ConfiguredAccount? FindAccount(MccConfiguration config, string name)
+    public static ConfiguredAccount? FindAccount(DmcbkConfiguration config, string name)
     {
         foreach (ConfiguredAccount account in config.Accounts.Accounts)
         {
@@ -86,11 +86,11 @@ internal static class SessionCommandHelpers
         return true;
     }
 
-    public static MccAccount ToAccount(ConfiguredAccount account)
+    public static DmcbkAccount ToAccount(ConfiguredAccount account)
     {
         string user = string.IsNullOrWhiteSpace(account.Login) ? account.Name : account.Login;
-        if (account.Kind == MccAccountKind.Offline)
-            return MccAccount.Offline(user);
+        if (account.Kind == DmcbkAccountKind.Offline)
+            return DmcbkAccount.Offline(user);
 
         Uri? authServer = null;
         if (!string.IsNullOrWhiteSpace(account.AuthServer))
@@ -100,7 +100,7 @@ internal static class SessionCommandHelpers
                 : new Uri($"https://{account.AuthServer}");
         }
 
-        return new MccAccount { Kind = account.Kind, User = user, AuthServerBaseUrl = authServer };
+        return new DmcbkAccount { Kind = account.Kind, User = user, AuthServerBaseUrl = authServer };
     }
 
     public static JavaVersion? ResolveVersion(string version)

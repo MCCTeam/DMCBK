@@ -201,7 +201,7 @@ public static class BeaconStaticCheck
             NoLiteral => true,
             CallExpr => true,
             CallPrimExpr => true,
-            MccExpr => true,
+            DmcbkExpr => true,
             MemberExpr member => IsCallChain(member),
             ParenExpr paren => IsStructurallyBoolean(paren.Inner),
             _ => false,

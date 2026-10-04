@@ -3,8 +3,8 @@ using Xunit;
 namespace DMCBK.Core.Tests;
 
 /// <summary>
-/// Guards the two cross-cutting rules <see cref="GameSession"/> centralizes for the GameApi facades: a missing session surfaces as <see cref="MccNotInSessionException"/>, and that mapping holds when reached through a real facade (not only the raw handle).
-/// The disabled-feature wrapping (<c>FeatureDisabledException</c> to <see cref="MccFeatureDisabledException"/>) needs a live <c>UmpkClient</c> (sealed, not fakeable) and is exercised by the live <c>--exercise smoke</c> diagnostic instead.
+/// Guards the two cross-cutting rules <see cref="GameSession"/> centralizes for the GameApi facades: a missing session surfaces as <see cref="DmcbkNotInSessionException"/>, and that mapping holds when reached through a real facade (not only the raw handle).
+/// The disabled-feature wrapping (<c>FeatureDisabledException</c> to <see cref="DmcbkFeatureDisabledException"/>) needs a live <c>UmpkClient</c> (sealed, not fakeable) and is exercised by the live <c>--exercise smoke</c> diagnostic instead.
 /// </summary>
 public sealed class GameSessionMappingTests
 {
@@ -12,7 +12,7 @@ public sealed class GameSessionMappingTests
     public void Require_Throws_NotInSession_WhenUnbound()
     {
         var session = new GameSession();
-        Assert.Throws<MccNotInSessionException>(() => session.Require());
+        Assert.Throws<DmcbkNotInSessionException>(() => session.Require());
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public sealed class GameSessionMappingTests
     public async Task ReadAsync_Throws_NotInSession_WhenUnbound()
     {
         var session = new GameSession();
-        await Assert.ThrowsAsync<MccNotInSessionException>(
+        await Assert.ThrowsAsync<DmcbkNotInSessionException>(
             () => session.ReadAsync(client => 0, CancellationToken.None));
     }
 
@@ -34,7 +34,7 @@ public sealed class GameSessionMappingTests
     public async Task RunAsync_Throws_NotInSession_WhenUnbound()
     {
         var session = new GameSession();
-        await Assert.ThrowsAsync<MccNotInSessionException>(
+        await Assert.ThrowsAsync<DmcbkNotInSessionException>(
             () => session.RunAsync(client => Task.CompletedTask));
     }
 
@@ -42,21 +42,21 @@ public sealed class GameSessionMappingTests
     public async Task WorldFacade_Throws_NotInSession_WhenUnbound()
     {
         var world = new WorldApi(new GameSession());
-        await Assert.ThrowsAsync<MccNotInSessionException>(() => world.GetTimeAsync());
+        await Assert.ThrowsAsync<DmcbkNotInSessionException>(() => world.GetTimeAsync());
     }
 
     [Fact]
     public async Task PlayerFacade_Throws_NotInSession_WhenUnbound()
     {
         var player = new PlayerApi(new GameSession(), translations: null);
-        await Assert.ThrowsAsync<MccNotInSessionException>(() => player.GetStatusAsync());
+        await Assert.ThrowsAsync<DmcbkNotInSessionException>(() => player.GetStatusAsync());
     }
 
     [Fact]
     public async Task InventoryFacade_Throws_NotInSession_WhenUnbound()
     {
         var inventory = new InventoryApi(new GameSession(), translations: null);
-        await Assert.ThrowsAsync<MccNotInSessionException>(() => inventory.GetPlayerInventoryAsync());
+        await Assert.ThrowsAsync<DmcbkNotInSessionException>(() => inventory.GetPlayerInventoryAsync());
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class GameSessionMappingTests
             new DialogApi(new GameSession(), translations: null),
             new MapApi(new GameSession()),
             new GameSession());
-        Assert.Throws<MccNotInSessionException>(() => _ = game.Events);
+        Assert.Throws<DmcbkNotInSessionException>(() => _ = game.Events);
     }
 
     [Fact]

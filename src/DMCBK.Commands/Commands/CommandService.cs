@@ -33,7 +33,7 @@ public sealed class CommandService : ICommandDispatcher
     private readonly ICommandRegistrationScope<CommandContext> _hostScope;
     private readonly object _gate = new();
 
-    private MccConfiguration? _config;
+    private DmcbkConfiguration? _config;
     private char _prefix;
     private bool _noPrefix;
     private GlyphSet _glyphs = GlyphSet.Ascii;
@@ -46,7 +46,7 @@ public sealed class CommandService : ICommandDispatcher
         Client client,
         ICommandOutput output,
         IHostUi? ui,
-        MccConfiguration? config,
+        DmcbkConfiguration? config,
         ClientFeatures features,
         VariableStore variables)
     {
@@ -86,7 +86,7 @@ public sealed class CommandService : ICommandDispatcher
     /// The current configuration snapshot used for command resolution.
     /// Unlike the client's construction snapshot, this follows explicit configuration reloads and saved-server changes.
     /// </summary>
-    public MccConfiguration? CurrentConfiguration
+    public DmcbkConfiguration? CurrentConfiguration
     {
         get { lock (_gate) return _config; }
     }
@@ -183,7 +183,7 @@ public sealed class CommandService : ICommandDispatcher
     }
 
     /// <summary>Re-applies configuration after a reload: refreshes the prefix and the config the commands read.</summary>
-    public void ReloadConfiguration(MccConfiguration config)
+    public void ReloadConfiguration(DmcbkConfiguration config)
     {
         ArgumentNullException.ThrowIfNull(config);
         lock (_gate)
@@ -760,14 +760,14 @@ public sealed class CommandService : ICommandDispatcher
 
     private CommandContext NewContext(CancellationToken ct, ICommandOutput? output = null)
     {
-        MccConfiguration? config;
+        DmcbkConfiguration? config;
         lock (_gate)
             config = _config;
 
         return new CommandContext(_client, output ?? _output, _ui, config, _variables, _features, this, ct);
     }
 
-    private void ApplyPrefix(MccConfiguration? config)
+    private void ApplyPrefix(DmcbkConfiguration? config)
     {
         InternalCommandPrefix prefix = config?.Permissions.CommandPrefix ?? InternalCommandPrefix.Slash;
         switch (prefix)

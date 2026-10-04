@@ -591,7 +591,7 @@ public sealed class ParserTests
     {
         BeaconScript script = MustParse("set answer to mcc \"/list\"\n");
         var set = Assert.IsType<SetStmt>(SingleTopStatement(script).Statement);
-        Assert.IsType<MccExpr>(set.Value);
+        Assert.IsType<DmcbkExpr>(set.Value);
     }
 
     [Fact]

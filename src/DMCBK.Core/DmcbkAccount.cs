@@ -1,11 +1,11 @@
 namespace DMCBK.Core;
 
-/// <summary>The authentication flow an <see cref="MccAccount"/> uses.</summary>
+/// <summary>The authentication flow an <see cref="DmcbkAccount"/> uses.</summary>
 /// <remarks>
 /// The ordinal order deliberately differs from <see cref="Umpk.Auth.AuthFlowKind"/>: MCC's TOML-facing contract defaults an unspecified account kind to <see cref="Offline"/>, so Offline has to be ordinal 0 here even though UMPK lists it last.
-/// <see cref="MccAuthMapping.ToFlowKind"/> is the single crossing point between the two enums; do not consolidate them.
+/// <see cref="DmcbkAuthMapping.ToFlowKind"/> is the single crossing point between the two enums; do not consolidate them.
 /// </remarks>
-public enum MccAccountKind
+public enum DmcbkAccountKind
 {
     /// <summary>Offline mode: deterministic UUID, no network auth (the offline path).</summary>
     Offline,
@@ -25,27 +25,27 @@ public enum MccAccountKind
 /// Offline accounts carry only a username; online accounts carry a login hint (a username or email) and never a plaintext password (Microsoft credentials are entered through the host <see cref="Umpk.Auth.IAuthInteraction"/>; Yggdrasil credentials are prompted at login and never stored here).
 /// <see cref="AuthServerBaseUrl"/> targets a third-party Yggdrasil provider.
 /// </summary>
-public sealed record MccAccount
+public sealed record DmcbkAccount
 {
     /// <summary>The authentication flow.</summary>
-    public required MccAccountKind Kind { get; init; }
+    public required DmcbkAccountKind Kind { get; init; }
 
     /// <summary>The offline username, or the online login hint (username/email) used as the token-cache key.</summary>
     public required string User { get; init; }
 
     /// <summary>
-    /// The base URL of a third-party Yggdrasil provider (authlib-injector) for <see cref="MccAccountKind.Yggdrasil"/>; null uses the Mojang defaults.
+    /// The base URL of a third-party Yggdrasil provider (authlib-injector) for <see cref="DmcbkAccountKind.Yggdrasil"/>; null uses the Mojang defaults.
     /// Ignored for other kinds.
     /// </summary>
     public Uri? AuthServerBaseUrl { get; init; }
 
     /// <summary>True for any non-offline account.</summary>
-    public bool IsOnline => Kind != MccAccountKind.Offline;
+    public bool IsOnline => Kind != DmcbkAccountKind.Offline;
 
     /// <summary>Creates an offline account for a username.</summary>
-    public static MccAccount Offline(string username)
+    public static DmcbkAccount Offline(string username)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(username);
-        return new MccAccount { Kind = MccAccountKind.Offline, User = username };
+        return new DmcbkAccount { Kind = DmcbkAccountKind.Offline, User = username };
     }
 }

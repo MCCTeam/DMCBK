@@ -12,7 +12,7 @@ namespace DMCBK.Core;
 /// Snapshot reads that enumerate mutable collections are marshaled onto the loop via <see cref="UmpkClient.InvokeAsync{T}"/> so a host never enumerates a dictionary mid-mutation.
 /// </item>
 /// <item>
-/// Typed exceptions: UMPK's <see cref="FeatureDisabledException"/> is wrapped into the core <see cref="MccFeatureDisabledException"/>, and a missing session surfaces as <see cref="MccNotInSessionException"/>.
+/// Typed exceptions: UMPK's <see cref="FeatureDisabledException"/> is wrapped into the core <see cref="DmcbkFeatureDisabledException"/>, and a missing session surfaces as <see cref="DmcbkNotInSessionException"/>.
 /// </item>
 /// </list>
 /// No statics; one instance per <see cref="Client"/>.
@@ -117,9 +117,9 @@ internal sealed class GameSession
         }
     }
 
-    /// <summary>The bound client, or throws <see cref="MccNotInSessionException"/> when not in a session.</summary>
+    /// <summary>The bound client, or throws <see cref="DmcbkNotInSessionException"/> when not in a session.</summary>
     internal UmpkClient Require()
-        => Current ?? throw new MccNotInSessionException(
+        => Current ?? throw new DmcbkNotInSessionException(
             "This game facade is unavailable: the client is not in a live session.");
 
     /// <summary>
@@ -135,7 +135,7 @@ internal sealed class GameSession
         }
         catch (FeatureDisabledException ex)
         {
-            throw new MccFeatureDisabledException(ex.Feature, ex);
+            throw new DmcbkFeatureDisabledException(ex.Feature, ex);
         }
     }
 
@@ -149,7 +149,7 @@ internal sealed class GameSession
         }
         catch (FeatureDisabledException ex)
         {
-            throw new MccFeatureDisabledException(ex.Feature, ex);
+            throw new DmcbkFeatureDisabledException(ex.Feature, ex);
         }
     }
 
@@ -163,7 +163,7 @@ internal sealed class GameSession
         }
         catch (FeatureDisabledException ex)
         {
-            throw new MccFeatureDisabledException(ex.Feature, ex);
+            throw new DmcbkFeatureDisabledException(ex.Feature, ex);
         }
     }
 }

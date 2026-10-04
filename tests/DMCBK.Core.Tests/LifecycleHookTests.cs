@@ -72,8 +72,8 @@ public sealed class LifecycleHookTests
         {
             client.BeforeConnect += (_, plan) => plan.Veto("not during maintenance");
 
-            MccConnectVetoedException vetoed =
-                await Assert.ThrowsAsync<MccConnectVetoedException>(() => client.StartAsync(ct));
+            DmcbkConnectVetoedException vetoed =
+                await Assert.ThrowsAsync<DmcbkConnectVetoedException>(() => client.StartAsync(ct));
 
             Assert.Equal("not during maintenance", vetoed.Reason);
             Assert.Empty(connections.Dialed);
@@ -125,7 +125,7 @@ public sealed class LifecycleHookTests
         CancellationToken ct = cts.Token;
 
         string folder = NewRoot("mcc-reload");
-        var loader = new MccConfigurationLoader(folder, loggerFactory: NullLoggerFactory.Instance);
+        var loader = new DmcbkConfigurationLoader(folder, loggerFactory: NullLoggerFactory.Instance);
         ConfigurationLoadResult loaded = loader.Load(generateMissing: true);
 
         Client client = new ClientBuilder().UseCommands().UseBeacon()
@@ -136,7 +136,7 @@ public sealed class LifecycleHookTests
 
         await using (client.ConfigureAwait(false))
         {
-            MccConfiguration? announced = null;
+            DmcbkConfiguration? announced = null;
             client.ConfigurationReloaded += (_, e) => announced = e.Current;
 
             string clientToml = Path.Combine(folder, "client.toml");

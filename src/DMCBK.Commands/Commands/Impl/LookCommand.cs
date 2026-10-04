@@ -73,7 +73,7 @@ public sealed class LookCommand : CommandBase
             .ThenArgument("Yaw", Arguments.Float(), h => h
                 .ThenArgument("Pitch", Arguments.Float(), a => a
                     .Executes(ctx => LookAtAngle(ctx.Source, ctx.GetArgument<float>("Yaw"), ctx.GetArgument<float>("Pitch")))))
-            .ThenArgument("Location", MccArguments.Location(), h => h
+            .ThenArgument("Location", DmcbkArguments.Location(), h => h
                 .Executes(ctx => LookAtLocation(ctx.Source, ctx.GetArgument<CommandLocation>("Location"))))
             .ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help)));
     }
@@ -94,7 +94,7 @@ public sealed class LookCommand : CommandBase
         {
             hit = ctx.Run(ct => ctx.Game.World.RaycastAsync(MaxDistance, includeFluids: false, ct));
         }
-        catch (MccFeatureDisabledException)
+        catch (DmcbkFeatureDisabledException)
         {
             return ctx.Result.Set(CmdStatus.FailNeedTerrain);
         }

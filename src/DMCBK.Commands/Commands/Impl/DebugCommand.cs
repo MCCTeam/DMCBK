@@ -99,7 +99,7 @@ public sealed class DebugCommand : CommandBase
     /// </para>
     /// <para>
     /// Historical note on what used to block this: LoggingConfig.DebugMessages (<c>Settings.Config.Logging.DebugMessages = ...</c>) and pushed it into the live logger (<c>handler.Log.DebugEnabled = ...</c>).
-    /// Neither is expressible here: <c>LoggingConfig.DebugMessages</c> is init-only (Configuration/ConfigurationSections.cs:273), <c>MccConfiguration.Logging</c> is init-only (Configuration/MccConfiguration.cs:31), <see cref="CommandContext.Config"/> is get-only, and no host seam (<see cref="IHostUi"/>, <see cref="IHostInterface"/>) exposes a runtime logging switch.
+    /// Neither is expressible here: <c>LoggingConfig.DebugMessages</c> is init-only (Configuration/ConfigurationSections.cs:273), <c>DmcbkConfiguration.Logging</c> is init-only (Configuration/DmcbkConfiguration.cs:31), <see cref="CommandContext.Config"/> is get-only, and no host seam (<see cref="IHostUi"/>, <see cref="IHostInterface"/>) exposes a runtime logging switch.
     /// The CLI's level gate already reads the flag through a live closure over that record (Mcc.Cli/ConsoleLogger.cs:65), so making <c>DebugMessages</c> settable is the whole central fix, and the assignment belongs on the next line once it is.
     /// </para>
     /// </summary>
@@ -201,6 +201,6 @@ public sealed class DebugCommand : CommandBase
         if (ctx.Client.CurrentSession?.Profile.Name is { Length: > 0 } profileName)
             return profileName;
 
-        return ctx.Config?.ResolvedAccount is { Kind: MccAccountKind.Offline } account ? account.Login : string.Empty;
+        return ctx.Config?.ResolvedAccount is { Kind: DmcbkAccountKind.Offline } account ? account.Login : string.Empty;
     }
 }

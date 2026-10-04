@@ -79,24 +79,24 @@ public sealed class ChunkCommand : CommandBase
             .ThenLiteral("ui", h => h.Executes(ctx => Ui(ctx.Source)))
             .ThenLiteral("status", h => h
                 .Executes(ctx => Status(ctx.Source, null, null))
-                .ThenArgument("Location", MccArguments.Location(), a => a
+                .ThenArgument("Location", DmcbkArguments.Location(), a => a
                     .Executes(ctx => Status(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), null)))
-                .ThenArgument("Chunk", MccArguments.Tuple(), a => a
+                .ThenArgument("Chunk", DmcbkArguments.Tuple(), a => a
                     .Executes(ctx => Status(ctx.Source, null, ctx.GetArgument<ChunkPos>("Chunk")))))
             .ThenLiteral("_setloading", h => h
-                .ThenArgument("Location", MccArguments.Location(), a => a
+                .ThenArgument("Location", DmcbkArguments.Location(), a => a
                     .Executes(ctx => SetLoading(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), null)))
-                .ThenArgument("Chunk", MccArguments.Tuple(), a => a
+                .ThenArgument("Chunk", DmcbkArguments.Tuple(), a => a
                     .Executes(ctx => SetLoading(ctx.Source, null, ctx.GetArgument<ChunkPos>("Chunk")))))
             .ThenLiteral("_setloaded", h => h
-                .ThenArgument("Location", MccArguments.Location(), a => a
+                .ThenArgument("Location", DmcbkArguments.Location(), a => a
                     .Executes(ctx => SetLoaded(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), null)))
-                .ThenArgument("Chunk", MccArguments.Tuple(), a => a
+                .ThenArgument("Chunk", DmcbkArguments.Tuple(), a => a
                     .Executes(ctx => SetLoaded(ctx.Source, null, ctx.GetArgument<ChunkPos>("Chunk")))))
             .ThenLiteral("_delete", h => h
-                .ThenArgument("Location", MccArguments.Location(), a => a
+                .ThenArgument("Location", DmcbkArguments.Location(), a => a
                     .Executes(ctx => Delete(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), null)))
-                .ThenArgument("Chunk", MccArguments.Tuple(), a => a
+                .ThenArgument("Chunk", DmcbkArguments.Tuple(), a => a
                     .Executes(ctx => Delete(ctx.Source, null, ctx.GetArgument<ChunkPos>("Chunk")))))
             .ThenLiteral("_help", h => h.Executes(ctx => ShowUsage(ctx.Source)).RedirectTo(help)));
     }

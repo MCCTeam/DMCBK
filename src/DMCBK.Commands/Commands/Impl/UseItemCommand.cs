@@ -99,7 +99,7 @@ public sealed class UseItemCommand : CommandBase
             .Executes(ctx => UseHand(ctx.Source, null))
             .ThenLiteral("mainhand", h => h.Executes(ctx => UseHand(ctx.Source, Hand.Main)))
             .ThenLiteral("offhand", h => h.Executes(ctx => UseHand(ctx.Source, Hand.Off)))
-            .ThenArgument("Location", MccArguments.Location(), h => h
+            .ThenArgument("Location", DmcbkArguments.Location(), h => h
                 .Executes(ctx => UseAt(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), Hand.Main))
                 .ThenLiteral("mainhand", a => a.Executes(ctx => UseAt(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), Hand.Main)))
                 .ThenLiteral("offhand", a => a.Executes(ctx => UseAt(ctx.Source, ctx.GetArgument<CommandLocation>("Location"), Hand.Off))))
