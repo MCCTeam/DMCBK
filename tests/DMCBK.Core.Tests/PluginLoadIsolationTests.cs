@@ -54,6 +54,15 @@ public sealed class PluginLoadIsolationTests
     [Fact]
     public async Task NativeDependencyResolvesThroughPackagedDepsJson()
     {
+        if (Environment.GetEnvironmentVariable("DMCBK_NATIVE_PROBE_ENTRY") is { } childEntry)
+        {
+            AssertNative(childEntry);
+            string result = Environment.GetEnvironmentVariable("DMCBK_NATIVE_PROBE_RESULT")
+                ?? throw new InvalidOperationException("The native probe result path is missing.");
+            File.WriteAllText(result, "passed");
+            return;
+        }
+
         using var fixture = new Fixture();
         string nativeRoot = Path.Combine(fixture.Root, "native"); Directory.CreateDirectory(nativeRoot);
         await File.WriteAllTextAsync(Path.Combine(nativeRoot, "CMakeLists.txt"), """
@@ -105,7 +114,33 @@ public sealed class PluginLoadIsolationTests
             libraries = new Dictionary<string, object> { ["NativeEntry/1.0.0"] = new { type = "project", serviceable = false, sha512 = "" } },
         };
         await File.WriteAllTextAsync(Path.ChangeExtension(entry, ".deps.json"), JsonSerializer.Serialize(metadata));
-        AssertNative(entry);
+        await AssertNativeInChildProcessAsync(entry);
+    }
+
+    // Native handles can outlive managed contexts on Windows. Run the real
+    // loader in a child test process so cleanup follows process termination.
+    private static async Task AssertNativeInChildProcessAsync(string entry)
+    {
+        var start = new ProcessStartInfo("dotnet")
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        start.ArgumentList.Add("vstest");
+        start.ArgumentList.Add(typeof(PluginLoadIsolationTests).Assembly.Location);
+        start.ArgumentList.Add("--TestCaseFilter:FullyQualifiedName="
+            + typeof(PluginLoadIsolationTests).FullName + "." + nameof(NativeDependencyResolvesThroughPackagedDepsJson));
+        string resultPath = Path.ChangeExtension(entry, ".probe-result");
+        start.Environment["DMCBK_NATIVE_PROBE_ENTRY"] = entry;
+        start.Environment["DMCBK_NATIVE_PROBE_RESULT"] = resultPath;
+        using Process process = Process.Start(start)!;
+        Task<string> output = process.StandardOutput.ReadToEndAsync();
+        Task<string> errors = process.StandardError.ReadToEndAsync();
+        try { await process.WaitForExitAsync().WaitAsync(TimeSpan.FromMinutes(2)); }
+        catch (TimeoutException) { process.Kill(entireProcessTree: true); throw; }
+        Assert.True(process.ExitCode == 0, await output + await errors);
+        Assert.Equal("passed", File.ReadAllText(resultPath));
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]

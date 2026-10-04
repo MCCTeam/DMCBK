@@ -1018,6 +1018,12 @@ public sealed class BeaconInterpreter
     private async Task ExecuteBlockAsync(
         BeaconBlock block, BeaconScope scope, BeaconVerbs verbs, int depth, bool isInHandler, CancellationToken ct)
     {
+        // Synchronously completed awaits otherwise grow the native stack across
+        // recursive calls. Keep the script depth limit, but break the CLR stack
+        // regularly so it remains safe on runtimes with smaller thread stacks.
+        if (depth == 0 && Budget.CallDepth > 0 && Budget.CallDepth % 16 == 0)
+            await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
+
         foreach (BeaconStatement statement in block.Statements)
         {
             ct.ThrowIfCancellationRequested();
