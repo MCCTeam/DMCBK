@@ -111,7 +111,8 @@ public static class BeaconCommandSpec
 /// </summary>
 public sealed class BeaconScriptCommand : CommandBase
 {
-    private readonly Func<IReadOnlyDictionary<string, string>, CancellationToken, Task<string>> _dispatch;
+    private readonly Func<IReadOnlyDictionary<string, string>, CancellationToken, Task<string>>? _dispatch;
+    private readonly Func<IReadOnlyDictionary<string, string>, CancellationToken, Task<BeaconRunResult>>? _runDispatch;
 
     /// <summary>Builds a Brigadier command over <paramref name="spec"/> dispatching to <paramref name="dispatch"/>.</summary>
     public BeaconScriptCommand(
@@ -122,6 +123,16 @@ public sealed class BeaconScriptCommand : CommandBase
         ArgumentNullException.ThrowIfNull(dispatch);
         Spec = spec;
         _dispatch = dispatch;
+    }
+
+    internal BeaconScriptCommand(
+        BeaconScriptCommandSpec spec,
+        Func<IReadOnlyDictionary<string, string>, CancellationToken, Task<BeaconRunResult>> dispatch)
+    {
+        ArgumentNullException.ThrowIfNull(spec);
+        ArgumentNullException.ThrowIfNull(dispatch);
+        Spec = spec;
+        _runDispatch = dispatch;
     }
 
     /// <summary>The parsed spec (name, args, help metadata).</summary>
@@ -196,7 +207,23 @@ public sealed class BeaconScriptCommand : CommandBase
 
     private int Run(CommandContext ctx, IReadOnlyDictionary<string, string> args)
     {
-        string output = ctx.Run(ct => _dispatch(args, ct));
+        if (_runDispatch is { } run)
+        {
+            BeaconRunResult result = ctx.Run(ct => run(args, ct));
+            string text = string.Join(Environment.NewLine, result.LocalOutput);
+            if (!result.Success)
+            {
+                string failure = result.Error?.Message
+                    ?? result.Diagnostics.FirstOrDefault(diagnostic =>
+                        diagnostic.Severity == BeaconSeverity.Error)?.Message
+                    ?? CommandStrings.ScriptsFailedNoDiagnostic(Spec.ScriptId);
+                return ctx.Result.Fail(text.Length == 0 ? failure : text + Environment.NewLine + failure);
+            }
+
+            return ctx.Result.Ok(text.Length == 0 ? null : text);
+        }
+
+        string output = ctx.Run(ct => _dispatch!(args, ct));
         if (output.Length > 0)
             return ctx.Result.Ok(output);
 

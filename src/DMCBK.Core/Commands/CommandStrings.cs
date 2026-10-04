@@ -376,6 +376,9 @@ internal static class CommandStrings
             scriptId, hook, message, code, file, line);
     public static string ScriptsCommandDesc(string pattern, string scriptId)
         => F(TextResources.Get("command.text.literal_f5009d0e8cda"), pattern, scriptId);
+    /// <summary>Explains why a script command did not replace an existing command.</summary>
+    public static string ScriptsCommandAlreadyRegistered(string name)
+        => F(TextResources.Get("cmd.scripts.command_already_registered"), name);
     public static string ScriptsCommandUsage(string usage)
         => F(TextResources.Get("command.text.literal_a2ba5f3aeb93"), usage);
     public static string ScriptsWatchOn(string dir) => F(TextResources.Get("command.text.literal_7afb74c89abe"), dir);

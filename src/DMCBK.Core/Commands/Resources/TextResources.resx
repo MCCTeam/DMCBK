@@ -525,4 +525,7 @@ Try this: {0}</value>
   <data name="command.text.literal_fed85da6109b" xml:space="preserve">
     <value>mute: {0} ({1} held)</value>
   </data>
+  <data name="cmd.scripts.command_already_registered" xml:space="preserve">
+    <value>Command '/{0}' is already registered. Rename the script command.</value>
+  </data>
 </root>

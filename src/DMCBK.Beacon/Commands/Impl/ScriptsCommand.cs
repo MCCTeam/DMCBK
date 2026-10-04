@@ -1019,6 +1019,7 @@ public sealed class ScriptsCommand : CommandBase
             Host = new BeaconClientHost(client, () => IsMuted, NoteHeld);
             Engine = new BeaconEngine(Host);
             Engine.Variables = client.Variables;
+            Engine.CommandBinder = BindScriptCommand;
             BeaconEngineWiring.Bind(client, Engine);
             Repl = new BeaconRepl(Host);
             client.Game.Chat.MessageReceived += OnChatMessage;
@@ -1036,6 +1037,18 @@ public sealed class ScriptsCommand : CommandBase
                 AttachSessionSubscriptions();
 
             StartTimerPump();
+        }
+
+        private IDisposable? BindScriptCommand(BeaconScriptCommandSpec spec)
+        {
+            if (_client.Commands.DescribeCommands().Any(command =>
+                string.Equals(command.Name, spec.Name, StringComparison.OrdinalIgnoreCase)
+                || command.Aliases.Any(alias =>
+                    string.Equals(alias, spec.Name, StringComparison.OrdinalIgnoreCase))))
+                return null;
+
+            return _client.Commands.RegisterScopedCommand(new BeaconScriptCommand(
+                spec, (args, ct) => Engine.InvokeScriptCommandAsync(spec.Name, args, ct)));
         }
 
         /// <summary>

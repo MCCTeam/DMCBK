@@ -56,6 +56,7 @@ public sealed class BeaconEngine : IBeaconEngine
     private readonly Dictionary<string, List<EveryRegistration>> _everyRegs = new(StringComparer.Ordinal);
     private readonly Dictionary<string, List<OnceRegistration>> _onceRegs = new(StringComparer.Ordinal);
     private readonly Dictionary<string, List<BeaconScriptCommandSpec>> _commandSpecs = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, List<IDisposable>> _commandRegistrations = new(StringComparer.Ordinal);
     private readonly Dictionary<string, string> _commandOwners = new(StringComparer.OrdinalIgnoreCase);
     private readonly BeaconEventBus _bus;
     private readonly BeaconSharedState _sharedState = new();
@@ -166,6 +167,8 @@ public sealed class BeaconEngine : IBeaconEngine
     /// </summary>
     public Func<string, BeaconMovementBinding?>? MovementBinder { get; set; }
 
+    internal Func<BeaconScriptCommandSpec, IDisposable?>? CommandBinder { get; set; }
+
     /// <summary>RAM-only cross-script <c>shared</c> store (evaluator writes land with the provider registry).</summary>
     public BeaconSharedState SharedState => _sharedState;
 
@@ -200,7 +203,10 @@ public sealed class BeaconEngine : IBeaconEngine
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
         ArgumentNullException.ThrowIfNull(source);
         lock (_gate)
+        {
+            WithdrawCommandSpecs(scriptId);
             _scripts[scriptId] = new ScriptRecord(scriptId, fileName, source);
+        }
     }
 
     /// <summary>
@@ -698,7 +704,10 @@ public sealed class BeaconEngine : IBeaconEngine
         List<OnceBlock> onceBlocks;
 
         lock (_gate)
+        {
+            WithdrawCommandSpecs(scriptId);
             _scripts[scriptId] = new ScriptRecord(scriptId, resolvedFile, source);
+        }
 
         lint = Lint(scriptId);
         IReadOnlyList<BeaconDiagnostic> errors = lint.Where(d => d.Severity == BeaconSeverity.Error).ToList();
@@ -910,8 +919,20 @@ public sealed class BeaconEngine : IBeaconEngine
                 startEcho.AddRange(handler.Result.LocalEcho);
             }
 
+            BeaconDiagnostic? startError = startFire.Handlers
+                .Select(handler => handler.Result?.Error)
+                .FirstOrDefault(diagnostic => diagnostic is not null)
+                ?? startFire.Diagnostics.FirstOrDefault(
+                    diagnostic => diagnostic.Severity == BeaconSeverity.Error);
+            if (startError is not null && !mergedDiagnostics.Contains(startError))
+                mergedDiagnostics.Add(startError);
+            if (startError is not null)
+                RemoveScript(scriptId);
+
             merged = merged with
             {
+                Success = startError is null,
+                Error = startError,
                 Diagnostics = mergedDiagnostics,
                 LocalOutput = startOutput,
                 PassthroughLog = startPassthrough,
@@ -1315,6 +1336,24 @@ public sealed class BeaconEngine : IBeaconEngine
                     continue;
                 }
 
+                if (CommandBinder is { } bind)
+                {
+                    IDisposable? registration = bind(spec);
+                    if (registration is null)
+                    {
+                        diagnostics.Add(new BeaconDiagnostic(
+                            BeaconDiagnosticCodes.UnknownName,
+                            BeaconSeverity.Warning,
+                            CommandStrings.ScriptsCommandAlreadyRegistered(spec.Name),
+                            block.PatternSpan.Origin));
+                        continue;
+                    }
+
+                    if (!_commandRegistrations.TryGetValue(scriptId, out List<IDisposable>? handles))
+                        _commandRegistrations[scriptId] = handles = [];
+                    handles.Add(registration);
+                }
+
                 if (!_commandSpecs.TryGetValue(scriptId, out List<BeaconScriptCommandSpec>? list))
                 {
                     list = [];
@@ -1330,6 +1369,12 @@ public sealed class BeaconEngine : IBeaconEngine
     private void WithdrawCommandSpecs(string scriptId)
     {
         using IDisposable environmentScope = Environment.Enter();
+        if (_commandRegistrations.Remove(scriptId, out List<IDisposable>? handles))
+        {
+            foreach (IDisposable handle in handles)
+                handle.Dispose();
+        }
+
         if (_commandSpecs.TryGetValue(scriptId, out List<BeaconScriptCommandSpec>? specs))
         {
             foreach (BeaconScriptCommandSpec spec in specs)
