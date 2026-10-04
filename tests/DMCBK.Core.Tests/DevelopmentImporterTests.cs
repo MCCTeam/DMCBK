@@ -125,5 +125,5 @@ public sealed class DevelopmentImporterTests : IDisposable
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         { Requests++; return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(bytes) }); }
     }
-    public void Dispose() => Directory.Delete(_root, true);
+    public void Dispose() => DevelopmentPackageImporter.DeleteTemporaryDirectory(_root);
 }

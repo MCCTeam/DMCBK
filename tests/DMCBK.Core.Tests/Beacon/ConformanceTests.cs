@@ -54,7 +54,7 @@ public sealed class ConformanceTests
     {
         string proposal = FindProposal();
         string text = File.ReadAllText(proposal);
-        var blocks = Regex.Matches(text, "```(?:[a-zA-Z]*)\n(?<body>.*?)```", RegexOptions.Singleline);
+        var blocks = Regex.Matches(text, "```(?:[a-zA-Z]*)\r?\n(?<body>.*?)```", RegexOptions.Singleline);
         var failures = new List<string>();
         int fullScripts = 0;
 

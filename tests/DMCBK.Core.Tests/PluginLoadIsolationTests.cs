@@ -153,7 +153,10 @@ public sealed class PluginLoadIsolationTests
             {
                 GC.Collect(); GC.WaitForPendingFinalizers();
                 try { Directory.Delete(Root, recursive: true); return; }
-                catch (IOException) when (attempt < 4) { }
+                catch (Exception exception) when (attempt < 4 && exception is IOException or UnauthorizedAccessException)
+                {
+                    Thread.Sleep(20);
+                }
             }
         }
     }

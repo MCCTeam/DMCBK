@@ -28,6 +28,8 @@ jobs:
       - run: dotnet restore DMCBK.slnx
       - run: dotnet build DMCBK.slnx -c Release --no-restore
   unit-tests:
+    env:
+      TMPDIR: ${{ runner.temp }}
     name: Unit tests (${{ matrix.os }})
     needs: build
     strategy:

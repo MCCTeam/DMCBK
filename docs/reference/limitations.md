@@ -35,3 +35,13 @@ Old MCC plugin binaries and schema-1 catalogues require migration. The runtime r
 ## Version support
 
 Game protocol support comes from the pinned UMPK packages. Read [UMPK's version reference](https://github.com/MCCTeam/UMPK/blob/master/docs/reference/supported-versions.md) for protocol mappings. A newer UMPK repository checkout can describe versions that the installed package does not contain.
+
+## Marketplace storage on macOS
+
+Marketplace storage checks reject symbolic links in a path or its parents. macOS exposes `/var` through a system link.
+
+1. Select a physical directory for plugin storage.
+2. Use `/private/var` instead of `/var` when the system provides that physical directory.
+3. Set `TMPDIR` to a physical directory before starting a host that imports development plugins.
+
+The CI workflow uses its runner's physical temporary directory. Plugin-controlled links remain rejected.

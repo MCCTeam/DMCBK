@@ -94,7 +94,25 @@ public sealed class DevelopmentPackageImporter(HttpClient http, string pluginRoo
                     new Uri("https://local.dmcbk.invalid/"));
             }
         }
-        finally { Directory.Delete(temporary, recursive: true); }
+        finally { DeleteTemporaryDirectory(temporary); }
+    }
+
+    // Git marks object files read-only on Windows. Clear only that bit in our
+    // disposable checkout, and never traverse links into another directory.
+    internal static void DeleteTemporaryDirectory(string path)
+    {
+        var options = new EnumerationOptions
+        {
+            RecurseSubdirectories = true,
+            AttributesToSkip = FileAttributes.ReparsePoint,
+        };
+        foreach (string file in Directory.EnumerateFiles(path, "*", options))
+        {
+            FileAttributes attributes = File.GetAttributes(file);
+            if ((attributes & FileAttributes.ReadOnly) != 0)
+                File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
+        }
+        Directory.Delete(path, recursive: true);
     }
 
     private static PluginRelease Release(PluginManifest manifest, string url, string digest) => new()
