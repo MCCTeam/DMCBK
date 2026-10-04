@@ -1,22 +1,5 @@
-// ----------------------------------------------------------------------------------------------------------- DMCBK.Samples.HeadlessClient - the embeddability proof.
-//
-// A trivial, worker-service-style host that embeds DMCBK.Core with ZERO console/UI library dependencies.
-// It references ONLY DMCBK.Core (see the .csproj): no Mcc.Cli, no ConsoleInteractive, no Consolonia, no Avalonia.
-// This host is free to use System.Console (a worker host is a console app); the architectural law is that the CORE stays UI-free, which this project - alongside DependencyGuardTests - demonstrates independently of the full CLI.
-//
-// What it does, end to end, entirely FROM CODE (no configurations/ folder, no interactive prompts):
-//   1. Build a DmcbkConfiguration-free client via the fluent ClientBuilder: offline account, a server
-// host/port, and either a pinned version or ping-based auto-detection.
-//   2. Connect (StartAsync returns once the play session is live).
-//   3. Log every inbound chat line to the console (rendered to plain text through the core translation service,
-// so translate-key server messages like join/leave resolve instead of showing raw keys).
-//   4. Run ONE scripted action after join: WAIT for the server to place the player, then read the player's
-// health/food/position and send a single chat line.
-// The wait is not optional - see step 6.
-//   5. Disconnect cleanly and return a clear exit code.
-//
-// Use this file as a copy/adapt template for embedding MCC into your own worker, daemon, bot farm, or test harness.
-// The heavy commenting is intentional. -----------------------------------------------------------------------------------------------------------
+// A host that connects, displays chat, reads player state and sends one message.
+// The application supplies console output. Core has no console UI dependency.
 
 using DMCBK.Core;
 using Microsoft.Extensions.Logging;
@@ -26,7 +9,7 @@ using Umpk.Text;
 
 namespace DMCBK.Samples.HeadlessClient;
 
-/// <summary>The sample host entry point. Kept deliberately minimal: it is a proof, not a product.</summary>
+/// <summary>Runs one bounded client session and reports its outcome.</summary>
 internal static class Program
 {
     // Exit codes mirror the CLI host so a supervising script can treat both hosts identically.
@@ -83,7 +66,7 @@ internal static class Program
 
         #endregion
         #region 3. Build the client FROM CODE
-        // No configurations/ folder, no DmcbkConfiguration snapshot: a pure builder-driven construction, which is the second thing this sample proves (the CLI drives the config-folder path; embedders can skip it).
+        // No configurations/ folder, no DmcbkConfiguration snapshot: a pure builder-driven construction, which is one supported host composition (the CLI drives the config-folder path; embedders can skip it).
         var builder = new ClientBuilder()
             .UseServer(host, port)
             .UseUsername(username)                 // offline account sugar; use UseAccount(...) for online flows
@@ -116,7 +99,7 @@ internal static class Program
                 Console.WriteLine($"[chat] {line}");
         };
 
-        // Lifecycle transitions (Connecting -> Authenticating -> ... -> Playing, and the terminal Stopped).
+        // Lifecycle transitions (Connecting -> Authenticating -> ... -> Playing, and the terminal Disconnected).
         var remoteDrop = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         client.StatusChanged += (_, e) =>
         {
@@ -183,7 +166,7 @@ internal static class Program
         try
         {
             // WAIT BEFORE READING.
-            // StartAsync returns as soon as the LOGIN phase completes, which is before the play-phase join packet and the initial position teleport have been applied, so a read taken right here returns the tracker's DEFAULTS: origin and survival, on a server whose spawn is elsewhere and whose game mode is creative.
+            // StartAsync confirms connection readiness, which does not guarantee that the initial player placement was applied, so a read taken right here returns the tracker's DEFAULTS: origin and survival, on a server whose spawn is elsewhere and whose game mode is creative.
             // Defaults are indistinguishable from a reading, which is why this sample used to print numbers that looked real and were not.
             using var spawnWait = CancellationTokenSource.CreateLinkedTokenSource(lifetime.Token);
             spawnWait.CancelAfter(SpawnWait);

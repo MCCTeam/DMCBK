@@ -45,3 +45,49 @@ Marketplace storage checks reject symbolic links in a path or its parents. macOS
 3. Set `TMPDIR` to a physical directory before starting a host that imports development plugins.
 
 The CI workflow uses its runner's physical temporary directory. Plugin-controlled links remain rejected.
+
+## Diagnose a failure in order
+
+1. Record the exact DMCBK and UMPK package versions.
+2. Check whether the required module is attached.
+3. Check whether a session exists.
+4. Check whether the client reached the required game state.
+5. Check the feature gates.
+6. Read the operation result and diagnostics.
+7. Reproduce the problem with the smallest relevant sample.
+
+A connection, a session and a spawned player are different states. A transport connection alone does not make position, world or inventory data ready. Check the relevant state before using that data.
+
+## What each kind of check proves
+
+| Check | Evidence | Remaining uncertainty |
+| --- | --- | --- |
+| C# compilation | Names, types and signatures agree with the selected packages | Runtime behavior and server permissions |
+| Offline Beacon execution | Parsing, expressions and simulated scheduling behave as checked | Actual Minecraft transport and game responses |
+| Scripted protocol session | Lifecycle callbacks and the modeled packet interaction work | Unmodeled server behavior |
+| Local Minecraft server test | The tested protocol and server configuration accept the behavior | Other versions, mods and configurations |
+| Cross-platform compilation | The code builds for the selected target | Native library execution on that target |
+
+The guides include reproducible offline and in-memory checks. Use a private live server for game actions that depend on server state. A simulated inventory does not prove every server will accept a click.
+
+## Plugin loading failures
+
+Inspect each entry from `PluginHost.List()`. An aggregate discovery or load result can succeed while an individual plugin reports an activation failure.
+
+Check the manifest identity against `Configure`. Check the entry file, required capabilities, framework and compatibility ranges. For a source package, check compiler diagnostics and reference availability. For a compiled package, check private dependencies and the process target.
+
+A native dependency needs the correct OS, architecture and Linux libc. A Windows x86 process needs x86 native dependencies even when the computer runs Windows x64. A portable managed assembly can still depend on a platform-specific native library.
+
+## Cancellation and unload
+
+Cancellation asks an operation to stop. It cannot interrupt arbitrary synchronous plugin code safely. A plugin must observe cancellation and release resources it creates.
+
+Collectible load contexts permit eventual unloading after all references disappear. Retained delegates, tasks, static fields or native handles can keep code alive. Do not treat an unload request as proof that every file handle closes immediately.
+
+Immutable installation directories let an update select another package without overwriting a loaded DLL. Cleanup can occur later when references and handles permit it.
+
+## Keep a useful error report
+
+Record the operation, package versions, process target, expected result and actual result. Include a minimal reproducer when possible. Include the relevant diagnostic identifiers and compiler errors.
+
+Remove tokens, credentials, account files and private chat before sharing a report. Keep enough context to reproduce the failure. A screenshot of a generic failure message usually hides the information needed to diagnose it.

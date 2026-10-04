@@ -73,7 +73,7 @@ command "/order-total"
 end command
 ```
 
-A command pattern needs its leading slash. `<item>` declares a one-word argument. The body reads it with `arg("item")`.
+A command pattern needs its leading slash. `<item>` declares one string argument. The client dispatcher also accepts quoted values with spaces. The body reads it with `arg("item")`.
 
 Commands register with the internal dispatcher and withdraw when the script stops. They do not create server commands.
 
@@ -91,7 +91,7 @@ Only the six Beacon value kinds cross the bridge. C# services and session object
 
 ## Files and network
 
-`file_read` and `file_write` require `fs.read` and `fs.write`. Paths remain inside the script's assigned data directory.
+`file_read` and `file_write` require `fs.read` and `fs.write`. Paths remain inside the host's `scripts/data` directory.
 
 `http_get` and `http_post` require `net.fetch`. The host's `beacon.toml` must also allow the destination host:
 
@@ -107,3 +107,37 @@ The runtime allows only HTTPS requests. A script capability does not bypass the 
 3. Catch network and parsing failures separately when their recovery differs.
 
 Next: [Host APIs and testing](hosting-and-testing.md).
+
+## Keep settings separate from progress
+
+A report interval is a setting because the user chooses it. A completed-report count is saved state because the script updates it. Mixing these uses makes edits and resets difficult to understand.
+
+A settings overlay does not need to contain every declared default. Omitted keys use the script's defaults. Incorrect kinds produce diagnostics rather than a useful replacement value.
+
+Saved state belongs to the script ID and configuration root. Keep that ID stable when the same script should retain progress. A separate engine or root does not share that state automatically.
+
+## Imports and running providers
+
+An imported library is part of the caller's program. It is useful for calculations and constants. A running provider owns exports that other scripts can call.
+
+Use an import for a small reusable helper. Use an export when several scripts need one provider's running state. Handle provider absence because the user can stop or reload it.
+
+Optional dependencies need both a declaration and a failure path. `# wants:` permits loading without the provider. It does not turn a missing function into a successful call.
+
+## File and network boundaries
+
+File helpers address the shared `scripts/data` directory beside the configured source folder. They do not grant general access to the host filesystem. Absolute paths, parent traversal, and symlink escapes are not a way to reach account files.
+
+All scripts in that engine use this file area. Use a directory or filename prefix for your own data. The runtime limits each file to 1 MiB. Saved state remains separate and belongs to a script ID.
+
+Network configuration uses bare host names. `api.example.org` is a host. `https://api.example.org/path` is a URL and does not belong in `AllowedHosts`.
+
+Do not treat an HTTP response as correct data until parsing and field checks pass. A successful fetch can still return text that is not the expected JSON document.
+
+## Choose a failure response
+
+For an optional price provider, show a local unavailable message. For a required provider, fail loading clearly. For a temporary network problem, wait before a bounded retry.
+
+Do not save a secret response into general state merely to simplify debugging. Inspect only the fields needed by the script.
+
+For a complete disk-backed counter test, read [Chapter 6](guide/06-state.md). For commands and providers, read [Chapter 7](guide/07-integrations.md).

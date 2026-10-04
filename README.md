@@ -63,7 +63,7 @@ The diagram shows composition and runtime flow. Core defines module boundaries w
 ## Start here
 
 1. Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
-2. Read [Your first client](docs/getting-started/first-client.md).
+2. Follow [Build a client](docs/client/index.md).
 3. Select modules from the [package guide](docs/reference/packages.md).
 
 ```bash
@@ -75,9 +75,12 @@ The preview uses UMPK `0.9.0-beta.4`. NuGet installation requires the DMCBK pack
 ## Documentation
 
 - [Documentation home](docs/index.md)
+- [Build a client, chapter by chapter](docs/client/index.md)
 - [Host a client](docs/hosting.md), including desktop, mobile and web guidance
+- [Write Beacon scripts, chapter by chapter](docs/beacon/guide/index.md)
 - [Commands and Beacon](docs/guides/commands-and-beacon.md)
-- [Write and test a plugin](docs/guides/plugins.md)
+- [Build a plugin, chapter by chapter](docs/plugins/tutorial/index.md)
+- [Plugin guides and reference](docs/plugins/index.md)
 - [Marketplace versions and platform assets](docs/marketplace-v2.md)
 - [Configuration](docs/reference/configuration.md) and [limitations](docs/reference/limitations.md)
 - [Build and contribute](CONTRIBUTING.md)

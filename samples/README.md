@@ -42,3 +42,14 @@ Set `Client__Host`, `Client__Port` and `Client__Username` to override the defaul
 Keep the sample bound to localhost during development. Before remote use, add authentication, authorization, request limits and account provisioning.
 
 See [hosting](../docs/hosting.md) for lifecycle and UI integration guidance.
+
+## Chaptered tutorial samples
+
+| Sample | Purpose | Guide |
+| --- | --- | --- |
+| [ClientGuide](ClientGuide/README.md) | Build and verify a client, then connect to a private server | [Client chapters](../docs/client/index.md) |
+| [PluginAuthoring](PluginAuthoring/README.md) | Build, load and verify the tutorial plugin | [Plugin chapters](../docs/plugins/tutorial/index.md) |
+| [Beacon](Beacon/README.md) | Run the tutorial scripts and practical recipes | [Beacon chapters](../docs/beacon/guide/index.md) |
+| [MarketplaceGuide](MarketplaceGuide/README.md) | Pack, resolve, install, pin and uninstall a real plugin | [Marketplace reference](../docs/marketplace-v2.md) |
+
+Use the sample's README for exact commands. Offline checks and scripted sessions do not require a real Minecraft server. The client connection mode needs an explicitly selected server.

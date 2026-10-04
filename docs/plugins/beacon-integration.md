@@ -130,3 +130,40 @@ For example, a running `shop` script can export `subtotal(price, count)`. A plug
 A host without Beacon supplies an inactive bridge. If your plugin requires this integration, declare the `beacon` capability rather than silently depending on it.
 
 Return to the [plugin index](index.md).
+
+## Separate host and script capabilities
+
+A plugin that requires Beacon declares `beacon` in its manifest's `needs`. Its function can expose a different capability, such as `shop.calculate`. A script declares that capability in its header.
+
+The host module permits registration. The script capability permits use. The script's `extern` statement selects the provider and function by name.
+
+The [Session Journal chapter](tutorial/05-beacon.md) follows the complete chain from plugin registration to an executable script assertion.
+
+## Design extension values
+
+Use a number for a calculation, text for a label, and a map for a structured snapshot. Copy mutable state into the returned map. A caller should not receive the plugin's internal object.
+
+For example, a shop snapshot can contain `balance` and `currency` fields. Return simple values under string keys. Keep the field names stable across compatible releases.
+
+Use `RequireNumber`, `RequireText`, and `RequireYesNo` for arguments. Invalid kinds then produce a clear boundary failure instead of an accidental cast exception.
+
+## Event ownership
+
+Declare an event before firing it. Its field names form the script contract. Supply values for that declared schema.
+
+Use the session detach token for a game event. Use plugin-lifetime cancellation for work that remains meaningful while disconnected.
+
+A custom event can run many scripts. Keep the producer independent of the scripts' implementation. Handle an unsuccessful dispatch result without repeating the same external action accidentally.
+
+## Diagnose an extension call
+
+| Symptom | Likely check |
+| --- | --- |
+| Provider missing before connection | Lazy Beacon initialization before activation |
+| Function unavailable | Plugin loaded state and function registration |
+| Capability missing | Script header and declared function capability |
+| Argument kind rejected | Signature and argument values |
+| Return value rejected | Unsupported CLR object crossing the boundary |
+| Function disappears after reload | Expected withdrawal and new registration |
+
+Keep extension callbacks short. A long synchronous callback blocks the scheduler even if its method returns a Task.

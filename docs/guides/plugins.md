@@ -30,7 +30,7 @@ public sealed class SessionCounter : IPlugin
         context.SessionStarted += (_, _) =>
         {
             sessions++;
-            context.Variables.Set("session-counter.sessions", sessions.ToString());
+            context.Variables.Set("session_counter_sessions", sessions.ToString());
         };
         return Task.CompletedTask;
     }
@@ -87,6 +87,9 @@ var runtime = client.GetModule<PluginHost>();
 var loaded = await runtime.LoadAllAsync();
 if (!loaded.Success)
     throw new InvalidOperationException(loaded.Message);
+
+if (!runtime.List().Single(plugin => plugin.Id == "session-counter").Loaded)
+    throw new InvalidOperationException("The plugin did not activate.");
 ```
 
 Start the client after loading the plugins. The host must provide accessible managed reference assemblies for source compilation. A host that embeds assemblies must supply `PluginOptions.CompilationReferences` explicitly.
@@ -107,7 +110,7 @@ public sealed class Example : IPlugin
     public void Configure(PluginDescriptor descriptor) => descriptor.Id = "example";
     public Task ActivateAsync(PluginContext context)
     {
-        context.SessionStarted += (_, _) => context.Variables.Set("example.started", "yes");
+        context.SessionStarted += (_, _) => context.Variables.Set("example_started", "yes");
         return Task.CompletedTask;
     }
 }
@@ -123,7 +126,7 @@ if (!host.Plugins.List().Single().Loaded)
 await host.RunSessionAsync(async _ =>
 {
     bool started = await host.WaitForAsync(
-        () => host.Client.Variables.Get("example.started") == "yes");
+        () => host.Client.Variables.Get("example_started") == "yes");
     if (!started)
         throw new InvalidOperationException("The session callback did not run.");
 });
@@ -148,3 +151,40 @@ This test checks runtime loading and the callback against a scripted protocol se
 | `context.Host` | Read API, library, application and capability information. |
 
 For exported contracts, declare provider assemblies under `[exports]`. Declare the provider as a required dependency in consumers. Use [DMCBK-Plugins](https://github.com/MCCTeam/DMCBK-Plugins) for author templates and packaging examples.
+
+## Continue with the chaptered plugin guide
+
+This page is a compact overview. Use the [plugin documentation](../plugins/index.md) for the full learning path and reference topics. The chaptered guide creates a project, adds a manifest and builds a real plugin. It then adds settings, durable data, a command, session behavior and Beacon integration.
+
+A source file is not a marketplace. A plugin project is not an installable archive. A loaded plugin is not necessarily connected to a server. The full guide explains each stage and provides checks for the result.
+
+## Understand the trust model
+
+A plugin runs inside your application's process. It can access files and network resources with the application's permissions. A separate load context controls assembly loading. It does not limit operating system access.
+
+Review source or trust the publisher before installing a plugin. Check immutable archive hashes during installation. A checksum identifies an expected payload. It does not establish that the code is safe.
+
+## Choose a development workflow
+
+| Workflow | Use when | What to test |
+| --- | --- | --- |
+| Single source file | The plugin is small and uses host-provided APIs | Actual runtime compilation and activation |
+| Compiled class library | The plugin has several files or private dependencies | Archive contents, assembly identity and runtime loading |
+| Native dependency | The plugin requires an OS-specific library | Execution on each declared process target |
+| Exported contracts | Another plugin needs typed services | Shared contract identity and dependency order |
+
+Compile your author project to catch C# errors. Also load the resulting package through the plugin runtime. The author project's successful build alone does not test runtime source references or private dependency resolution.
+
+## Keep identity consistent
+
+Use one stable lowercase plugin ID in the descriptor, manifest, catalogue, dependency declarations and resource paths. Give a changed published payload a new plugin version.
+
+Do not use the application version as the plugin API version. DMCBK, UMPK, the host application and the plugin have separate versions. The manifest checks each relevant compatibility constraint.
+
+## Plan cleanup before activation
+
+List every resource your plugin creates. Include event handlers, commands, timers, workers, channels, services and disposable objects. Assign each resource to a session scope or plugin lifetime.
+
+Use session callbacks for work that repeats after reconnect. Release plugin-owned resources during deactivation. Respect cancellation for asynchronous cleanup. Keep packet callbacks short so they do not delay the client event path.
+
+The testing guide demonstrates loading, multiple sessions and unload. Run those checks before publishing an update.

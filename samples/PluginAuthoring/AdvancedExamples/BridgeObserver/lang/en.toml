@@ -1,0 +1,5 @@
+snapshot_help = "Read the most recent workflow total."
+event_help = "An exported calculation completed."
+command_help = "Call the workflow script and publish its result."
+event_failed = "A workflow event handler failed."
+result = "Workflow total: {0}"

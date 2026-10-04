@@ -93,3 +93,35 @@ For integration tests, use `DMCBK.Testing` and then a controlled live server for
 | Network refusal | Missing grant, HTTPS or allowed host | Inspect the header and Beacon network configuration |
 
 Return to the [Beacon index](index.md).
+
+## Build an editor around explicit results
+
+Treat saved source and running source as separate states. A buffer can contain unsaved changes while the runtime still uses the previous file. Show both states when an editor offers save and reload.
+
+Discovery returns script files. It does not prove that the files passed lint or started. Inspect the run result and current running state before displaying a success indicator.
+
+Reload resets script globals. Persistent settings and saved state have a different lifetime. Tell the user when a reset action removes those files.
+
+## Avoid stale reference examples
+
+Check examples against the same DMCBK version that the application consumes. Preview packages can change. Reusing an old NuGet cache can test an earlier preview even when the version text matches.
+
+An in-memory script test should supply a realistic filename. Imports depend on that filename. A timer test should use an explicit virtual clock rather than a long real sleep.
+
+## Test the negative path
+
+Check a chat record that must not match. Check a missing item, missing field, and absent optional provider. Check an error result as well as the successful result.
+
+A test must fail when the action is absent. Counting that a handler ran is not sufficient for an inventory or chat expectation. Check the output or recorded action itself.
+
+[Chapter 8](guide/08-testing.md) contains a complete timer boundary test. [Chapter 4](guide/04-events.md) contains a positive and negative chat test.
+
+## Display script command output
+
+A client composed with Commands and Beacon binds valid script `command` blocks to its internal dispatcher. Load the script before dispatching its command. Use the command name without its declaration's slash in `DispatchAsync`.
+
+Script `show` output from a command appears in `CmdResult.Message`. Read that message as well as captured body output. A runtime error returns a failed command result. Check `IsSuccess` before reporting completion.
+
+The binding belongs to the script. Reload replaces it. Stop and module disposal remove it. A command name that conflicts with an existing host name or alias produces a warning. Rename the script command instead of trying to replace a built-in command.
+
+The [complete helper](guide/09-complete-helper.md) demonstrates the entire path from a `.bcn` command declaration to local host output.

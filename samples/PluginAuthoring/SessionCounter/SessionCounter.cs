@@ -23,7 +23,7 @@ public sealed class SessionCounter : IPlugin
             string value = count.ToString(CultureInfo.InvariantCulture);
             context.Storage.Set("sessions", value);
             context.Storage.Save();
-            context.Variables.Set("session-counter.sessions", value);
+            context.Variables.Set("session_counter_sessions", value);
         };
         return Task.CompletedTask;
     }

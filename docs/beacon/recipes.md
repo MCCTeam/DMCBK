@@ -289,3 +289,20 @@ finally
 Add `DMCBK.Beacon` and `DMCBK.Testing` to the test project. Run it from the directory that contains `quiz.bcn`.
 
 For a live host, use [Beacon composition](getting-started.md#attach-beacon-to-a-client). For the optional pricing provider, see [Beacon plugin integration](../plugins/beacon-integration.md).
+
+## Adapt a recipe without losing its checks
+
+1. Copy the matching sample file before editing it.
+2. Change one setting or condition.
+3. Lint the complete file.
+4. Run its simulated trigger.
+5. Check the exact output or requested action.
+6. Check the behavior on your controlled server when the recipe uses game state.
+
+A recipe's header lists script requirements. The client still needs corresponding tracking and session support. A capability does not add chunks or entities that the client never received.
+
+For a chat recipe, test the exact trigger and one unrelated message. For a cooldown recipe, test two immediate triggers. For a container or dialog recipe, test absence and closure as well as the expected open state.
+
+These recipes are independent examples. Loading every sample can register overlapping handlers or commands. Start with the one recipe that matches your use case.
+
+For a gradual introduction, use the [nine-chapter script guide](guide/index.md) before adapting game recipes.

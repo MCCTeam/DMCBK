@@ -18,3 +18,26 @@ Start with one source file for a small plugin. Use a compiled project when you n
 All examples use API `1.0`, schema `2`, DMCBK `0.1.0-preview.1`, UMPK `0.9.0-beta.4` and .NET 10.
 
 Marketplace v2 rejects old manifests. Existing MCC binary plugins must be rebuilt against DMCBK. See [marketplace v2](../marketplace-v2.md) for installation and release formats.
+
+## Follow a complete project
+
+Read the [eight-chapter Session Journal guide](tutorial/index.md) for a step-by-step project. It starts with the author project and ends with tested source and compiled packages.
+
+The guide does not assume that you know plugin lifecycle rules. It explains sessions, scopes, manifests, settings, localization, and script boundaries when you use them.
+
+## Choose a starting point
+
+| Your goal | Start here |
+| --- | --- |
+| Learn the full workflow | [Chaptered tutorial](tutorial/index.md) |
+| Add a small disconnected calculation | [First plugin](getting-started.md), then [Beacon integration](beacon-integration.md) |
+| React to incoming packets | [Lifecycle and commands](lifecycle-and-commands.md) |
+| Share a service with another plugin | [Dependencies and loading](dependencies-and-loading.md) |
+| Ship a private library or native DLL | [Dependencies and loading](dependencies-and-loading.md), then [testing and release](testing-and-release.md) |
+| Expose user options | [Settings and resources](settings-and-resources.md) |
+
+A package manifest describes a release asset. A descriptor describes the entry class. The manifest takes precedence for package identity and compatibility. Keep both consistent.
+
+Plugins run inside the host process with normal .NET access. They are not isolated from files or network resources by a security sandbox. Install code that you trust.
+
+[Advanced working examples](advanced-examples.md) cover exported contracts, typed services and messages, Beacon events and snapshots, and scoped packet work.

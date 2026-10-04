@@ -113,3 +113,56 @@ Do not repeatedly retry a failed game action without a delay. The action can rem
 `sort` returns a new list of numbers or text. `unique` preserves first-seen order. `index_of` returns a zero-based position or `none`.
 
 Next: [Events and game APIs](events-and-game.md).
+
+## Read an expression step by step
+
+In `price * count + fee`, multiplication runs before addition. Parentheses make the intended grouping visible: `(price * count) + fee`. Prefer explicit parentheses when several comparisons or defaults appear together.
+
+List positions start at zero. A position outside the list does not provide a usable item. Check the list length before selecting a position that can be absent.
+
+A map field can be missing. Check a missing field before treating it as a number or another map. `or` is a default operator as well as a boolean operator. It does not treat every empty value as false.
+
+```beacon
+# beacon 1
+set record to {name: "Alice"}
+set count to record.count or 0
+if count is 0 then
+  show "No orders yet"
+end if
+set names to [" Alice ", "BOB"]
+for each name in names
+  show lower(trim(name))
+end for
+```
+
+Expected output is `No orders yet`, `alice`, and `bob` on separate lines.
+
+## Convert external text
+
+User input starts as text. A numeric calculation needs a number. Test or catch conversion errors instead of assuming that every input is numeric.
+
+```beacon
+# beacon 1
+set count to number("4")
+assert(count is 4, "number conversion")
+set encoded to json_stringify({item: "bread", count: count})
+set decoded to json_parse(encoded)
+assert(decoded.count is 4, "JSON round trip")
+show decoded.item
+```
+
+Expected output is `bread`. JSON describes data. It does not execute a Beacon script. A JSON response can still have missing or unexpected fields.
+
+## Understand scope
+
+Each script has its own globals. Function parameters and local assignments belong to that call. An event alias is available inside its handler. Do not read an event alias from unrelated top-level code.
+
+Use names that describe their values, such as `total` or `player_name`. Avoid names that hide built-in tables such as `server`, `inv`, or `world`.
+
+## Keep background work bounded
+
+Use `start` when work must continue separately. Keep the task ID when you need to cancel or await it. Use `every` when the main purpose is recurring scheduling.
+
+A `wait` yields execution. It does not guarantee that the world remains unchanged. Read the relevant container, position, or entity again after a wait.
+
+For complete progression from values to tested functions, read [Chapters 2 and 3](guide/02-values.md).

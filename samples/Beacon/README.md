@@ -25,3 +25,5 @@ See [recipes from MCC](../../docs/beacon/recipes.md) for the complete scripts, t
 - [A shared counter](shared-counter.bcn)
 - [Answer a team-selection dialog](team-dialog.bcn)
 - [Use an optional plugin](optional-pricing.bcn)
+
+The [chaptered guide samples](guide/README.md) add beginner exercises for values, events, timers, commands, and persistent state.

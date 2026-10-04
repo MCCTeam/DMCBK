@@ -1,0 +1,4 @@
+# beacon 1
+# needs: journal.read
+extern journal_count from "session-journal"
+show journal_count()

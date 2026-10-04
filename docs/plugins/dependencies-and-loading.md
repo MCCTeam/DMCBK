@@ -18,7 +18,7 @@ Optional dependencies are not installed automatically. An incompatible optional 
 
 One active version exists per plugin ID. Conflicting required ranges, missing providers and required dependency cycles reject the plan.
 
-Pins restrict updates. Yanked releases remain in history but normal installation and update selection exclude them.
+Pins restrict updates. Yanked releases remain in history. New selection excludes them, but resolution can retain an installed yanked version that remains compatible.
 
 1. Use required dependencies for functionality that must exist.
 2. Use optional dependencies for enhancements that can be absent.
@@ -86,3 +86,43 @@ An `any` asset is appropriate for portable managed code. It cannot hide an archi
 Collectible contexts enable unloading, but references, running tasks and native handles can delay release. Never depend on overwriting a loaded DLL.
 
 Next: [Testing and release](testing-and-release.md).
+
+## Choose the correct dependency mechanism
+
+| Requirement | Mechanism |
+| --- | --- |
+| Another plugin must run | Manifest `[requires]` |
+| Another plugin adds optional behavior | Manifest `[optional]` and absence handling |
+| A DLL implements private code | Packaged helper under `deps` |
+| Both plugins exchange a typed object | Exported contract assembly |
+| The host provides a module | Manifest `needs` |
+| The entry project needs a build reference | NuGet `PackageReference` in the author project |
+
+A NuGet reference in an author project does not install another plugin. A manifest dependency does not restore a NuGet package during source compilation.
+
+## Version ranges in practice
+
+`^2.1.0` accepts compatible releases from 2.1.0 up to, but excluding, 3.0.0. `>=2.1.0 <2.4.0` applies an explicit lower and upper bound. An exact version selects that release.
+
+Required ranges must intersect across every installed dependent. If one consumer requires version 2 and another requires version 3, the resolver rejects the graph. It does not load both provider versions side by side.
+
+Private helper versions can coexist because they belong to separate load contexts. This does not apply to one active plugin ID or to shared host contracts.
+
+## Contract design
+
+A shared interface should describe data and operations without exposing implementation types. Keep the contract assembly small. Avoid references to UI frameworks or private helper libraries.
+
+A provider owns the exported contract at runtime. Consumers compile against the same contract definition and declare the provider's compatible range. Copying the DLL privately into a consumer creates a different type identity.
+
+Treat a cached optional service as invalid after provider unload. Request it again when the operation begins. Do not keep references that prevent a provider's load context from becoming collectible.
+
+## Diagnose dependency failures
+
+1. Check the dependency's plugin ID.
+2. Check the provider's installed version.
+3. Check the required range.
+4. Check whether the provider loaded successfully.
+5. Check exported contract paths.
+6. Check whether the consumer packaged a duplicate shared contract.
+
+For native files, test the actual process target. An x64 machine can run an x86 process. The x86 process requires an x86 native library.

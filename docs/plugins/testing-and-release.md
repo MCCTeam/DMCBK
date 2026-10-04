@@ -38,7 +38,7 @@ session-counter/
 ├── lib/                          # private helpers
 ├── lang/en.toml
 ├── man/en/session-counter.md
-└── settings.toml                 # optional defaults
+└── defaults/settings.toml        # optional defaults
 ```
 
 Source and compiled assets have separate manifests and archives. Each archive declares its own `kind`, `entry` and `target`.
@@ -107,3 +107,39 @@ Marketplace paths reject symlink ancestors. On macOS, use a physical path instea
 Reload after changing code or resources. Unload can be delayed by retained references or native handles, so never overwrite an installed loaded DLL.
 
 Return to the [plugin index](index.md).
+
+## A complete test you can run
+
+Use [VerifyPlugin](../../samples/PluginAuthoring/VerifyPlugin/Program.cs) with the [Session Journal package](../../samples/PluginAuthoring/SessionJournal/README.md). It verifies source and compiled assets with the same program.
+
+The program is a console application. A failed assertion throws and produces a nonzero exit status. You can use the same assertions in xUnit, NUnit, or another runner.
+
+A bounded test budget prevents an absent callback from waiting forever. Increase the budget for slow source compilation in CI, but keep a limit.
+
+## Test outgoing behavior
+
+`PluginTestSession.NextFrameAsync` returns the wire ID and copied payload of the next serverbound frame. Check the action that your plugin sent, not merely that it did not throw.
+
+`SendPluginMessageAsync` injects a clientbound channel message. `AnnounceChannelsAsync` advertises available channels. `SendAsync` encodes a packet for the negotiated version.
+
+Keep expected frames specific. An unrelated background packet is not proof that the requested action succeeded.
+
+## Separate source and compiled validation
+
+| Check | Source asset | Compiled asset |
+| --- | --- | --- |
+| Entry | One explicit-using C# file | Built entry DLL |
+| Development build | Useful but insufficient | Produces the entry |
+| Runtime load | Checks Roslyn references and diagnostics | Checks assembly and dependency resolution |
+| Private packages | Prebuilt helpers only | Author restore and package helpers |
+| Native test | Required if helpers use native code | Required on each supported execution target |
+
+Do not publish `bin` wholesale. It can contain host contracts that must not be private, build artifacts, and unrelated files.
+
+## Prepare useful release notes
+
+State the plugin version, behavior changes, compatible host/library ranges, and user-data changes. List required manual steps explicitly.
+
+When a new default changes behavior, explain whether existing user settings retain their old choice. When stored data changes, explain whether downgrade remains possible.
+
+Keep prior release archives accessible. An exact lock or rollback refers to a particular immutable payload and checksum.

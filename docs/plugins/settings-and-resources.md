@@ -39,7 +39,7 @@ The settings type needs a public parameterless constructor. `Validate()` normali
 
 `context.Settings.Save(settings)` persists user changes. Save does not replace the need to normalize values before accepting them from an editor.
 
-A package can supply `settings.toml` defaults. User values overlay package defaults. Updates do not overwrite existing user choices.
+A package can supply `defaults/settings.toml` defaults. User values overlay package defaults. Updates do not overwrite existing user choices.
 
 A malformed user file produces a warning and validated defaults. It does not make successful activation proof that the user's file parsed correctly.
 
@@ -98,3 +98,36 @@ User settings are ordinary files. They are not a secret vault. Avoid logging acc
 A host can supply its own secure storage workflow. A plugin should document which settings contain credentials and how its host supplies them.
 
 Next: [Dependencies and loading](dependencies-and-loading.md).
+
+## Defaults and user values, with an example
+
+Suppose the package declares `Increment = 1` in `defaults/settings.toml`. A user writes `Increment = 3` in their settings file. The active value is three.
+
+A later release can add a new default property. An existing user value still takes precedence. Do not copy new package defaults over the user's file during activation.
+
+The runtime loads values when requested. Your cached settings object does not change when a user edits the file. Reload the plugin or explicitly load a new settings object at a documented hook.
+
+`Validate` changes the in-memory values. `Save` serializes them. Call validation before saving values received from a UI or external service.
+
+| Location | Owner and purpose |
+| --- | --- |
+| Package `defaults/settings.toml` | Author defaults |
+| User `settings.toml` | User choices |
+| User `data/storage.toml` | Persisted key/value data |
+| User `data/report.json` | Plugin-owned structured output |
+| Package `lang/en.toml` | English message resources |
+| Package `man/en/topic.md` | User manual topic |
+
+## Design a settings change
+
+Keep property names stable when possible. A property rename can make an old user value ineffective. Explain migration steps in release notes.
+
+Normalize values within realistic limits. A negative interval, empty hostname, or inverted range needs an explicit rule. A silent default is appropriate only when the user can understand it.
+
+Test missing files, partial files, invalid TOML, and values outside the accepted range. Check the diagnostic path as well as the resulting setting.
+
+## Translate parameterized text
+
+Keep placeholders in each translation. The message `"Sessions: {0}"` has one argument. A translation can move that placeholder, but it must not remove or change its meaning.
+
+Use invariant formats for stored data. Use the host's selected language for displayed text. A localized decimal format should not determine the format of a persistent machine-readable file.

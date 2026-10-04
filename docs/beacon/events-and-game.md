@@ -2,6 +2,8 @@
 
 Event handlers run when the host delivers an event. They can filter its fields and apply a cooldown before performing work.
 
+The current dispatcher acquires a named cooldown before evaluating `when`. A record that fails the filter can still consume the cooldown.
+
 ## React to chat
 
 ```beacon
@@ -96,7 +98,7 @@ Entity IDs last for one session. Do not persist an ID for use after reconnect.
 
 ## Movement and containers
 
-`move_goto(120, 65, -40, {tolerance: 2, sneak: no})` finishes on arrival. `move_follow("Steve")` continues until cancellation.
+`move_goto` and `move_follow` require the `movement` capability. `move_goto(120, 65, -40, {tolerance: 2, sneak: no})` finishes on arrival. `move_follow("Steve")` continues until cancellation.
 
 The newest movement request wins. The previous request receives a superseded error. `stop_moving()` cancels steering.
 
@@ -121,3 +123,50 @@ Event work receives 100,000 fuel units and a five-second wall-clock budget. The 
 World mutations have a per-script allowance of eight actions per ten seconds. A refusal reports a retry delay. A successful local action is not proof that a server accepted the result.
 
 Next: [State and integrations](state-and-integrations.md).
+
+## Event fields are observations
+
+A handler receives values from the event that triggered it. Those values describe that notification. Later reads such as `me.pos` can describe a newer observation.
+
+A player's chat name is not automatically an administrator identity. A script that accepts remote commands needs its own explicit authorization rule. A simple greeting does not need that authority.
+
+Filters should match the input you intend to accept. `contains "!help"` also matches longer messages. Use `trim(lower(e.message)) is "!help"` for an exact command word.
+
+## Handle absent observations
+
+A tracked value can be unavailable before login or before its first update. Check absence before formatting or calculating from it.
+
+```beacon
+# beacon 1
+if me.pos is set then
+  show "Position is available"
+else
+  show "Position is not available yet"
+end if
+```
+
+This script reports the available branch. Offline execution reports `Position is not available yet`. It does not enable movement or terrain tracking.
+
+## Inventory selectors
+
+An inventory selector can be a simple item name, such as `"torch"`. Matching accepts the optional `minecraft:` prefix. It treats underscores, spaces, and hyphens as equivalent for basic names.
+
+A selector map can add criteria, including `type`, `name`, `name_contains`, `lore_contains`, and `min_count`. Use a simple selector first. Add criteria only when several item variants need separation.
+
+Reading a slot snapshot does not move an item. An inventory action requests a server-side change. After the action, check the observed inventory again when your next decision depends on it.
+
+## World and entity searches
+
+A world search sees terrain that the client tracks. It does not scan the entire server. A missing result can mean that the block is absent or that the client does not know that area.
+
+An entity search sees tracked entities. An entity can disappear before the action uses its ID. Catch this failure and obtain a fresh observation before retrying.
+
+Start with read-only searches. Test writes separately on a controlled server. The [nearby chests and census recipes](recipes.md) show complete read workflows.
+
+## Session transitions
+
+A client can outlive one connection. Disconnect invalidates session-specific data and cancels work tied to that session. Reconnect does not preserve old entity IDs or open windows.
+
+Load-time `start` and session `login` describe different moments. Place session work in the appropriate event or invoke it only after the host confirms connection.
+
+For an exact chat filter and a complete event test, read [Chapter 4](guide/04-events.md).

@@ -1,0 +1,10 @@
+# beacon 1
+# needs: workflow.read
+export function subtotal(price, count)
+  return price * count
+end function
+on workflow_ready as e
+  assert(e.total is 12, "custom event total")
+  assert(workflow.total is 12, "plugin variable snapshot")
+  show "Workflow complete: {e.total}"
+end on

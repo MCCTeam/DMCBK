@@ -75,3 +75,13 @@ A host can use in-memory source without file discovery. File settings, saved sta
 You can also copy the [ready-to-run example files](../../samples/Beacon/README.md).
 
 Next: [Learn the language](language.md).
+
+## Choose a script path and ID
+
+For `scripts/welcome.bcn`, the discovered ID is `welcome`. The ID identifies the script's state, settings, commands, and exports. Renaming the file changes that identity for discovery.
+
+A full filename also gives imports their base directory. If you pass `welcome.bcn` for source stored elsewhere, a relative import can resolve from the wrong folder.
+
+Do not start with a large automation script. First print one local line. Then test one calculation. Add the first event only after those checks pass.
+
+For complete project creation and expected output, follow [Chapter 1](guide/01-first-file.md). Continue through the chapters for a complete persistent helper.

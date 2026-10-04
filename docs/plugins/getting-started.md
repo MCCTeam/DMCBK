@@ -35,7 +35,7 @@ public sealed class SessionCounter : IPlugin
             string value = count.ToString(CultureInfo.InvariantCulture);
             context.Storage.Set("sessions", value);
             context.Storage.Save();
-            context.Variables.Set("session-counter.sessions", value);
+            context.Variables.Set("session_counter_sessions", value);
         };
         return Task.CompletedTask;
     }
@@ -88,3 +88,28 @@ Installed package files are immutable. User settings and data belong in `userdat
 The [downloadable source example](../../samples/PluginAuthoring/SessionCounter/SessionCounter.cs) and [manifest](../../samples/PluginAuthoring/SessionCounter/plugin.toml) match this tutorial.
 
 Next: [Lifecycle and commands](lifecycle-and-commands.md).
+
+## Check the complete example
+
+The [SessionCounter sample](../../samples/PluginAuthoring/SessionCounter/README.md) includes exact test commands and a runnable verifier. Use it to check the entry through runtime source compilation.
+
+The count changes only after a successful session start. Loading the plugin while disconnected does not increase it.
+
+The variable store holds text for the current client instance. The persistent storage table holds text on disk. This example updates both with the same number for different purposes.
+
+Use [Session Journal](tutorial/index.md) when you want a complete project with settings, a command, translated text, Beacon, compiled packaging, and reconnect tests.
+
+## Check compatibility before loading
+
+| Field | What it checks |
+| --- | --- |
+| `schema-version` | The manifest format, currently `2` |
+| `api-version` | Plugin contract major and required minor |
+| `dmcbk` | The library version used by the host |
+| `umpk` | The engine version used by the host |
+| `framework` | The managed target framework |
+| `target` | Operating system and process architecture |
+| `needs` | Host capabilities such as Commands or Beacon |
+| `hosts` | Optional application ID and version restrictions |
+
+Do not use a wildcard merely to silence a compatibility failure. Test the versions that you declare. Keep the library version, API version, and plugin release version separate.

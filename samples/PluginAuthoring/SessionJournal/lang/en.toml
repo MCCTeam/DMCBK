@@ -1,0 +1,4 @@
+[journal]
+command_help = "Show the saved session count."
+function_help = "Read the saved session count."
+count = "Sessions: {0}"

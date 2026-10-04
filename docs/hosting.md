@@ -1,95 +1,80 @@
 # Host a client
 
-DMCBK does not choose a terminal or UI framework. Your host supplies login interaction, command output and optional views. A worker can use the default host. A desktop application can implement the same interfaces with windows and dialogs.
+Your application is the host. It chooses the UI, storage paths, authentication interaction and optional modules. DMCBK provides the client services. UMPK provides the Minecraft protocol and game engine.
 
-## Compose modules
+For a complete application, follow [Build a client](client/index.md). This page summarizes the decisions a host must make.
 
-Module factories run in the order you register them. Commands must precede Beacon and plugin loading. Marketplace installation needs the previously attached plugin runtime.
+## Choose a host type
 
-```csharp
-using DMCBK.Core;
-using DMCBK.Marketplace;
-using DMCBK.PluginSdk;
+| Host | Responsibilities |
+| --- | --- |
+| Console or worker | Process lifetime, logs, command output and account interaction |
+| Desktop UI | UI dispatch, windows, dialogs and application shutdown |
+| Web backend | HTTP authorization, per-user ownership and the Minecraft connection |
+| Mobile UI | Device storage, suspend/resume and platform-compatible modules |
 
-string dataRoot = Path.Combine(Path.GetTempPath(), "dmcbk-example");
-string pluginRoot = Path.Combine(dataRoot, "plugins");
+A host can use Core without Commands, Beacon or Plugins. Do not add UI framework dependencies to Core.
 
-await using Client client = new ClientBuilder()
-    .UseServer("localhost")
-    .UseUsername("KitBot")
-    .UseApplication(new HostApplication(
-        "my-client", "1.0.0", new HashSet<string>()))
-    .UseCommands()
-    .UseBeacon()
-    .UsePlugins(new PluginOptions(pluginRoot))
-    .UseMarketplace(new MarketplaceOptions(
-        pluginRoot, Path.Combine(dataRoot, "marketplaces.toml"))
-    {
-        Runtime = current => current.GetModule<IPluginInstallationHost>()
-    })
-    .Build();
-```
+## Compose modules explicitly
 
-This example needs Core, Commands, Beacon, Plugins and Marketplace packages. Construction does not connect to a server. The host loads plugins with `PluginHost.LoadAllAsync` before it starts the client. The [plugin guide](guides/plugins.md#load-a-local-plugin) shows that sequence.
+Module factories execute in registration order. Commands must precede Beacon and Plugins. Marketplace integration needs the plugin installation host.
 
-Each client owns its module instances and manual catalogue. Disposal releases modules in reverse registration order. The host retains ownership of a logger factory or HTTP client that it supplies.
+See [Chapter 5](client/05-modules.md#add-plugins-and-a-marketplace) for a complete composition example. Package installation and module composition are separate steps.
 
-## Supply command output
+Each client owns its module instances. Module disposal runs in reverse registration order. A supplied logger factory or HTTP client remains host-owned.
 
-`IHostInterface` supplies authentication interaction and presentation services. Optional properties have default implementations. This host buffers command output for a UI to read:
+`HostApplication` records application identity, version and host capabilities. These values let plugin compatibility checks distinguish your application from other DMCBK hosts.
 
-```csharp
-using DMCBK.Core;
-using DMCBK.Core.Commands;
-using Umpk.Auth;
+## Own presentation
 
-public sealed class BufferedHost : IHostInterface
-{
-    public BufferedCommandOutput Output { get; } = new();
-    public IUserPrompt? Prompt => null;
-    public IAuthInteraction? AuthInteraction => null;
-    public ICommandOutput CommandOutput => Output;
-}
-```
+`IHostInterface` supplies optional version prompts, authentication interaction, command output, resource-pack prompts and rich UI services.
 
-Pass the host to `UseHostInterface`. A rich host can also implement `IHostUi` for images, inventory views, book editors, dialogs and manual documents. Methods return `false` or `null` when the host cannot provide a view. Commands then use their text fallback.
+The default `NullHostInterface` has no interaction. Offline clients can still connect. An interactive online login needs a host that implements `IAuthInteraction`.
 
-## Authentication
+Commands return a `CmdResult` and can write longer body text to `ICommandOutput`. Display both. Use `DispatchCapturedAsync` for a sequential request/response operation.
 
-`UseUsername` creates an offline identity. Online accounts use `UseAccount` with `DmcbkAccountKind.MicrosoftDeviceCode`, `MicrosoftBrowser` or `Yggdrasil`.
+A host can implement `IHostUi` for images, inventory views, books, dialogs and manuals. Report unsupported views through their documented return values. Keep framework objects within your application.
 
-1. Implement UMPK's `IAuthInteraction` in your host.
-2. Return the implementation from `IHostInterface.AuthInteraction`.
-3. Select the account with `UseAccount`.
-4. Set `UseTokenStorePath` if tokens must persist between runs.
+See [configuration and host interaction](client/04-host.md) for practical examples.
 
-Without an interaction implementation, the default host cannot complete an interactive online login. Without a token-store path, online authentication uses memory storage. See [UMPK authentication](https://github.com/MCCTeam/UMPK/blob/master/docs/guides/authentication.md) for the interaction contract.
+## Select storage
 
-## Lifecycle and reconnects
+1. Choose an application data root.
+2. Keep account and token files private.
+3. Select a configuration directory explicitly.
+4. Select plugin and marketplace paths explicitly.
+5. Keep user data outside immutable package directories.
 
-1. Subscribe to client events before calling `StartAsync`.
-2. Use a cancellation token for connection and game actions.
-3. Wait for player placement before reading position-dependent state.
-4. Call `ReconnectAsync` for an explicit reconnect.
-5. Call `StopAsync` when the host shuts down.
-6. Dispose the client.
+Core accepts typed options without generating files. Configuration loading can generate defaults only when requested. Inspect loader warnings before connecting.
 
-`StatusChanged` reports connection states. `LastDisconnect` contains the latest disconnect information. Automatic reconnects require a policy through `UseReconnectPolicyProvider` or typed configuration. A plugin's `ActivateAsync` runs once per activation. Its `SessionStarted` handler runs again after reconnect.
+A separate client should normally use a separate storage root. Sharing a plugin installation root requires the marketplace's installation locking rules.
 
-## Desktop and mobile
+## Treat sessions as replaceable
 
-A desktop host can use Avalonia, WinUI or another .NET UI framework. A mobile host must use a platform that supports .NET 10 and the selected dependencies. DMCBK does not include a finished desktop or mobile application.
+`Client` owns connection management. A session owns one Minecraft connection. A reconnect replaces that connection.
 
-1. Run network work outside the UI thread.
-2. Dispatch UI changes through your framework's dispatcher.
-3. Select writable directories for tokens, settings and plugin data.
-4. Implement login interaction for the platform.
-5. Stop the client when the application suspends or exits.
+Subscribe to stable client events before connecting. Refresh session event subscriptions after reconnect. Cancel work bound to an old session.
 
-Runtime C# compilation and dynamic assembly loading depend on platform restrictions. A platform with mandatory Native AOT cannot use the current plugin runtime unchanged. Test the selected modules on the actual device.
+Use tokens for waits and game actions. Call `StopAsync` during host shutdown. Dispose the client after application work ends.
 
-## Web applications
+See [Chapter 6](client/06-lifecycle.md) for reconnect policies and shutdown order.
 
-The [WebBackend sample](../samples/WebBackend/Program.cs) hosts DMCBK inside ASP.NET Core. A browser talks to your backend. The backend owns the Minecraft connection.
+## Logging and errors
 
-Ordinary browser code cannot open the Minecraft TCP connection used here. DMCBK does not include a browser transport relay. An HTTP or WebSocket API also needs host-level authentication and access controls before you expose game actions to other users.
+The default logger factory discards diagnostics. Supply a factory through `UseLoggerFactory` when your application needs logs.
+
+Report failures using the actual exception, command result or action outcome. Do not display success just because a request did not throw.
+
+Do not block a packet callback with slow network or disk work. Move that work to an application-owned queue. Dispose subscriptions and workers when their owner ends.
+
+## Web, desktop and mobile limits
+
+The [web backend](../samples/WebBackend/README.md) owns the Minecraft TCP connection. A browser communicates with that backend. DMCBK does not include a browser transport relay.
+
+The backend sample is for local development. It has no HTTP caller authentication. A public deployment needs authorization and isolated ownership of each client's operations.
+
+Desktop and mobile hosts implement presentation and authentication for their selected framework. UI updates must use that framework's dispatcher.
+
+Dynamic assembly loading and Roslyn compilation depend on the target platform. Current plugin loading does not support mandatory Native AOT unchanged. Test modules on the actual device.
+
+See [test and distribute a client](client/07-test-and-deploy.md) for publish commands and validation limits.
