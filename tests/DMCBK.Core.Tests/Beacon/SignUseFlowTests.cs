@@ -187,7 +187,7 @@ public sealed class SignUseFlowTests : IDisposable
     public void Lint_SignText_InfersWorldRead()
     {
         BeaconLintReport report = BeaconLint.LintSource(
-            "s.mcc", WithHeader("show world.sign_text(10, 64, -3)\n"));
+            "s.bcn", WithHeader("show world.sign_text(10, 64, -3)\n"));
         Assert.Contains(BeaconCapabilities.WorldRead, report.Permissions);
     }
 
@@ -195,7 +195,7 @@ public sealed class SignUseFlowTests : IDisposable
     public void Lint_FindSigns_InfersWorldSearch()
     {
         BeaconLintReport report = BeaconLint.LintSource(
-            "f.mcc", WithHeader("show world.find_signs(\"Storage\", 32, 5)\n"));
+            "f.bcn", WithHeader("show world.find_signs(\"Storage\", 32, 5)\n"));
         Assert.Contains(BeaconCapabilities.WorldSearch, report.Permissions);
     }
 
@@ -203,7 +203,7 @@ public sealed class SignUseFlowTests : IDisposable
     public void Lint_Use_InfersWorldWrite()
     {
         BeaconLintReport report = BeaconLint.LintSource(
-            "u.mcc", WithHeader("show world.use(10, 63, -3)\n"));
+            "u.bcn", WithHeader("show world.use(10, 63, -3)\n"));
         Assert.Contains(BeaconCapabilities.WorldWrite, report.Permissions);
     }
 
@@ -211,7 +211,7 @@ public sealed class SignUseFlowTests : IDisposable
     public void Lint_UseWithoutWrite_ManifestFailsClosed()
     {
         BeaconLintReport report = BeaconLint.LintSource(
-            "u.mcc", "# beacon 1\n# needs: world.read\n\nshow world.use(10, 63, -3)\n");
+            "u.bcn", "# beacon 1\n# needs: world.read\n\nshow world.use(10, 63, -3)\n");
         Assert.False(report.Ok);
         BeaconDiagnostic error = Assert.Single(
             report.Diagnostics, d => d.Code == BeaconDiagnosticCodes.ManifestNeedsMismatch);

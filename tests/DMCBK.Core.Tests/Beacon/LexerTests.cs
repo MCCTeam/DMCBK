@@ -10,11 +10,11 @@ public sealed class LexerTests
 {
     private static IReadOnlyList<BeaconToken> LexTokens(string source)
     {
-        BeaconLexResult result = BeaconLexer.Lex("test.mcc", source);
+        BeaconLexResult result = BeaconLexer.Lex("test.bcn", source);
         return result.Tokens.Where(t => t.Kind != BeaconTokenKind.EndOfFile).ToList();
     }
 
-    private static BeaconLexResult Lex(string source) => BeaconLexer.Lex("test.mcc", source);
+    private static BeaconLexResult Lex(string source) => BeaconLexer.Lex("test.bcn", source);
 
     private static IReadOnlyList<BeaconDiagnostic> LexErrors(string source)
         => Lex(source).Diagnostics.Where(d => d.Severity == BeaconSeverity.Error).ToList();
@@ -499,7 +499,7 @@ public sealed class LexerTests
 
         foreach (BeaconToken token in result.Tokens)
         {
-            Assert.Equal("test.mcc", token.Span.File);
+            Assert.Equal("test.bcn", token.Span.File);
             Assert.True(token.Span.Line >= 1);
             Assert.True(token.Span.Column >= 1);
         }

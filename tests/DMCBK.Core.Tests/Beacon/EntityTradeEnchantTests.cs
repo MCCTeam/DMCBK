@@ -427,7 +427,7 @@ public sealed class EntityTradeEnchantTests
     public void Manifest_EntitiesRead_Inferred()
     {
         var (engine, _) = FreshEngine();
-        engine.LoadSource("radar", "radar.mcc", "# beacon 1\n# needs: chat.send\nshow len(entities.near())");
+        engine.LoadSource("radar", "radar.bcn", "# beacon 1\n# needs: chat.send\nshow len(entities.near())");
 
         BeaconDiagnostic refusal = Assert.Single(
             engine.Lint("radar"), d => d.Code == BeaconDiagnosticCodes.ManifestNeedsMismatch);
@@ -440,7 +440,7 @@ public sealed class EntityTradeEnchantTests
     {
         var (engine, _) = FreshEngine();
         engine.LoadSource(
-            "guard", "guard.mcc",
+            "guard", "guard.bcn",
             "# beacon 1\n# needs: entity.read\nattack(\"zombie\")\ninteract(1)");
 
         BeaconDiagnostic refusal = Assert.Single(
@@ -452,12 +452,12 @@ public sealed class EntityTradeEnchantTests
     public void Manifest_Disconnect_NeedsServerDisconnect()
     {
         var (engine, _) = FreshEngine();
-        engine.LoadSource("leave", "leave.mcc", "# beacon 1\ndisconnect \"done\"");
+        engine.LoadSource("leave", "leave.bcn", "# beacon 1\ndisconnect \"done\"");
 
         Assert.DoesNotContain(
             engine.Lint("leave"), d => d.Severity == BeaconSeverity.Error);
 
-        engine.LoadSource("leave2", "leave2.mcc", "# beacon 1\n# needs: chat.send\ndisconnect");
+        engine.LoadSource("leave2", "leave2.bcn", "# beacon 1\n# needs: chat.send\ndisconnect");
         BeaconDiagnostic refusal = Assert.Single(
             engine.Lint("leave2"), d => d.Code == BeaconDiagnosticCodes.ManifestNeedsMismatch);
         Assert.Contains("server.disconnect", refusal.Message, StringComparison.Ordinal);
@@ -468,7 +468,7 @@ public sealed class EntityTradeEnchantTests
     {
         var (engine, _) = FreshEngine();
         engine.LoadSource(
-            "watcher", "watcher.mcc",
+            "watcher", "watcher.bcn",
             "# beacon 1\n# needs: chat.send\non entity_add when is_player is yes\nshow \"hi\"\nend on\n");
 
         BeaconDiagnostic refusal = Assert.Single(
@@ -481,7 +481,7 @@ public sealed class EntityTradeEnchantTests
     {
         var (engine, _) = FreshEngine();
         engine.LoadSource(
-            "shop", "shop.mcc",
+            "shop", "shop.bcn",
             "# beacon 1\n# needs: inventory.read\ntrade.select(0)");
 
         BeaconDiagnostic refusal = Assert.Single(
@@ -494,7 +494,7 @@ public sealed class EntityTradeEnchantTests
     {
         var (engine, _) = FreshEngine();
         engine.LoadSource(
-            "watcher", "watcher.mcc",
+            "watcher", "watcher.bcn",
             "# beacon 1\non entity_add\nshow \"hi\"\nend on\non entity_remove\nshow \"bye\"\nend on\n");
 
         Assert.DoesNotContain(
@@ -664,7 +664,7 @@ public sealed class EntityRoundTripTests : IDisposable
 
     private static async Task RunScriptAsync(Client client, string root, string name, string body)
     {
-        string path = Path.Combine(root, name + ".mcc");
+        string path = Path.Combine(root, name + ".bcn");
         await File.WriteAllTextAsync(path, body);
         CmdResult run = await client.Commands.DispatchAsync($"scripts run \"{path}\"");
         Assert.Equal(CmdStatus.Done, run.Status);

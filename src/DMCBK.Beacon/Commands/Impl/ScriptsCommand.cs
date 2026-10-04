@@ -77,7 +77,7 @@ public sealed class ScriptsCommand : CommandBase
         "scripts list",
         "scripts run welcome",
         "scripts run welcome --trace",
-        "scripts lint welcome.mcc --format json",
+        "scripts lint welcome.bcn --format json",
         "scripts new welcome mybot",
         "scripts mute on",
         "scripts repl show 1 + 2",
@@ -2217,7 +2217,7 @@ public sealed class ScriptsCommand : CommandBase
                 _pendingReloads.Clear();
                 var watcher = new FileSystemWatcher(scriptsDir!)
                 {
-                    Filter = "*.mcc",
+                    Filter = "*.bcn",
                     NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
                     EnableRaisingEvents = true,
                 };

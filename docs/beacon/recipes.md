@@ -15,15 +15,15 @@ The examples below use live events unless stated otherwise. Offline tests check 
 
 | Recipe | File |
 | --- | --- |
-| [Chat quiz](#quiz) | [quiz.mcc](../../samples/Beacon/quiz.mcc) |
-| [TPS warning with a cooldown](#tps-guard) | [tps-guard.mcc](../../samples/Beacon/tps-guard.mcc) |
-| [Inventory report](#inventory-report) | [inventory-report.mcc](../../samples/Beacon/inventory-report.mcc) |
-| [Find nearby chests](#nearby-chests) | [nearby-chests.mcc](../../samples/Beacon/nearby-chests.mcc) |
-| [Entity census](#census) | [census.mcc](../../samples/Beacon/census.mcc) |
-| [A command with an argument](#price-command) | [price-command.mcc](../../samples/Beacon/price-command.mcc) |
-| [A shared counter](#shared-counter) | [shared-counter.mcc](../../samples/Beacon/shared-counter.mcc) |
-| [Answer a team-selection dialog](#team-dialog) | [team-dialog.mcc](../../samples/Beacon/team-dialog.mcc) |
-| [Use an optional plugin](#optional-pricing) | [optional-pricing.mcc](../../samples/Beacon/optional-pricing.mcc) |
+| [Chat quiz](#quiz) | [quiz.bcn](../../samples/Beacon/quiz.bcn) |
+| [TPS warning with a cooldown](#tps-guard) | [tps-guard.bcn](../../samples/Beacon/tps-guard.bcn) |
+| [Inventory report](#inventory-report) | [inventory-report.bcn](../../samples/Beacon/inventory-report.bcn) |
+| [Find nearby chests](#nearby-chests) | [nearby-chests.bcn](../../samples/Beacon/nearby-chests.bcn) |
+| [Entity census](#census) | [census.bcn](../../samples/Beacon/census.bcn) |
+| [A command with an argument](#price-command) | [price-command.bcn](../../samples/Beacon/price-command.bcn) |
+| [A shared counter](#shared-counter) | [shared-counter.bcn](../../samples/Beacon/shared-counter.bcn) |
+| [Answer a team-selection dialog](#team-dialog) | [team-dialog.bcn](../../samples/Beacon/team-dialog.bcn) |
+| [Use an optional plugin](#optional-pricing) | [optional-pricing.bcn](../../samples/Beacon/optional-pricing.bcn) |
 
 <a id="quiz"></a>
 
@@ -267,7 +267,7 @@ The optional capability permits loading without the provider. Calls still fail c
 using DMCBK.Core.Beacon;
 using DMCBK.Testing;
 
-string source = await File.ReadAllTextAsync("quiz.mcc");
+string source = await File.ReadAllTextAsync("quiz.bcn");
 var host = new ScriptTestHost();
 var engine = new BeaconEngine(host);
 try
@@ -286,6 +286,6 @@ finally
 }
 ```
 
-Add `DMCBK.Beacon` and `DMCBK.Testing` to the test project. Run it from the directory that contains `quiz.mcc`.
+Add `DMCBK.Beacon` and `DMCBK.Testing` to the test project. Run it from the directory that contains `quiz.bcn`.
 
 For a live host, use [Beacon composition](getting-started.md#attach-beacon-to-a-client). For the optional pricing provider, see [Beacon plugin integration](../plugins/beacon-integration.md).

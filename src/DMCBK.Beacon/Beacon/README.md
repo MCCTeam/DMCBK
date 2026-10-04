@@ -1,6 +1,6 @@
 # Beacon (DMCBK.Core side)
 
-Beacon is MCC's scripting language (`.mcc` files in `scripts/`). This folder is the engine home.
+Beacon is MCC's scripting language (`.bcn` files in `scripts/`). This folder is the engine home.
 
 Boundary: everything here stays console-free (`System.Console` is analyzer-banned in DMCBK.Core).
 The engine reports findings as `BeaconDiagnostic` values with stable codes; only `Mcc.Cli`

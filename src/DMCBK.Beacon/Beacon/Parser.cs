@@ -373,7 +373,7 @@ public static class BeaconParser
                 BeaconToken found = Peek();
                 Error(found.Span, "a quoted path after 'import'",
                     DescribeToken(found),
-                    "Write import \"lib/econ.mcc\" as econ.");
+                    "Write import \"lib/econ.bcn\" as econ.");
                 SynchronizeToStatement();
                 return null;
             }
@@ -388,7 +388,7 @@ public static class BeaconParser
                     : null;
                 Error(found.Span, "'as' plus an alias after the import path",
                     DescribeToken(found),
-                    hint is null ? "Write import \"lib/econ.mcc\" as econ." : $"Did you mean 'as'? Write import \"{path}\" as econ.");
+                    hint is null ? "Write import \"lib/econ.bcn\" as econ." : $"Did you mean 'as'? Write import \"{path}\" as econ.");
                 SynchronizeToStatement();
                 return null;
             }
@@ -398,7 +398,7 @@ public static class BeaconParser
             if (alias is null)
             {
                 BeaconToken found = Peek();
-                ErrorToken(found, "an alias after 'as'", "Write import \"lib/econ.mcc\" as econ.");
+                ErrorToken(found, "an alias after 'as'", "Write import \"lib/econ.bcn\" as econ.");
                 SynchronizeToStatement();
                 return null;
             }

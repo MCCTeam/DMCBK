@@ -34,7 +34,7 @@ public sealed class ErrorTests
         string rendered = BeaconErrorRenderer.Render(diagnostic, source);
 
         string[] lines = rendered.Split('\n');
-        Assert.Matches(@"^[\w.\-]+\.mcc:\d+:\d+$", lines[0]);
+        Assert.Matches(@"^[\w.\-]+\.bcn:\d+:\d+$", lines[0]);
         Assert.Contains(source.Split('\n')[diagnostic.Span.Origin.Line - 1].Trim(), rendered, StringComparison.Ordinal);
         Assert.Contains("^", rendered, StringComparison.Ordinal);
         Assert.Contains("Try this:", rendered, StringComparison.Ordinal);
@@ -46,7 +46,7 @@ public sealed class ErrorTests
     {
         const string source = "# beacon 1\nshow healt\n";
         var engine = NewEngine();
-        engine.LoadSource("typo", "typo.mcc", source);
+        engine.LoadSource("typo", "typo.bcn", source);
         BeaconRunResult result = await engine.RunTopLevelAsync("typo").WaitAsync(TimeSpan.FromSeconds(5));
 
         Assert.False(result.Success);
@@ -62,7 +62,7 @@ public sealed class ErrorTests
     {
         const string source = "# beacon 1\nset x = 5\n";
         var engine = NewEngine();
-        engine.LoadSource("eq", "eq.mcc", source);
+        engine.LoadSource("eq", "eq.bcn", source);
         BeaconDiagnostic diagnostic = Assert.Single(
             engine.Lint("eq"), d => string.Equals(d.Code, BeaconDiagnosticCodes.StrictEquals, StringComparison.Ordinal));
 
@@ -76,7 +76,7 @@ public sealed class ErrorTests
     {
         const string source = "# beacon 1\nset count to 3\nif count\nshow \"x\"\nend if\n";
         var engine = NewEngine();
-        engine.LoadSource("cond", "cond.mcc", source);
+        engine.LoadSource("cond", "cond.bcn", source);
         BeaconDiagnostic diagnostic = Assert.Single(
             engine.Lint("cond"),
             d => string.Equals(d.Code, BeaconDiagnosticCodes.StrictBooleanCondition, StringComparison.Ordinal));
@@ -90,7 +90,7 @@ public sealed class ErrorTests
     {
         const string source = "# beacon 1\nwhile yes\nshow \"spin\"\nend while\n";
         var engine = NewEngine();
-        engine.LoadSource("spin", "spin.mcc", source);
+        engine.LoadSource("spin", "spin.bcn", source);
         BeaconRunResult result = await engine.RunTopLevelAsync("spin").WaitAsync(TimeSpan.FromSeconds(5));
 
         Assert.False(result.Success);
@@ -105,12 +105,12 @@ public sealed class ErrorTests
         var diagnostic = new BeaconDiagnostic(
             BeaconDiagnosticCodes.StrictEquals, BeaconSeverity.Error,
             "I expected something.",
-            new SourceSpan("quiz.mcc", 4, 7, 1),
+            new SourceSpan("quiz.bcn", 4, 7, 1),
             "Write it differently.");
 
         string rendered = BeaconErrorRenderer.Render(diagnostic, "a\nb\nc\nset x = 5\n");
 
-        Assert.StartsWith("quiz.mcc:4:7", rendered, StringComparison.Ordinal);
+        Assert.StartsWith("quiz.bcn:4:7", rendered, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -119,12 +119,12 @@ public sealed class ErrorTests
         var diagnostic = new BeaconDiagnostic(
             BeaconDiagnosticCodes.StrictEquals, BeaconSeverity.Error,
             "I expected something.",
-            new SourceSpan("quiz.mcc", 4, 7, 1),
+            new SourceSpan("quiz.bcn", 4, 7, 1),
             "Write it differently.");
 
         string rendered = BeaconErrorRenderer.Render(diagnostic, null);
 
-        Assert.StartsWith("quiz.mcc:4:7", rendered, StringComparison.Ordinal);
+        Assert.StartsWith("quiz.bcn:4:7", rendered, StringComparison.Ordinal);
         Assert.DoesNotContain("^", rendered, StringComparison.Ordinal);
         Assert.Contains("Try this:", rendered, StringComparison.Ordinal);
     }
@@ -135,7 +135,7 @@ public sealed class ErrorTests
         var diagnostic = new BeaconDiagnostic(
             BeaconDiagnosticCodes.UnknownName, BeaconSeverity.Error,
             "Unknown name 'foo'.",
-            new SourceSpan("a.mcc", 2, 3, 3),
+            new SourceSpan("a.bcn", 2, 3, 3),
             "Did you mean 'food'?");
 
         string plain = BeaconErrorRenderer.Render(diagnostic, "# beacon 1\nshow foo\n");
@@ -150,7 +150,7 @@ public sealed class ErrorTests
     public async Task CatchValue_CarriesCodeLineMessage()
     {
         var engine = NewEngine();
-        engine.LoadSource("catchy", "catchy.mcc",
+        engine.LoadSource("catchy", "catchy.bcn",
             "# beacon 1\ntry\nset x to mcc \"/bad\"\ncatch err\nshow err.code\nshow err.line\nshow err.message\nend try\n");
         BeaconRunResult result = await engine.RunTopLevelAsync("catchy").WaitAsync(TimeSpan.FromSeconds(5));
 
@@ -166,7 +166,7 @@ public sealed class ErrorTests
     {
         const string source = "# beacon 1\nset quota to 3\nwhile yes\nshow quota\nend while\n";
         var engine = NewEngine();
-        engine.LoadSource("ctx", "ctx.mcc", source);
+        engine.LoadSource("ctx", "ctx.bcn", source);
         BeaconRunResult result = await engine.RunTopLevelAsync("ctx").WaitAsync(TimeSpan.FromSeconds(5));
 
         Assert.False(result.Success);
@@ -182,7 +182,7 @@ public sealed class ErrorTests
         const string source = "# beacon 1\nserver \"home\"\n";
         var engine = new BeaconEngine(
             new FailingHost(), new VirtualClock(), new SeededRng(17), new FuelBudget());
-        engine.LoadSource("slash", "slash.mcc", source);
+        engine.LoadSource("slash", "slash.bcn", source);
         BeaconRunResult result = await engine.RunTopLevelAsync("slash").WaitAsync(TimeSpan.FromSeconds(5));
 
         Assert.False(result.Success);

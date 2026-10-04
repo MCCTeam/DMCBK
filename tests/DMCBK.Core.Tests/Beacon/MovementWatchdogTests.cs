@@ -128,7 +128,7 @@ public sealed class MovementWatchdogTests
     {
         var host = new ScriptTestHost();
         var clock = new VirtualClock();
-        var interpreter = new BeaconInterpreter("m", "m.mcc", host, clock, new SeededRng(1), new FuelBudget())
+        var interpreter = new BeaconInterpreter("m", "m.bcn", host, clock, new SeededRng(1), new FuelBudget())
         {
             Movement = StalledRunner(NeverCompletes),
         };
@@ -141,9 +141,9 @@ public sealed class MovementWatchdogTests
             "show \"caught\"\n" +
             "end try\n" +
             "show \"continued\"\n";
-        BeaconLexResult lexed = BeaconLexer.Lex("m.mcc", "# beacon 1\n" + body);
-        BeaconHeaderResult header = BeaconHeader.Parse("m.mcc", lexed.NormalizedSource, 2, lexed.Comments);
-        BeaconParseResult parsed = BeaconParser.Parse("m.mcc", lexed.Tokens, header.Major);
+        BeaconLexResult lexed = BeaconLexer.Lex("m.bcn", "# beacon 1\n" + body);
+        BeaconHeaderResult header = BeaconHeader.Parse("m.bcn", lexed.NormalizedSource, 2, lexed.Comments);
+        BeaconParseResult parsed = BeaconParser.Parse("m.bcn", lexed.Tokens, header.Major);
         Assert.NotNull(parsed.Script);
         interpreter.BeginDispatch("top-level", seed: 1);
 

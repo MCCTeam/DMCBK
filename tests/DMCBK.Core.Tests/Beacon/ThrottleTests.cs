@@ -44,12 +44,12 @@ public sealed class ThrottleTests
     private static async Task<(BeaconInterpreter Interpreter, List<OnBlock> Blocks)> LoadAsync(
         string scriptId, string body, RecordingHost host, VirtualClock clock)
     {
-        BeaconLexResult lexed = BeaconLexer.Lex(scriptId + ".mcc", "# beacon 1\n" + body);
-        BeaconParseResult parsed = BeaconParser.Parse(scriptId + ".mcc", lexed.Tokens, 1);
+        BeaconLexResult lexed = BeaconLexer.Lex(scriptId + ".bcn", "# beacon 1\n" + body);
+        BeaconParseResult parsed = BeaconParser.Parse(scriptId + ".bcn", lexed.Tokens, 1);
         Assert.DoesNotContain(parsed.Diagnostics, d => d.Severity == BeaconSeverity.Error);
         Assert.NotNull(parsed.Script);
         BeaconScript script = BeaconDesugar.Desugar(parsed.Script!);
-        var interpreter = new BeaconInterpreter(scriptId, scriptId + ".mcc", host, clock, new SeededRng(7), new FuelBudget());
+        var interpreter = new BeaconInterpreter(scriptId, scriptId + ".bcn", host, clock, new SeededRng(7), new FuelBudget());
         BeaconRunResult top = await interpreter.RunTopLevelAsync(script, lexed.Comments);
         Assert.True(top.Success);
         return (interpreter, script.Decls.OfType<OnBlock>().ToList());
@@ -65,7 +65,7 @@ public sealed class ThrottleTests
     [Fact]
     public void ResolveWindow_SecondsMinutesHours()
     {
-        var span = new SourceSpan("test.mcc", 1, 1, 0);
+        var span = new SourceSpan("test.bcn", 1, 1, 0);
         Assert.Equal(
             TimeSpan.FromSeconds(300),
             BeaconThrottleRegistry.ResolveWindow(new BeaconCooldown(
@@ -83,7 +83,7 @@ public sealed class ThrottleTests
     [Fact]
     public void ResolveWindow_Null_WhenAbsentOrUnresolvable()
     {
-        var span = new SourceSpan("test.mcc", 1, 1, 0);
+        var span = new SourceSpan("test.bcn", 1, 1, 0);
         Assert.Null(BeaconThrottleRegistry.ResolveWindow(null));
         Assert.Null(BeaconThrottleRegistry.ResolveWindow(new BeaconCooldown(
             span, new NumberLiteral(span, 1, "1"), string.Empty, string.Empty, span, "x", span)));

@@ -13,7 +13,7 @@ public sealed class HeaderTests
     private static IReadOnlyList<BeaconDiagnostic> LintSource(string source)
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", source);
+        engine.LoadSource("probe", "probe.bcn", source);
         return engine.Lint("probe");
     }
 
@@ -69,7 +69,7 @@ public sealed class HeaderTests
     {
         const string source = "# beacon 1\n# needs: chat.send inventory.read\n# wants: net.fetch\nsay \"hi\"\n";
 
-        BeaconHeaderResult header = BeaconHeader.Parse("probe.mcc", source, firstCodeLine: 4);
+        BeaconHeaderResult header = BeaconHeader.Parse("probe.bcn", source, firstCodeLine: 4);
 
         Assert.True(header.Ok);
         Assert.Empty(header.Diagnostics);
@@ -81,7 +81,7 @@ public sealed class HeaderTests
     [Fact]
     public void Manifest_Capability_SpansPointAtOwningLine()
     {
-        BeaconHeaderResult header = BeaconHeader.Parse("probe.mcc", "# beacon 1\n# needs: chat.send\n", firstCodeLine: 3);
+        BeaconHeaderResult header = BeaconHeader.Parse("probe.bcn", "# beacon 1\n# needs: chat.send\n", firstCodeLine: 3);
 
         BeaconManifestEntry entry = Assert.Single(header.Needs);
         Assert.Equal(2, entry.Span.Line);
@@ -100,7 +100,7 @@ public sealed class HeaderTests
         Assert.Equal(BeaconDiagnosticCodes.LateManifest, late.Code);
         Assert.Equal(BeaconSeverity.Warning, late.Severity);
 
-        BeaconHeaderResult header = BeaconHeader.Parse("probe.mcc", source, firstCodeLine: 2);
+        BeaconHeaderResult header = BeaconHeader.Parse("probe.bcn", source, firstCodeLine: 2);
         Assert.Empty(header.Needs);
     }
 
@@ -130,7 +130,7 @@ public sealed class HeaderTests
     {
         const string source = "# beacon 1\n// needs: chat.send\nsay \"hi\"\n";
 
-        BeaconHeaderResult header = BeaconHeader.Parse("probe.mcc", source, firstCodeLine: 3);
+        BeaconHeaderResult header = BeaconHeader.Parse("probe.bcn", source, firstCodeLine: 3);
 
         Assert.Empty(header.Needs);
         Assert.Empty(header.Wants);
@@ -141,7 +141,7 @@ public sealed class HeaderTests
     public void Manifest_Entries_PreserveOrder()
     {
         BeaconHeaderResult header = BeaconHeader.Parse(
-            "probe.mcc",
+            "probe.bcn",
             "# beacon 1\n# needs: b.cap a.cap\n",
             firstCodeLine: 3);
 

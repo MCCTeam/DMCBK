@@ -50,7 +50,7 @@ public sealed class ScriptsApi : IDisposable
     /// <summary>Whether the top-level script watcher is currently active.</summary>
     public bool WatchEnabled => Runtime.WatchEnabled;
 
-    /// <summary>Discovers every top-level <c>.mcc</c> file and marks the scripts currently running.</summary>
+    /// <summary>Discovers every top-level <c>.bcn</c> file and marks the scripts currently running.</summary>
     public IReadOnlyList<ScriptInfo> Discover()
     {
         string? directory = ScriptsDirectory;

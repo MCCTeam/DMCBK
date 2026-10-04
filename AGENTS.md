@@ -96,7 +96,7 @@ Skipped checks, missing prerequisites and aborted runs are not passes. Distingui
 Read `docs/beacon/index.md` and `docs/plugins/index.md` before changing their public behavior.
 
 - Keep Beacon syntax, capabilities, lint diagnostics and examples consistent.
-- Preserve `.mcc` files and the `mcc` command verb unless the user explicitly requests a language change.
+- Preserve `.bcn` files and the `mcc` command verb unless the user explicitly requests a language change.
 - Test event ordering, timers, reconnect cancellation and registration withdrawal when changing script scheduling.
 - Beacon initializes lazily. Initialize the engine before plugin activation for pre-session script calls into plugins.
 - Source plugin installation compiles one entry file. It must not restore arbitrary NuGet dependencies or build arbitrary projects.

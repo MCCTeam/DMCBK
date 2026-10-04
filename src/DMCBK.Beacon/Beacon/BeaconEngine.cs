@@ -517,7 +517,7 @@ public sealed class BeaconEngine : IBeaconEngine
                     BeaconDiagnosticCodes.UnknownName,
                     BeaconSeverity.Error,
                     $"Unknown script command '/{commandName}'.",
-                    new SourceSpan(commandName + ".mcc", 1, 1, 0),
+                    new SourceSpan(commandName + ".bcn", 1, 1, 0),
                     "List script commands with /scripts list.");
                 return new BeaconRunResult(false, null, [diagnostic], [], [], [], diagnostic);
             }
@@ -563,7 +563,7 @@ public sealed class BeaconEngine : IBeaconEngine
                 throw new BeaconRuntimeException(
                     BeaconBridgeErrorCodes.BridgeCall,
                     $"Call '{scriptId}.{function}' failed: '{function}' is a value export, not a function.",
-                    new SourceSpan(scriptId + ".mcc", 1, 1, 0),
+                    new SourceSpan(scriptId + ".bcn", 1, 1, 0),
                     $"Call '{scriptId}.{function}' with no arguments.");
             }
 
@@ -575,8 +575,8 @@ public sealed class BeaconEngine : IBeaconEngine
             throw new BeaconRuntimeException(
                 BeaconBridgeErrorCodes.BridgeCall,
                 $"Call '{scriptId}.{function}' failed: script '{scriptId}' exports no function '{function}'.",
-                new SourceSpan(scriptId + ".mcc", 1, 1, 0),
-                $"Add 'export function {function}()' to {scriptId}.mcc.");
+                new SourceSpan(scriptId + ".bcn", 1, 1, 0),
+                $"Add 'export function {function}()' to {scriptId}.bcn.");
         }
 
         List<BeaconValue> beaconArgs;
@@ -589,7 +589,7 @@ public sealed class BeaconEngine : IBeaconEngine
             throw new BeaconRuntimeException(
                 BeaconBridgeErrorCodes.BridgeCall,
                 $"Call '{scriptId}.{function}' failed: {ex.Message}",
-                new SourceSpan(scriptId + ".mcc", 1, 1, 0),
+                new SourceSpan(scriptId + ".bcn", 1, 1, 0),
                 "Pass only text, numbers, booleans, lists, string-keyed maps, or null.",
                 ex);
         }
@@ -668,7 +668,7 @@ public sealed class BeaconEngine : IBeaconEngine
     /// <param name="hostServices">Host seam override for this load; null means the engine host.</param>
     /// <param name="configFolder">Configurations folder for <c>saved</c> persistence; null keeps RAM-only.</param>
     /// <param name="detachedCt">Session <c>Detached</c> token; binds scheduler disconnect on fire.</param>
-    /// <param name="fileName">File name for spans; defaults to <c>&lt;scriptId&gt;.mcc</c>.</param>
+    /// <param name="fileName">File name for spans; defaults to <c>&lt;scriptId&gt;.bcn</c>.</param>
     /// <param name="ct">Run cancellation.</param>
     public async Task<BeaconRunResult> RunScriptAsync(
         string scriptId,
@@ -682,7 +682,7 @@ public sealed class BeaconEngine : IBeaconEngine
         using IDisposable environmentScope = Environment.Enter();
         ArgumentException.ThrowIfNullOrWhiteSpace(scriptId);
         ArgumentNullException.ThrowIfNull(source);
-        string resolvedFile = string.IsNullOrWhiteSpace(fileName) ? scriptId + ".mcc" : fileName!;
+        string resolvedFile = string.IsNullOrWhiteSpace(fileName) ? scriptId + ".bcn" : fileName!;
 
         IBeaconHostServices effectiveHost = hostServices ?? Host;
         string? resolvedConfig = configFolder;

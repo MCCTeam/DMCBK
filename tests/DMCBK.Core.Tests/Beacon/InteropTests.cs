@@ -339,10 +339,10 @@ public sealed class InteropTests : IDisposable
     {
         var (engine, host) = NewEngine();
         var loader = (BeaconImportLoader)engine.ModuleResolver;
-        loader.Overlay["econ.mcc"] = "# beacon 1\nfunction price(item)\nreturn 5\nend function\n";
+        loader.Overlay["econ.bcn"] = "# beacon 1\nfunction price(item)\nreturn 5\nend function\n";
 
         BeaconRunResult run = await engine.RunScriptAsync("shop", WithHeader(
-            "import \"lib/econ.mcc\" as econ\non chat:\nsay \"Bread costs {econ.price(\"bread\")} coins.\"\nend on\n"));
+            "import \"lib/econ.bcn\" as econ\non chat:\nsay \"Bread costs {econ.price(\"bread\")} coins.\"\nend on\n"));
         Assert.True(run.Success);
         BeaconFireResult fire = await engine.FireEventAsync("chat", BeaconEventFields.Chat("S", "hi"));
         Assert.True(fire.Handlers[0].Result!.Success);
@@ -354,21 +354,21 @@ public sealed class InteropTests : IDisposable
     {
         var (engine, _) = NewEngine();
         var loader = (BeaconImportLoader)engine.ModuleResolver;
-        loader.Overlay["a.mcc"] = "# beacon 1\nimport \"b.mcc\" as b\nfunction fa()\nreturn 1\nend function\n";
-        loader.Overlay["b.mcc"] = "# beacon 1\nimport \"a.mcc\" as a\nfunction fb()\nreturn 2\nend function\n";
+        loader.Overlay["a.bcn"] = "# beacon 1\nimport \"b.bcn\" as b\nfunction fa()\nreturn 1\nend function\n";
+        loader.Overlay["b.bcn"] = "# beacon 1\nimport \"a.bcn\" as a\nfunction fb()\nreturn 2\nend function\n";
 
-        BeaconRunResult run = await engine.RunScriptAsync("root", WithHeader("import \"a.mcc\" as a\nshow \"hi\"\n"));
+        BeaconRunResult run = await engine.RunScriptAsync("root", WithHeader("import \"a.bcn\" as a\nshow \"hi\"\n"));
         Assert.False(run.Success);
         Assert.Equal("B1005", run.Error!.Code);
-        Assert.Contains("a.mcc", run.Error.Message);
-        Assert.Contains("b.mcc", run.Error.Message);
+        Assert.Contains("a.bcn", run.Error.Message);
+        Assert.Contains("b.bcn", run.Error.Message);
     }
 
     [Fact]
     public async Task Import_MissingFile_FailsClosed()
     {
         var (engine, _) = NewEngine();
-        BeaconRunResult run = await engine.RunScriptAsync("root", WithHeader("import \"lib/gone.mcc\" as g\nshow \"hi\"\n"));
+        BeaconRunResult run = await engine.RunScriptAsync("root", WithHeader("import \"lib/gone.bcn\" as g\nshow \"hi\"\n"));
         Assert.False(run.Success);
         Assert.Equal("B1004", run.Error!.Code);
     }
@@ -429,8 +429,8 @@ public sealed class InteropTests : IDisposable
 
     private static BeaconScript MustParse(string body)
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("t.mcc", "# beacon 1\n" + body);
-        BeaconParseResult parsed = BeaconParser.Parse("t.mcc", lexed.Tokens, 1);
+        BeaconLexResult lexed = BeaconLexer.Lex("t.bcn", "# beacon 1\n" + body);
+        BeaconParseResult parsed = BeaconParser.Parse("t.bcn", lexed.Tokens, 1);
         Assert.NotNull(parsed.Script);
         return BeaconDesugar.Desugar(parsed.Script!);
     }

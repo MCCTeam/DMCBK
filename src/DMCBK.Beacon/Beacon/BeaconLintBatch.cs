@@ -53,7 +53,7 @@ public static class BeaconLintBatch
                 return BeaconLint.ExitCodes.Usage;
             }
 
-            string name = (string.IsNullOrWhiteSpace(args.StdinName) ? "stdin.mcc" : args.StdinName);
+            string name = (string.IsNullOrWhiteSpace(args.StdinName) ? "stdin.bcn" : args.StdinName);
             BeaconLintReport report = BeaconLint.LintSource(name, stdinText, options);
             var reports = new List<BeaconLintReport> { report };
             stdout = Render(reports, null, args.Format, new Dictionary<string, string>(StringComparer.Ordinal)

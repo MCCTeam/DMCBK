@@ -275,7 +275,7 @@ public static class BeaconStaticCheck
                 BeaconDiagnosticCodes.Parse,
                 BeaconSeverity.Error,
                 $"I expected 'end {expected}', but found 'end {label}'. End labels must match their opener.",
-                labelSpan ?? new SourceSpan("unknown.mcc", 1, 1, 0),
+                labelSpan ?? new SourceSpan("unknown.bcn", 1, 1, 0),
                 $"Write 'end {expected}'."));
         }
     }

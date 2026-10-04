@@ -134,15 +134,15 @@ public sealed class WorldWriteAndContainerTests : IDisposable
     {
         var host = new WritesHost();
         var clock = new VirtualClock();
-        var interpreter = new BeaconInterpreter("g", "g.mcc", host, clock, new SeededRng(1), new FuelBudget());
+        var interpreter = new BeaconInterpreter("g", "g.bcn", host, clock, new SeededRng(1), new FuelBudget());
         for (int i = 0; i < BeaconWorldWriteGate.MaxOperations; i++)
-            interpreter.WriteGate.Acquire(new SourceSpan("g.mcc", 1, 1, 0), "world.place");
+            interpreter.WriteGate.Acquire(new SourceSpan("g.bcn", 1, 1, 0), "world.place");
 
         BeaconRuntimeException ex = Assert.Throws<BeaconRuntimeException>(() =>
-            interpreter.WriteGate.Acquire(new SourceSpan("g.mcc", 1, 1, 0), "world.place"));
+            interpreter.WriteGate.Acquire(new SourceSpan("g.bcn", 1, 1, 0), "world.place"));
         Assert.Equal(BeaconDiagnosticCodes.WorldWriteGate, ex.Code);
         clock.Advance(TimeSpan.FromSeconds(11));
-        interpreter.WriteGate.Acquire(new SourceSpan("g.mcc", 1, 1, 0), "world.place");
+        interpreter.WriteGate.Acquire(new SourceSpan("g.bcn", 1, 1, 0), "world.place");
     }
 
     [Fact]
@@ -150,13 +150,13 @@ public sealed class WorldWriteAndContainerTests : IDisposable
     {
         var host = new WritesHost();
         var clock = new VirtualClock();
-        var interpreter = new BeaconInterpreter("d", "d.mcc", host, clock, new SeededRng(1), new FuelBudget())
+        var interpreter = new BeaconInterpreter("d", "d.bcn", host, clock, new SeededRng(1), new FuelBudget())
         {
             Gates = new BeaconGameplayGates(Terrain: false),
         };
-        BeaconLexResult lexed = BeaconLexer.Lex("d.mcc", WithHeader("show world.dig(1, 2, 3)\n"));
-        BeaconHeaderResult header = BeaconHeader.Parse("d.mcc", lexed.NormalizedSource, 2, lexed.Comments);
-        BeaconParseResult parsed = BeaconParser.Parse("d.mcc", lexed.Tokens, header.Major);
+        BeaconLexResult lexed = BeaconLexer.Lex("d.bcn", WithHeader("show world.dig(1, 2, 3)\n"));
+        BeaconHeaderResult header = BeaconHeader.Parse("d.bcn", lexed.NormalizedSource, 2, lexed.Comments);
+        BeaconParseResult parsed = BeaconParser.Parse("d.bcn", lexed.Tokens, header.Major);
         Assert.NotNull(parsed.Script);
         interpreter.BeginDispatch("top-level", seed: 1);
         BeaconRunResult run = await interpreter.RunTopLevelAsync(
@@ -198,9 +198,9 @@ public sealed class WorldWriteAndContainerTests : IDisposable
     public async Task WorldWrite_InfersCapability()
     {
         BeaconLexResult lexed = BeaconLexer.Lex(
-            "w.mcc", WithHeader("show world.dig(1, 2, 3)\nshow world.place(1, 2, 3)\nshow world.looking_at()\n"));
-        BeaconHeaderResult header = BeaconHeader.Parse("w.mcc", lexed.NormalizedSource, 2, lexed.Comments);
-        BeaconParseResult parsed = BeaconParser.Parse("w.mcc", lexed.Tokens, header.Major);
+            "w.bcn", WithHeader("show world.dig(1, 2, 3)\nshow world.place(1, 2, 3)\nshow world.looking_at()\n"));
+        BeaconHeaderResult header = BeaconHeader.Parse("w.bcn", lexed.NormalizedSource, 2, lexed.Comments);
+        BeaconParseResult parsed = BeaconParser.Parse("w.bcn", lexed.Tokens, header.Major);
         Assert.NotNull(parsed.Script);
         Assert.Contains(BeaconCapabilities.WorldWrite, BeaconCapabilityInference.Infer(parsed.Script));
     }

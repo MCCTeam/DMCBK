@@ -61,7 +61,7 @@ public sealed class SessionEventRoundTripTests : IDisposable
 
     private static async Task<string> RunScriptAsync(Client client, string root, string name, string body)
     {
-        string path = Path.Combine(root, name + ".mcc");
+        string path = Path.Combine(root, name + ".bcn");
         await File.WriteAllTextAsync(path, body);
         CmdResult run = await client.Commands.DispatchAsync($"scripts run \"{path}\"");
         Assert.Equal(CmdStatus.Done, run.Status);

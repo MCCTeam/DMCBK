@@ -1,4 +1,4 @@
 # beacon 1
 
-import "lib/econ.mcc" as econ
+import "lib/econ.bcn" as econ
 say "Bread costs {econ.price("bread")} coins."

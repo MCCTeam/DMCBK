@@ -14,7 +14,7 @@ Use the same client services in a background worker, desktop app or web backend.
 - **Client hosting:** authentication, connection lifecycle, reconnects and independent clients in one process.
 - **Game API:** typed access to chat, player state, inventory, entities, terrain and movement through UMPK.
 - **Commands:** dispatch, completion and scoped registration for hosts and plugins.
-- **Beacon scripting:** event handlers, scheduled tasks, persistent state, linting, formatting and plugin extensions.
+- **Beacon scripting (`.bcn`):** event handlers, scheduled tasks, persistent state, linting, formatting and plugin extensions.
 - **Plugins:** C# source or compiled packages, lifecycle hooks, settings, storage, localization and shared contracts.
 - **Marketplace:** versioned releases, dependency resolution, platform-specific assets, pins and transactional installation with rollback.
 - **Configuration:** typed options and optional TOML loading, validation and persistence.

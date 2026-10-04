@@ -191,13 +191,13 @@ public sealed record BeaconScriptFile(string ScriptId, string Path);
 
 /// <summary>
 /// Discovers Beacon scripts: the <c>scripts/</c> folder beside the configurations folder, one file one script (own globals per script id).
-/// Only top-level <c>*.mcc</c> files count; anything else (notes, subfolders) is ignored.
+/// Only top-level <c>*.bcn</c> files count; anything else (notes, subfolders) is ignored.
 /// A missing folder discovers as empty, never throws.
 /// </summary>
 public static class BeaconScriptDiscovery
 {
     /// <summary>The only file extension discovered as a script.</summary>
-    public const string ScriptExtension = ".mcc";
+    public const string ScriptExtension = ".bcn";
 
     /// <summary>Lists scripts sorted by id.</summary>
     public static IReadOnlyList<BeaconScriptFile> Discover(string configurationsFolder)

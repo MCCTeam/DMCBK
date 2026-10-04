@@ -70,7 +70,7 @@ public sealed class ScriptsApiTests : IDisposable
         WriteScript(client, "beta", "# beacon 1\nshow \"beta\"\n");
         string nested = Path.Combine(client.Scripts.ScriptsDirectory!, "nested");
         Directory.CreateDirectory(nested);
-        await File.WriteAllTextAsync(Path.Combine(nested, "hidden.mcc"), "# beacon 1\n");
+        await File.WriteAllTextAsync(Path.Combine(nested, "hidden.bcn"), "# beacon 1\n");
 
         Assert.True((await client.Scripts.RunFileAsync("alpha")).Success);
         IReadOnlyList<ScriptInfo> scripts = client.Scripts.Discover();
@@ -100,7 +100,7 @@ public sealed class ScriptsApiTests : IDisposable
     public async Task Delete_RejectsPathsOutsideTheTopLevelScriptsDirectory()
     {
         await using Client client = BuildClient();
-        string outside = Path.Combine(Path.GetDirectoryName(client.Scripts.ScriptsDirectory!)!, "outside.mcc");
+        string outside = Path.Combine(Path.GetDirectoryName(client.Scripts.ScriptsDirectory!)!, "outside.bcn");
         await File.WriteAllTextAsync(outside, "# beacon 1\n");
 
         Assert.Throws<ArgumentException>(() => client.Scripts.Delete("../outside"));
@@ -146,7 +146,7 @@ public sealed class ScriptsApiTests : IDisposable
     {
         string directory = client.Scripts.ScriptsDirectory!;
         Directory.CreateDirectory(directory);
-        string path = Path.Combine(directory, id + ".mcc");
+        string path = Path.Combine(directory, id + ".bcn");
         File.WriteAllText(path, source);
         return path;
     }

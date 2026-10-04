@@ -64,7 +64,7 @@ public sealed class InterpreterTests
     private static async Task<BeaconRunResult> RunCleanAsync(
         BeaconEngine engine, string scriptId, string body)
     {
-        engine.LoadSource(scriptId, scriptId + ".mcc", "# beacon 1\n" + body);
+        engine.LoadSource(scriptId, scriptId + ".bcn", "# beacon 1\n" + body);
         IReadOnlyList<BeaconDiagnostic> errors = engine.Lint(scriptId)
             .Where(d => d.Severity == BeaconSeverity.Error).ToList();
         Assert.Empty(errors);
@@ -121,8 +121,8 @@ public sealed class InterpreterTests
     {
         var host = new RecordingHost();
         var engine = new BeaconEngine(host, new VirtualClock(), new SeededRng(7), new FuelBudget());
-        engine.LoadSource("a", "a.mcc", "# beacon 1\nset x to 1\nshow x\n");
-        engine.LoadSource("b", "b.mcc", "# beacon 1\nset x to 2\nshow x\n");
+        engine.LoadSource("a", "a.bcn", "# beacon 1\nset x to 1\nshow x\n");
+        engine.LoadSource("b", "b.bcn", "# beacon 1\nset x to 2\nshow x\n");
 
         BeaconRunResult ra = await engine.RunTopLevelAsync("a");
         BeaconRunResult rb = await engine.RunTopLevelAsync("b");
@@ -268,7 +268,7 @@ public sealed class InterpreterTests
         var host = new RecordingHost();
         var clock = new VirtualClock();
         var engine = new BeaconEngine(host, clock, new SeededRng(9), new FuelBudget());
-        engine.LoadSource("w", "w.mcc", "# beacon 1\nwait 0 seconds\nshow \"done\"\n");
+        engine.LoadSource("w", "w.bcn", "# beacon 1\nwait 0 seconds\nshow \"done\"\n");
         Assert.DoesNotContain(engine.Lint("w"), d => d.Severity == BeaconSeverity.Error);
 
         Task<BeaconRunResult> task = engine.RunTopLevelAsync("w");
@@ -314,7 +314,7 @@ public sealed class InterpreterTests
         const string body =
             "on join:\nsay \"Welcome to the server, {player}!\"\nend on\n" +
             "on chat when message contains \"!rules\":\nwhisper player \"1. Be kind. 2. No griefing.\"\nend on\n";
-        engine.LoadSource("welcome", "welcome.mcc", "# beacon 1\n# needs: chat.send\n" + body);
+        engine.LoadSource("welcome", "welcome.bcn", "# beacon 1\n# needs: chat.send\n" + body);
         Assert.DoesNotContain(engine.Lint("welcome"), d => d.Severity == BeaconSeverity.Error);
         BeaconRunResult top = await engine.RunTopLevelAsync("welcome");
         Assert.True(top.Success);
@@ -342,7 +342,7 @@ public sealed class InterpreterTests
         var (engine, host, _) = NewEngine();
         const string body =
             "on join:\nset seen to saved(\"seen\") or {}\nif seen[player] is set\nsay \"Welcome back, {player}!\"\nset seen[player] to seen[player] + 1\nelse\nsay \"Welcome for the first time, {player}!\"\nset seen[player] to 1\nend if\nsave \"seen\" to seen\nend on\n";
-        engine.LoadSource("greeter", "greeter.mcc", "# beacon 1\n" + body);
+        engine.LoadSource("greeter", "greeter.bcn", "# beacon 1\n" + body);
         Assert.DoesNotContain(engine.Lint("greeter"), d => d.Severity == BeaconSeverity.Error);
         Assert.True((await engine.RunTopLevelAsync("greeter")).Success);
 
@@ -363,7 +363,7 @@ public sealed class InterpreterTests
         const string body =
             "set quiz to {running: no, q: \"\", a: \"\", wins: {}}\n" +
             "on chat when message is \"!quiz\":\nif quiz.running is yes\nwhisper player \"running\"\nstop event\nend if\nset quiz.running to yes\nset quiz.q to \"What mob explodes?\"\nset quiz.a to \"creeper\"\nsay \"Quiz! {quiz.q}\"\nend on\n";
-        engine.LoadSource("quiz", "quiz.mcc", "# beacon 1\n" + body);
+        engine.LoadSource("quiz", "quiz.bcn", "# beacon 1\n" + body);
         Assert.DoesNotContain(engine.Lint("quiz"), d => d.Severity == BeaconSeverity.Error);
         Assert.True((await engine.RunTopLevelAsync("quiz")).Success);
 
@@ -379,15 +379,15 @@ public sealed class InterpreterTests
     [Fact]
     public async Task NestedDecl_NeverClean_ThrowsAtEvaluation()
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("probe.mcc", "# beacon 1\nset x to 1\nif x is 1\non join\nsay \"hi\"\nend on\nend if\n");
-        BeaconParseResult parsed = BeaconParser.Parse("probe.mcc", lexed.Tokens);
+        BeaconLexResult lexed = BeaconLexer.Lex("probe.bcn", "# beacon 1\nset x to 1\nif x is 1\non join\nsay \"hi\"\nend on\nend if\n");
+        BeaconParseResult parsed = BeaconParser.Parse("probe.bcn", lexed.Tokens);
         Assert.NotNull(parsed.Script);
         // Lint fails first.
         var probe = new BeaconEngine(new RecordingHost());
-        probe.LoadSource("probe", "probe.mcc", "# beacon 1\nset x to 1\nif x is 1\non join\nsay \"hi\"\nend on\nend if\n");
+        probe.LoadSource("probe", "probe.bcn", "# beacon 1\nset x to 1\nif x is 1\non join\nsay \"hi\"\nend on\nend if\n");
         Assert.Contains(probe.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
 
-        var interp = new BeaconInterpreter("probe", "probe.mcc", new RecordingHost());
+        var interp = new BeaconInterpreter("probe", "probe.bcn", new RecordingHost());
         BeaconRunResult result = await interp.RunTopLevelAsync(parsed.Script!);
         Assert.False(result.Success);
         Assert.NotNull(result.Error);
@@ -458,25 +458,25 @@ public sealed class InterpreterTests
     [Fact]
     public async Task DesugaredSpans_OriginIsUserText()
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("probe.mcc", "# beacon 1\nif a == 1\nsay \"x\"\nend if\n");
-        BeaconParseResult parsed = BeaconParser.Parse("probe.mcc", lexed.Tokens);
+        BeaconLexResult lexed = BeaconLexer.Lex("probe.bcn", "# beacon 1\nif a == 1\nsay \"x\"\nend if\n");
+        BeaconParseResult parsed = BeaconParser.Parse("probe.bcn", lexed.Tokens);
         Assert.NotNull(parsed.Script);
         BeaconScript desugared = BeaconDesugar.Desugar(parsed.Script!);
-        Assert.Equal("probe.mcc", desugared.Span.Origin.File);
+        Assert.Equal("probe.bcn", desugared.Span.Origin.File);
 
         var (engine, _, _) = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\nshow \"health: \" + 5\n");
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\nshow \"health: \" + 5\n");
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
         Assert.False(result.Success);
         Assert.NotNull(result.Error);
-        Assert.Equal("probe.mcc", result.Error!.Span.Origin.File);
+        Assert.Equal("probe.bcn", result.Error!.Span.Origin.File);
     }
 
     [Fact]
     public void WaitEveryCooldown_NumberLiteralWhenClean()
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("probe.mcc", "# beacon 1\nwait 2 seconds\n");
-        BeaconParseResult parsed = BeaconParser.Parse("probe.mcc", lexed.Tokens);
+        BeaconLexResult lexed = BeaconLexer.Lex("probe.bcn", "# beacon 1\nwait 2 seconds\n");
+        BeaconParseResult parsed = BeaconParser.Parse("probe.bcn", lexed.Tokens);
         Assert.NotNull(parsed.Script);
         var top = Assert.IsType<TopStatement>(Assert.Single(parsed.Script!.Decls));
         Assert.IsType<NumberLiteral>(Assert.IsType<WaitStmt>(top.Statement).Count);
@@ -486,7 +486,7 @@ public sealed class InterpreterTests
     public async Task Repeat_CountsNotStaticallyChecked_ValidateAtRuntime()
     {
         var (engine, _, _) = NewEngine();
-        engine.LoadSource("rep", "rep.mcc", "# beacon 1\nrepeat \"three\" times\nsay \"hi\"\nend repeat\n");
+        engine.LoadSource("rep", "rep.bcn", "# beacon 1\nrepeat \"three\" times\nsay \"hi\"\nend repeat\n");
         // No static numeric check for repeat: Lint stays clean.
         Assert.DoesNotContain(engine.Lint("rep"), d => d.Severity == BeaconSeverity.Error);
 

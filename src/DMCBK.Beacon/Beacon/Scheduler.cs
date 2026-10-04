@@ -517,7 +517,7 @@ public sealed class BeaconScheduler
         SchedulerSpan(),
         $"Wrap 'await {task.Id}' in try/catch err and read err.message.");
 
-    private SourceSpan SchedulerSpan() => new($"{ScriptId}.mcc", 1, 1, 0);
+    private SourceSpan SchedulerSpan() => new($"{ScriptId}.bcn", 1, 1, 0);
 }
 
 /// <summary>

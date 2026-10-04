@@ -31,8 +31,8 @@ These APIs let a host build its own editor or dashboard. MCC supplies its own te
 using DMCBK.Core.Beacon;
 
 string source = "# beacon 1\nset total to 3 * 4\nassert(total is 12, \"total\")\n";
-var lint = BeaconLint.LintSource("total.mcc", source);
-var formatted = BeaconFormat.FormatSource("total.mcc", source);
+var lint = BeaconLint.LintSource("total.bcn", source);
+var formatted = BeaconFormat.FormatSource("total.bcn", source);
 Console.WriteLine(formatted.Formatted);
 if (!lint.Ok || formatted.HadErrors)
     throw new InvalidOperationException("The script has errors.");

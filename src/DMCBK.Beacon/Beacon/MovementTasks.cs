@@ -570,7 +570,7 @@ public sealed class BeaconMovementRunner
             TaskScheduler.Default);
     }
 
-    private static SourceSpan MovementSpan() => new("movement.mcc", 1, 1, 0);
+    private static SourceSpan MovementSpan() => new("movement.bcn", 1, 1, 0);
 
     private sealed class MovementRequest(string owner, BeaconMoveTarget target, IBeaconMovementLease lease)
     {

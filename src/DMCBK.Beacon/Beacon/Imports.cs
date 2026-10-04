@@ -32,7 +32,7 @@ public interface IBeaconModuleResolver
 }
 
 /// <summary>
-/// The import loader: relative <c>import "lib/x.mcc" as ns</c> resolves against the importing
+/// The import loader: relative <c>import "lib/x.bcn" as ns</c> resolves against the importing
 /// file and stays inside its folder (like the lint closure, so runtime and lint never disagree);
 /// parsed files are cached by content hash (like the single-file plugin cache); a circular chain fails with an error naming every file in the cycle.
 /// One level of namespacing: the importing script calls <c>ns.func()</c>; inside a module body its own functions are visible bare (the module context), while the importer must still qualify them; nested imports merge under the same alias in file order so a library file stays self-contained.

@@ -197,7 +197,7 @@ public static class BeaconLint
             if (_files.TryGetValue(abs, out FileEntry? known) && known is not null)
                 return known;
 
-            // Diagnostic spans carry the file NAME (not the as-given path): the headless JSON contract pins `"file": "quiz.mcc"` for a file linted by any path, and the closure keys identity by absolute path, so same-name files in different folders still lint independently while each reports its own short name.
+            // Diagnostic spans carry the file NAME (not the as-given path): the headless JSON contract pins `"file": "quiz.bcn"` for a file linted by any path, and the closure keys identity by absolute path, so same-name files in different folders still lint independently while each reports its own short name.
             // Report.Path keeps the as-given path for the files[] array.
             string display = Path.GetFileName(path);
             if (string.IsNullOrEmpty(display))
@@ -409,10 +409,10 @@ public static class BeaconLint
             new(
                 BeaconDiagnosticCodes.UnresolvedBridge,
                 BeaconSeverity.Warning,
-                $"Cannot resolve call target '{target}' offline: no '{scriptId}.mcc' sits beside "
+                $"Cannot resolve call target '{target}' offline: no '{scriptId}.bcn' sits beside "
                 + $"'{Path.GetFileName(entry.Display)}' and there is no provider registry in this build.",
                 call.TargetSpan.Origin,
-                $"Add '{scriptId}.mcc' next to '{Path.GetFileName(entry.Display)}' or install the owning script.");
+                $"Add '{scriptId}.bcn' next to '{Path.GetFileName(entry.Display)}' or install the owning script.");
 
         private static string? ResolveInside(string rel, FileEntry entry, string rootDir)
         {

@@ -134,7 +134,7 @@ public sealed class StringBuiltinTests
     public void Repeat_AsCallNowFailsCleanlyAtLint()
     {
         BeaconLintReport report = BeaconLint.LintSource(
-            "repeat-call.mcc", ScriptTestHelpers.WithHeader("show repeat(\"ab\", 3)\n"));
+            "repeat-call.bcn", ScriptTestHelpers.WithHeader("show repeat(\"ab\", 3)\n"));
         Assert.False(report.Ok);
         Assert.Contains(report.Diagnostics, d => d.Severity == BeaconSeverity.Error);
     }

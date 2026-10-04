@@ -4,7 +4,7 @@ using DMCBK.Core.Beacon;
 namespace DMCBK.Core.Tests.Beacon;
 
 /// <summary>
-/// Conformance harness: walks <c>TestData/accept/*.mcc</c> expecting zero error diagnostics and <c>TestData/reject/*.mcc</c> expecting a named rejection.
+/// Conformance harness: walks <c>TestData/accept/*.bcn</c> expecting zero error diagnostics and <c>TestData/reject/*.bcn</c> expecting a named rejection.
 /// A reject file declares its expected code in a <c># expect: Bxxxx</c> comment; without one, any error diagnostic counts as the rejection.
 /// Every failure is reported as <c>file:line: message</c> so a red run points at the fixture, not the runner.
 /// </summary>
@@ -74,7 +74,7 @@ internal static class ConformanceRunner
 
     private static IEnumerable<string> OrderedScripts(string dir)
         => Directory.Exists(dir)
-            ? Directory.GetFiles(dir, "*.mcc", SearchOption.TopDirectoryOnly).OrderBy(f => f)
+            ? Directory.GetFiles(dir, "*.bcn", SearchOption.TopDirectoryOnly).OrderBy(f => f)
             : [];
 
     private static (string? Code, int Line) ReadExpectedCode(string source)

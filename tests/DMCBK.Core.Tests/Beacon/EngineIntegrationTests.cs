@@ -414,8 +414,8 @@ public sealed class EngineIntegrationTests : IDisposable
         Assert.True(BeaconHookCatalog.TryGetSchema("logout", out BeaconHookSchema? logout));
         Assert.NotNull(logout);
         Assert.Empty(logout!.Fields);
-        Assert.Null(BeaconHookCatalog.ValidateHook("start", new SourceSpan("t.mcc", 1, 1, 0)));
-        Assert.Null(BeaconHookCatalog.ValidateHook("logout", new SourceSpan("t.mcc", 1, 1, 0)));
+        Assert.Null(BeaconHookCatalog.ValidateHook("start", new SourceSpan("t.bcn", 1, 1, 0)));
+        Assert.Null(BeaconHookCatalog.ValidateHook("logout", new SourceSpan("t.bcn", 1, 1, 0)));
     }
 
     [Fact]
@@ -440,11 +440,11 @@ public sealed class EngineIntegrationTests : IDisposable
     public void Lint_StartAndLogout_AreNotUnknownHookWarnings()
     {
         var (engine, _, _) = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", WithHeader("on start\nshow \"x\"\nend on\n"));
+        engine.LoadSource("probe", "probe.bcn", WithHeader("on start\nshow \"x\"\nend on\n"));
         Assert.DoesNotContain(
             engine.Lint("probe"),
             d => string.Equals(d.Code, BeaconDiagnosticCodes.UnknownEvent, StringComparison.Ordinal));
-        engine.LoadSource("probe2", "probe2.mcc", WithHeader("on logout\nshow \"x\"\nend on\n"));
+        engine.LoadSource("probe2", "probe2.bcn", WithHeader("on logout\nshow \"x\"\nend on\n"));
         Assert.DoesNotContain(
             engine.Lint("probe2"),
             d => string.Equals(d.Code, BeaconDiagnosticCodes.UnknownEvent, StringComparison.Ordinal));

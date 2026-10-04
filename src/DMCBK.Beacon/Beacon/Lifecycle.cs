@@ -365,5 +365,5 @@ public sealed class BeaconLifecycle
         };
     }
 
-    private static SourceSpan LifecycleSpan() => new("lifecycle.mcc", 1, 1, 0);
+    private static SourceSpan LifecycleSpan() => new("lifecycle.bcn", 1, 1, 0);
 }

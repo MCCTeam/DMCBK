@@ -66,9 +66,9 @@ public sealed class JailTests : IDisposable
         JailHost host, string body, Action<BeaconInterpreter>? configure = null)
     {
         var interp = new BeaconInterpreter(
-            "j", "j.mcc", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
+            "j", "j.bcn", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
         configure?.Invoke(interp);
-        BeaconScript script = MustParse("j.mcc", body);
+        BeaconScript script = MustParse("j.bcn", body);
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 1)
             .WaitAsync(TimeSpan.FromSeconds(5));
         Assert.True(result.Success, result.Error?.Message);
@@ -87,7 +87,7 @@ public sealed class JailTests : IDisposable
     public void FileJail_WriteRead_RoundTrip()
     {
         var jail = new BeaconFileJail(Path.Combine(NewRoot(), "data"));
-        var span = new SourceSpan("j.mcc", 1, 1, 0);
+        var span = new SourceSpan("j.bcn", 1, 1, 0);
 
         jail.WriteText("notes.txt", "hello", span);
 
@@ -98,7 +98,7 @@ public sealed class JailTests : IDisposable
     public void FileJail_Escape_Refused()
     {
         var jail = new BeaconFileJail(Path.Combine(NewRoot(), "data"));
-        var span = new SourceSpan("j.mcc", 2, 1, 0);
+        var span = new SourceSpan("j.bcn", 2, 1, 0);
 
         // Backslash is a separator only on Windows; on Linux it names a legal inner file, so only truly-escaping shapes are refused here.
         foreach (string evil in new[] { "../evil.txt", "/abs.txt", "sub/../../evil.txt", ".." })
@@ -118,7 +118,7 @@ public sealed class JailTests : IDisposable
         var jail = new BeaconFileJail(Path.Combine(root, "data"));
         Directory.CreateDirectory(Path.Combine(root, "data"));
         File.CreateSymbolicLink(Path.Combine(root, "data", "link.txt"), outside);
-        var span = new SourceSpan("j.mcc", 1, 1, 0);
+        var span = new SourceSpan("j.bcn", 1, 1, 0);
 
         BeaconRuntimeException ex = Assert.Throws<BeaconRuntimeException>(() => jail.ReadText("link.txt", span));
         Assert.Equal(BeaconDiagnosticCodes.FileJail, ex.Code);
@@ -129,7 +129,7 @@ public sealed class JailTests : IDisposable
     public void FileJail_WriteCap_Refused()
     {
         var jail = new BeaconFileJail(Path.Combine(NewRoot(), "data"));
-        var span = new SourceSpan("j.mcc", 1, 1, 0);
+        var span = new SourceSpan("j.bcn", 1, 1, 0);
 
         BeaconRuntimeException ex = Assert.Throws<BeaconRuntimeException>(
             () => jail.WriteText("big.txt", new string('x', (int)BeaconFileJail.MaxFileBytes + 1), span));
@@ -144,7 +144,7 @@ public sealed class JailTests : IDisposable
         Directory.CreateDirectory(data);
         File.WriteAllText(Path.Combine(data, "big.txt"), new string('x', (int)BeaconFileJail.MaxFileBytes + 1));
         var jail = new BeaconFileJail(data);
-        var span = new SourceSpan("j.mcc", 1, 1, 0);
+        var span = new SourceSpan("j.bcn", 1, 1, 0);
 
         BeaconRuntimeException ex = Assert.Throws<BeaconRuntimeException>(() => jail.ReadText("big.txt", span));
         Assert.Equal(BeaconDiagnosticCodes.FileJail, ex.Code);
@@ -169,11 +169,11 @@ public sealed class JailTests : IDisposable
         var host = new JailHost();
         string data = Path.Combine(NewRoot(), "data");
         var interp = new BeaconInterpreter(
-            "j", "j.mcc", host, new VirtualClock(), new SeededRng(1), new FuelBudget())
+            "j", "j.bcn", host, new VirtualClock(), new SeededRng(1), new FuelBudget())
         {
             FileJail = new BeaconFileJail(data),
         };
-        BeaconScript script = MustParse("j.mcc",
+        BeaconScript script = MustParse("j.bcn",
             "try\nshow file_read(\"../evil.txt\")\ncatch err\nshow err.code\nshow \"caught\"\nend try\n");
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 1)
             .WaitAsync(TimeSpan.FromSeconds(5));
@@ -223,11 +223,11 @@ public sealed class JailTests : IDisposable
             (_, _, _, _) => Task.FromResult(Encoding.UTF8.GetBytes("x")),
             null, "hooks.example.com");
         var interp = new BeaconInterpreter(
-            "j", "j.mcc", host, new VirtualClock(), new SeededRng(1), new FuelBudget())
+            "j", "j.bcn", host, new VirtualClock(), new SeededRng(1), new FuelBudget())
         {
             NetGate = gate,
         };
-        BeaconScript script = MustParse("j.mcc",
+        BeaconScript script = MustParse("j.bcn",
             "try\nshow http_get(\"http://hooks.example.com/x\")\ncatch err\nshow err.code\nshow err.message\nend try\n");
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 1)
             .WaitAsync(TimeSpan.FromSeconds(5));
@@ -243,7 +243,7 @@ public sealed class JailTests : IDisposable
         var gate = AllowlistedGate(
             (_, _, _, _) => Task.FromResult(Encoding.UTF8.GetBytes("x")),
             null, "already.example.com");
-        var span = new SourceSpan("deal.mcc", 7, 3, 10);
+        var span = new SourceSpan("deal.bcn", 7, 3, 10);
 
         BeaconRuntimeException ex = await Assert.ThrowsAsync<BeaconRuntimeException>(
             () => gate.GetAsync("https://hooks.example.com/mcc-deals", span));
@@ -263,7 +263,7 @@ public sealed class JailTests : IDisposable
         var gate = AllowlistedGate(
             (_, _, _, _) => Task.FromResult(new byte[BeaconNetGate.MaxResponseBytes + 1]),
             null, "h.example.com");
-        var span = new SourceSpan("deal.mcc", 1, 1, 0);
+        var span = new SourceSpan("deal.bcn", 1, 1, 0);
 
         BeaconRuntimeException ex = await Assert.ThrowsAsync<BeaconRuntimeException>(
             () => gate.GetAsync("https://h.example.com/big", span));
@@ -278,7 +278,7 @@ public sealed class JailTests : IDisposable
         var gate = AllowlistedGate(
             (_, _, _, ct) => Task.Delay(Timeout.InfiniteTimeSpan, ct).ContinueWith(_ => Array.Empty<byte>(), ct),
             TimeSpan.FromMilliseconds(50), "h.example.com");
-        var span = new SourceSpan("deal.mcc", 1, 1, 0);
+        var span = new SourceSpan("deal.bcn", 1, 1, 0);
 
         BeaconRuntimeException ex = await Assert.ThrowsAsync<BeaconRuntimeException>(
             () => gate.GetAsync("https://h.example.com/slow", span));
@@ -324,7 +324,7 @@ public sealed class JailTests : IDisposable
     public void Manifest_NeedsExactCover_RefusesWithPasteLine()
     {
         var engine = LintEngine();
-        engine.LoadSource("deal", "deal.mcc", "# beacon 1\n# needs: chat.send\nsay \"hi\"\nserver \"/home\"\n");
+        engine.LoadSource("deal", "deal.bcn", "# beacon 1\n# needs: chat.send\nsay \"hi\"\nserver \"/home\"\n");
 
         IReadOnlyList<BeaconDiagnostic> errors = engine.Lint("deal")
             .Where(d => d.Severity == BeaconSeverity.Error).ToList();
@@ -353,7 +353,7 @@ public sealed class JailTests : IDisposable
     public void Manifest_Covered_LoadsClean()
     {
         var engine = LintEngine();
-        engine.LoadSource("ok", "ok.mcc", "# beacon 1\n# needs: chat.send server.send\nsay \"hi\"\nserver \"/home\"\n");
+        engine.LoadSource("ok", "ok.bcn", "# beacon 1\n# needs: chat.send server.send\nsay \"hi\"\nserver \"/home\"\n");
 
         Assert.DoesNotContain(engine.Lint("ok"), d => d.Severity == BeaconSeverity.Error);
     }
@@ -363,7 +363,7 @@ public sealed class JailTests : IDisposable
     {
         // Declared-but-unused entries are allowed: only missing coverage refuses.
         var engine = LintEngine();
-        engine.LoadSource("extra", "extra.mcc", "# beacon 1\n# needs: chat.send inventory.read\nsay \"hi\"\n");
+        engine.LoadSource("extra", "extra.bcn", "# beacon 1\n# needs: chat.send inventory.read\nsay \"hi\"\n");
 
         Assert.DoesNotContain(engine.Lint("extra"), d => d.Severity == BeaconSeverity.Error);
     }
@@ -388,7 +388,7 @@ public sealed class JailTests : IDisposable
     {
         // Zero-config start: scripts that declare no manifest load unenforced.
         var engine = LintEngine();
-        engine.LoadSource("plain", "plain.mcc", "# beacon 1\nsay \"hi\"\n");
+        engine.LoadSource("plain", "plain.bcn", "# beacon 1\nsay \"hi\"\n");
 
         Assert.DoesNotContain(engine.Lint("plain"), d => d.Severity == BeaconSeverity.Error);
     }
@@ -465,8 +465,8 @@ public sealed class JailTests : IDisposable
     {
         var host = new JailHost();
         var interp = new BeaconInterpreter(
-            "j", "j.mcc", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
-        BeaconScript script = MustParse("j.mcc",
+            "j", "j.bcn", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
+        BeaconScript script = MustParse("j.bcn",
             "try\nshow world.block_at(0, 10000, 0)\ncatch err\nshow err.code\nshow \"caught\"\nend try\n" +
             "try\nshow world.block_at(0.5, 64, 0)\ncatch err\nshow err.code\nshow \"caught-frac\"\nend try\n");
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 1)
@@ -496,8 +496,8 @@ public sealed class JailTests : IDisposable
     {
         var host = new JailHost();
         var interp = new BeaconInterpreter(
-            "j", "j.mcc", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
-        BeaconScript script = MustParse("j.mcc",
+            "j", "j.bcn", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
+        BeaconScript script = MustParse("j.bcn",
             "try\nshow world.block_at(10, 64, 10)\ncatch err\nshow err.code\nshow \"unloaded\"\nend try\n");
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 1)
             .WaitAsync(TimeSpan.FromSeconds(5));

@@ -70,8 +70,8 @@ public sealed class ChatBucketTests
 
     private static BeaconScript MustParse(string source)
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("flood.mcc", source);
-        BeaconParseResult parsed = BeaconParser.Parse("flood.mcc", lexed.Tokens);
+        BeaconLexResult lexed = BeaconLexer.Lex("flood.bcn", source);
+        BeaconParseResult parsed = BeaconParser.Parse("flood.bcn", lexed.Tokens);
         Assert.NotNull(parsed.Script);
         return BeaconDesugar.Desugar(parsed.Script!);
     }
@@ -117,7 +117,7 @@ public sealed class ChatBucketTests
         var host = new LockingHost();
         var clock = new VirtualClock();
         var bucket = new BeaconChatBucket(clock);
-        var interp = new BeaconInterpreter("flood", "flood.mcc", host, clock, new SeededRng(1), new FuelBudget());
+        var interp = new BeaconInterpreter("flood", "flood.bcn", host, clock, new SeededRng(1), new FuelBudget());
         interp.ChatBucket = bucket;
         BeaconScript script = MustParse(SaysBody(10));
 
@@ -146,7 +146,7 @@ public sealed class ChatBucketTests
         var host = new LockingHost();
         var clock = new VirtualClock();
         var bucket = new BeaconChatBucket(clock);
-        var interp = new BeaconInterpreter("order", "order.mcc", host, clock, new SeededRng(2), new FuelBudget());
+        var interp = new BeaconInterpreter("order", "order.bcn", host, clock, new SeededRng(2), new FuelBudget());
         interp.ChatBucket = bucket;
         BeaconScript script = MustParse(SaysBody(9));
 
@@ -178,7 +178,7 @@ public sealed class ChatBucketTests
         for (int i = 0; i < scripts; i++)
         {
             var interp = new BeaconInterpreter(
-                $"s{i}", $"s{i}.mcc", host, clock, new SeededRng(100 + i), new FuelBudget());
+                $"s{i}", $"s{i}.bcn", host, clock, new SeededRng(100 + i), new FuelBudget());
             interp.ChatBucket = bucket;
             interps.Add(interp);
         }
@@ -224,7 +224,7 @@ public sealed class ChatBucketTests
 
         var warnings = new List<BeaconDiagnostic>();
         Task pending = bucket.WaitForSlotAsync(
-            "spin", new SourceSpan("spin.mcc", 1, 1, 0), "say", warnings, CancellationToken.None);
+            "spin", new SourceSpan("spin.bcn", 1, 1, 0), "say", warnings, CancellationToken.None);
         await Task.Delay(50);
 
         // No clock advance, no slot: a wait-0 style spin cannot burn through the bucket.
@@ -240,7 +240,7 @@ public sealed class ChatBucketTests
         var host = new LockingHost();
         var clock = new VirtualClock();
         var bucket = new BeaconChatBucket(clock) { Muted = true };
-        var interp = new BeaconInterpreter("quiet", "quiet.mcc", host, clock, new SeededRng(5), new FuelBudget());
+        var interp = new BeaconInterpreter("quiet", "quiet.bcn", host, clock, new SeededRng(5), new FuelBudget());
         interp.ChatBucket = bucket;
         BeaconScript script = MustParse("say \"hello\"\n");
 
@@ -266,7 +266,7 @@ public sealed class ChatBucketTests
         var host = new LockingHost();
         var clock = new VirtualClock();
         var bucket = new BeaconChatBucket(clock);
-        var interp = new BeaconInterpreter("mix", "mix.mcc", host, clock, new SeededRng(6), new FuelBudget());
+        var interp = new BeaconInterpreter("mix", "mix.bcn", host, clock, new SeededRng(6), new FuelBudget());
         interp.ChatBucket = bucket;
         BeaconScript script = MustParse(SaysBody(8) + "whisper \"Steve\" \"queued\"\n");
 
@@ -291,7 +291,7 @@ public sealed class ChatBucketTests
         for (int i = 0; i < BeaconChatBucket.BurstCapacity; i++)
             Assert.True(bucket.TryAcquire("drain", out _));
 
-        var interp = new BeaconInterpreter("cmd", "cmd.mcc", host, clock, new SeededRng(7), new FuelBudget());
+        var interp = new BeaconInterpreter("cmd", "cmd.bcn", host, clock, new SeededRng(7), new FuelBudget());
         interp.ChatBucket = bucket;
         BeaconScript script = MustParse("server \"/home\"\n");
 

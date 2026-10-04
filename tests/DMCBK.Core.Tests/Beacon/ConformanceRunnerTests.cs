@@ -50,20 +50,20 @@ public sealed class ConformanceRunnerTests
         string reject = Path.Combine(root, "reject");
         Directory.CreateDirectory(accept);
         Directory.CreateDirectory(reject);
-        File.WriteAllText(Path.Combine(accept, "headerless.mcc"), "say \"no header\"\n");
+        File.WriteAllText(Path.Combine(accept, "headerless.bcn"), "say \"no header\"\n");
 
         ConformanceRunResult result = ConformanceRunner.Run(NewEngine(), accept, reject);
 
         Assert.False(result.Passed);
         string failure = Assert.Single(result.Failures);
-        Assert.Contains("headerless.mcc:1:1", failure, StringComparison.Ordinal);
+        Assert.Contains("headerless.bcn:1:1", failure, StringComparison.Ordinal);
     }
 
     [Fact]
     public void Lint_MissingHeader_ReportsRegisteredParseCode()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "say \"no header\"\n");
+        engine.LoadSource("probe", "probe.bcn", "say \"no header\"\n");
 
         BeaconDiagnostic diagnostic = Assert.Single(engine.Lint("probe"));
 

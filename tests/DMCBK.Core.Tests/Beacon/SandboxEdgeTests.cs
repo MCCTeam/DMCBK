@@ -45,7 +45,7 @@ public sealed class SandboxEdgeTests : IDisposable
     public void ChatBucket_WithoutBucket_SurfacesNoneAvailable()
     {
         var host = new ScriptTestHost();
-        var interp = new BeaconInterpreter("c", "c.mcc", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
+        var interp = new BeaconInterpreter("c", "c.bcn", host, new VirtualClock(), new SeededRng(1), new FuelBudget());
         Assert.Null(interp.ChatBucket);
     }
 
@@ -92,8 +92,8 @@ public sealed class SandboxEdgeTests : IDisposable
     public void Format_Idempotent_OnNewConstructs()
     {
         const string source = "# beacon 1\nshow lower(\"HI\")\nshow clamp(5, 0, 10)\nshow has_key({a: 1}, \"a\")\n";
-        BeaconFormatResult first = BeaconFormat.FormatSource("g.mcc", source);
-        BeaconFormatResult second = BeaconFormat.FormatSource("g.mcc", first.Formatted);
+        BeaconFormatResult first = BeaconFormat.FormatSource("g.bcn", source);
+        BeaconFormatResult second = BeaconFormat.FormatSource("g.bcn", first.Formatted);
         Assert.Equal(first.Formatted, second.Formatted);
         Assert.False(second.Changed);
     }
@@ -102,7 +102,7 @@ public sealed class SandboxEdgeTests : IDisposable
     public void Format_CrlfUnicode_NormalizesAndKeepsText()
     {
         string source = "# beacon 1\r\nshow \"caf\u00E9  \"  \r\n";
-        BeaconFormatResult result = BeaconFormat.FormatSource("u.mcc", source);
+        BeaconFormatResult result = BeaconFormat.FormatSource("u.bcn", source);
         Assert.Contains("caf\u00E9", result.Formatted, StringComparison.Ordinal);
         Assert.DoesNotContain("\r", result.Formatted, StringComparison.Ordinal);
         Assert.EndsWith("\n", result.Formatted, StringComparison.Ordinal);

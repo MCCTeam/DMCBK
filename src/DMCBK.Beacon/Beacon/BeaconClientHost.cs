@@ -1764,7 +1764,7 @@ public sealed class BeaconClientHost : IBeaconHostServices
     private static BeaconRuntimeException Refused(string verb, string reason) => new(
         BeaconDiagnosticCodes.WorldWriteGate,
         $"{verb} refused: {reason}.",
-        new SourceSpan("live.mcc", 1, 1, 0),
+        new SourceSpan("live.bcn", 1, 1, 0),
         $"Wrap it in try/catch err and read err.message.");
 
     /// <inheritdoc />

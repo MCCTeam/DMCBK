@@ -325,7 +325,7 @@ public sealed class ScriptTestHost : IBeaconHostServices
         if (DialogValue is null)
         {
             throw new BeaconRuntimeException(
-                "B4002", "no dialog is open", new SourceSpan("test.mcc", 1, 1, 0), "open one first");
+                "B4002", "no dialog is open", new SourceSpan("test.bcn", 1, 1, 0), "open one first");
         }
 
         if (DialogValue.Inputs.All(i => !string.Equals(i.Key, key, StringComparison.Ordinal)))

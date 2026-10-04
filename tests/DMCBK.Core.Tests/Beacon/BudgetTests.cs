@@ -45,7 +45,7 @@ public sealed class BudgetTests
         TimeSpan? wallClock = null, int seed = 42)
     {
         return new BeaconInterpreter(
-            "probe", "probe.mcc", host, clock, new SeededRng(seed), new FuelBudget(fuelLimit),
+            "probe", "probe.bcn", host, clock, new SeededRng(seed), new FuelBudget(fuelLimit),
             budgetWallClock: wallClock);
     }
 
@@ -60,7 +60,7 @@ public sealed class BudgetTests
     private static async Task<BeaconRunResult> RunTopLevelAsync(
         BeaconEngine engine, string scriptId, string body)
     {
-        engine.LoadSource(scriptId, scriptId + ".mcc", "# beacon 1\n" + body);
+        engine.LoadSource(scriptId, scriptId + ".bcn", "# beacon 1\n" + body);
         IReadOnlyList<BeaconDiagnostic> errors = engine.Lint(scriptId)
             .Where(d => d.Severity == BeaconSeverity.Error).ToList();
         Assert.Empty(errors);
@@ -106,7 +106,7 @@ public sealed class BudgetTests
         var host = new RecordingHost();
         var clock = new VirtualClock();
         var engine = new BeaconEngine(host, clock, new SeededRng(9), new FuelBudget(300));
-        engine.LoadSource("loop", "loop.mcc", "# beacon 1\non chat\nwhile yes\nshow \"x\"\nend while\nend on\n");
+        engine.LoadSource("loop", "loop.bcn", "# beacon 1\non chat\nwhile yes\nshow \"x\"\nend while\nend on\n");
         Assert.DoesNotContain(engine.Lint("loop"), d => d.Severity == BeaconSeverity.Error);
         Assert.True((await engine.RunTopLevelAsync("loop")).Success);
 
@@ -146,7 +146,7 @@ public sealed class BudgetTests
         var interp = NewInterpreter(host, clock, fuelLimit: 10_000_000);
         interp.Budget.MaxCallDepth = 32;
 
-        BeaconScript script = MustParse("probe.mcc",
+        BeaconScript script = MustParse("probe.bcn",
             "function rec(n)\nreturn rec(n + 1)\nend function\nset x to rec(0)\nshow x\n");
 
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 7)
@@ -164,7 +164,7 @@ public sealed class BudgetTests
         var host = new RecordingHost();
         var clock = new VirtualClock();
         var engine = new BeaconEngine(host, clock, new SeededRng(3), new FuelBudget());
-        engine.LoadSource("acct", "acct.mcc",
+        engine.LoadSource("acct", "acct.bcn",
             "# beacon 1\nsay \"a\"\nrepeat 2 times\nshow \"x\"\nend repeat\n" +
             "function f()\nreturn 1\nend function\nset y to f()\n" +
             "wait 1 second\nset z to mcc \"/list\"\nshow \"{y} {z}\"\n");
@@ -187,7 +187,7 @@ public sealed class BudgetTests
         var budget = new BeaconDispatchBudget(
             new FuelBudget(), clock, wallClockLimit: TimeSpan.FromMilliseconds(100));
         budget.Reset(7, "top-level");
-        var span = new SourceSpan("t.mcc", 1, 1, 0);
+        var span = new SourceSpan("t.bcn", 1, 1, 0);
 
         budget.Spend(null, span);
         clock.Advance(TimeSpan.FromMilliseconds(101));
@@ -206,7 +206,7 @@ public sealed class BudgetTests
         var host = new RecordingHost();
         var clock = new VirtualClock();
         var interp = NewInterpreter(host, clock, wallClock: TimeSpan.FromSeconds(5));
-        BeaconScript script = MustParse("probe.mcc",
+        BeaconScript script = MustParse("probe.bcn",
             "wait 1 second\nwait 1 second\nwait 1 second\nwait 1 second\n" +
             "wait 1 second\nwait 1 second\nwait 1 second\nshow \"still alive\"\n");
 
@@ -240,8 +240,8 @@ public sealed class BudgetTests
     {
         const string source =
             "show random(1000)\nshow pick([1, 2, 3, 4, 5])\nshow chance(0.5)\nshow random(1000)\n";
-        BeaconScript firstParsed = MustParse("r.mcc", source);
-        BeaconScript secondParsed = MustParse("r.mcc", source);
+        BeaconScript firstParsed = MustParse("r.bcn", source);
+        BeaconScript secondParsed = MustParse("r.bcn", source);
 
         var hostA = new RecordingHost();
         var interpA = NewInterpreter(hostA, new VirtualClock());
@@ -262,7 +262,7 @@ public sealed class BudgetTests
     {
         var host = new RecordingHost();
         var interp = NewInterpreter(host, new VirtualClock(), fuelLimit: 200);
-        BeaconScript script = MustParse("probe.mcc", "while yes\nshow \"x\"\nend while\n");
+        BeaconScript script = MustParse("probe.bcn", "while yes\nshow \"x\"\nend while\n");
 
         BeaconRunResult result = await interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 4242);
 
@@ -277,7 +277,7 @@ public sealed class BudgetTests
         var host = new RecordingHost();
         var clock = new VirtualClock();
         var interp = NewInterpreter(host, clock);
-        BeaconScript script = MustParse("probe.mcc", "wait 0 seconds\nshow \"done\"\n");
+        BeaconScript script = MustParse("probe.bcn", "wait 0 seconds\nshow \"done\"\n");
 
         Task<BeaconRunResult> pending = interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 5);
         await Task.Delay(25);
@@ -301,7 +301,7 @@ public sealed class BudgetTests
         var scheduler = new BeaconScheduler("w", clock, fuel);
         var interp = NewInterpreter(host, clock);
         interp.Scheduler = scheduler;
-        BeaconScript script = MustParse("probe.mcc", "wait 1 second\nshow \"done\"\n");
+        BeaconScript script = MustParse("probe.bcn", "wait 1 second\nshow \"done\"\n");
 
         Task<BeaconRunResult> pending = interp.RunTopLevelAsync(script, null, CancellationToken.None, seed: 5);
         await Task.Delay(50);
@@ -322,7 +322,7 @@ public sealed class BudgetTests
         var scheduler = new BeaconScheduler("t", clock, new FuelBudget());
         var interp = NewInterpreter(host, clock);
         interp.Scheduler = scheduler;
-        BeaconScript script = MustParse("probe.mcc",
+        BeaconScript script = MustParse("probe.bcn",
             "function patrol()\nreturn 7\nend function\n" +
             "start patrol()\nset ts to tasks()\nset id to ts[0].id\nawait id\n" +
             "set done to tasks()\nshow done[0].status\nshow done[0].result\n");
@@ -343,7 +343,7 @@ public sealed class BudgetTests
         var scheduler = new BeaconScheduler("t", clock, new FuelBudget());
         var interp = NewInterpreter(host, clock);
         interp.Scheduler = scheduler;
-        BeaconScript script = MustParse("probe.mcc",
+        BeaconScript script = MustParse("probe.bcn",
             "function sleeper()\nwait 60 seconds\nreturn 1\nend function\n" +
             "start sleeper()\nset ts to tasks()\nset id to ts[0].id\ncancel task id\n" +
             "try\nawait id\ncatch err\nshow err.code\nend try\nshow \"after\"\n");

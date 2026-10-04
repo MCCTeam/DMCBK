@@ -96,9 +96,9 @@ public sealed class PluginVariableNamespaceTests : IDisposable
     public async Task Inference_MemberRead_ContributesCapability()
     {
         BeaconProviders.OfferVariable("econ", "coins", "econ.read");
-        BeaconLexResult lexed = BeaconLexer.Lex("s.mcc", WithHeader("show coins.balance\n"));
-        BeaconHeaderResult header = BeaconHeader.Parse("s.mcc", lexed.NormalizedSource, 2, lexed.Comments);
-        BeaconParseResult parsed = BeaconParser.Parse("s.mcc", lexed.Tokens, header.Major);
+        BeaconLexResult lexed = BeaconLexer.Lex("s.bcn", WithHeader("show coins.balance\n"));
+        BeaconHeaderResult header = BeaconHeader.Parse("s.bcn", lexed.NormalizedSource, 2, lexed.Comments);
+        BeaconParseResult parsed = BeaconParser.Parse("s.bcn", lexed.Tokens, header.Major);
         Assert.NotNull(parsed.Script);
         Assert.Contains("econ.read", BeaconCapabilityInference.Infer(parsed.Script));
         await Task.CompletedTask;

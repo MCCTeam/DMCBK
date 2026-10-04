@@ -97,7 +97,7 @@ public static class BeaconTemplates
     }
 
     /// <summary>
-    /// Writes a scaffold into <paramref name="scriptsDir"/> as <c>&lt;id&gt;.mcc</c>.
+    /// Writes a scaffold into <paramref name="scriptsDir"/> as <c>&lt;id&gt;.bcn</c>.
     /// Refuses to overwrite; validates the id is a safe file name.
     /// </summary>
     public static bool TryWriteNew(

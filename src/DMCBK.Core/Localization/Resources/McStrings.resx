@@ -3529,7 +3529,7 @@ The TUI plugin manager uses the same marketplace service as these commands. It o
   <data name="man.page.scripts" xml:space="preserve">
     <value># Scripts
 
-Beacon scripts automate the client in plain words. Each script is one UTF-8 `.mcc` file in the
+Beacon scripts automate the client in plain words. Each script is one UTF-8 `.bcn` file in the
 `scripts/` folder next to your configurations, with its own globals. The first line is mandatory:
 
     # beacon 1
@@ -3538,7 +3538,7 @@ A missing header, or a newer major version, fails closed with a pointer instead 
 
 ## Your first script
 
-Save this as `scripts/welcome.mcc`:
+Save this as `scripts/welcome.bcn`:
 
     # beacon 1
     # needs: chat.send
@@ -3576,10 +3576,10 @@ manual `reload` always works whether watching or not.
 
 ## TUI workbench
 
-`/scripts ui` opens every top-level `.mcc` file in one workspace and marks it Running or
+`/scripts ui` opens every top-level `.bcn` file in one workspace and marks it Running or
 Stopped. Run or stop the selected script, reload it, lint it, preview a format diff, edit its
 declared settings, or open a persistent REPL with optional seeded randomness and a locals view.
-Watch and Mute stay visible on the dashboard. Delete removes the selected `.mcc` source only after
+Watch and Mute stay visible on the dashboard. Delete removes the selected `.bcn` source only after
 confirmation and stops it when it is running. Script settings and saved state are kept.
 
 The REPL has a multiline input area on the left and a split results side for output and locals.
@@ -3802,7 +3802,7 @@ answer under `dialog.write`. Leaving the server with `disconnect` needs
 
 One file stops being enough around week two:
 
-    import "lib/econ.mcc" as econ
+    import "lib/econ.bcn" as econ
     say "Bread costs {econ.price("bread")} coins."
 
 Paths resolve relative to the importing file, circular imports error naming the cycle, and
@@ -3976,7 +3976,7 @@ edited.
 Headless `run` executes scripts end to end without a client, on the inert host with a
 virtual clock and a seeded RNG:
 
-    mcc run quiz.mcc --seed 42 --tick 60 --format text
+    mcc run quiz.bcn --seed 42 --tick 60 --format text
 
 Exit codes mirror `lint`: 0 clean (warnings allowed), 1 script errors, 2 usage. `--tick`
 advances virtual seconds after load so one-shot timers fire; `--seed` replays random draws

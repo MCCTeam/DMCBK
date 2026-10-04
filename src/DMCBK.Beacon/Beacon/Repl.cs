@@ -28,7 +28,7 @@ public sealed class BeaconRepl
         "if", "while", "repeat", "for", "try",
     };
 
-    private const string ReplFileName = "repl.mcc";
+    private const string ReplFileName = "repl.bcn";
 
     private readonly BeaconInterpreter _interpreter;
     private readonly SemaphoreSlim _gate = new(1, 1);

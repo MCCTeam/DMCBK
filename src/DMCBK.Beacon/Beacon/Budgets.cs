@@ -149,7 +149,7 @@ public sealed class BeaconDispatchBudget
     /// </summary>
     public void Spend(BeaconScope? scope, SourceSpan? span)
     {
-        SourceSpan at = span?.Origin ?? new SourceSpan("unknown.mcc", 1, 1, 0);
+        SourceSpan at = span?.Origin ?? new SourceSpan("unknown.bcn", 1, 1, 0);
         if (Elapsed > WallClockLimit)
         {
             throw BeaconErrors.WallClockExceeded(
@@ -176,7 +176,7 @@ public sealed class BeaconDispatchBudget
         ArgumentException.ThrowIfNullOrWhiteSpace(functionName);
         if (CallDepth >= MaxCallDepth)
         {
-            SourceSpan at = span?.Origin ?? new SourceSpan("unknown.mcc", 1, 1, 0);
+            SourceSpan at = span?.Origin ?? new SourceSpan("unknown.bcn", 1, 1, 0);
             List<string> stack = CallStack.ToList();
             stack.Add(functionName);
             throw BeaconErrors.RecursionTooDeep(_handler, at, functionName, CallDepth + 1, MaxCallDepth, Seed);

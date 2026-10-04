@@ -1,10 +1,10 @@
 # Run your first Beacon script
 
-A script is a UTF-8 file with the `.mcc` extension. Its first line selects the language version.
+A script is a UTF-8 file with the `.bcn` extension. Its first line selects the language version.
 
 ## Write a script
 
-1. Create a file named `total.mcc`.
+1. Create a file named `total.bcn`.
 2. Copy this example into the file.
 
 ```beacon
@@ -25,12 +25,12 @@ The output is `Total: 15`. `show` writes local output. It does not send chat and
 ## Run without a server
 
 1. Add the `DMCBK.Beacon` package to a .NET 10 console project.
-2. Run this program from the directory that contains `total.mcc`.
+2. Run this program from the directory that contains `total.bcn`.
 
 ```csharp
 using DMCBK.Core.Beacon;
 
-string path = Path.GetFullPath("total.mcc");
+string path = Path.GetFullPath("total.bcn");
 string source = await File.ReadAllTextAsync(path);
 var report = await BeaconOfflineRunner.RunSourceAsync(
     path, source, seed: 42, tickSeconds: 0);
@@ -59,10 +59,10 @@ await using Client client = new ClientBuilder()
     .Build();
 
 string source = "# beacon 1\nshow 2 + 3\n";
-var diagnostics = client.Scripts.Lint("hello.mcc", source);
+var diagnostics = client.Scripts.Lint("hello.bcn", source);
 if (!diagnostics.Ok)
     throw new InvalidOperationException("The script has lint errors.");
-await client.Scripts.RunAsync("hello", source, "hello.mcc");
+await client.Scripts.RunAsync("hello", source, "hello.bcn");
 client.Scripts.Stop("hello");
 ```
 

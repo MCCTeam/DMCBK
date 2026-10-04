@@ -71,7 +71,7 @@ public sealed class PluginEventUpgradeTests : IDisposable
             Assert.Equal("econ.read", capability);
 
             BeaconLintReport report = BeaconLint.LintSource(
-                "deal.mcc", "# beacon 1\n# needs: econ.read\non shop_deal_upg\nshow player\nend on\n");
+                "deal.bcn", "# beacon 1\n# needs: econ.read\non shop_deal_upg\nshow player\nend on\n");
             Assert.True(report.Ok);
             Assert.Contains("econ.read", report.Permissions);
         }

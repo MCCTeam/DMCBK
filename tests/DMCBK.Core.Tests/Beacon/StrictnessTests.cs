@@ -31,14 +31,14 @@ public sealed class StrictnessTests
     private static IReadOnlyList<BeaconDiagnostic> LintErrors(string body)
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\n" + body);
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\n" + body);
         return engine.Lint("probe").Where(d => d.Severity == BeaconSeverity.Error).ToList();
     }
 
     private static async Task<BeaconRunResult> RunCleanAsync(string body, int seed = 11)
     {
         var engine = NewEngine(seed);
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\n" + body);
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\n" + body);
         Assert.DoesNotContain(engine.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
         return await engine.RunTopLevelAsync("probe");
     }
@@ -47,7 +47,7 @@ public sealed class StrictnessTests
     public async Task MixedPlus_SuggestsInterpolationAndText()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\nset health to 20\nshow \"health: \" + health\n");
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\nset health to 20\nshow \"health: \" + health\n");
         Assert.DoesNotContain(engine.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
 
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
@@ -102,7 +102,7 @@ public sealed class StrictnessTests
         Assert.Contains(rejected, d => d.Code == BeaconDiagnosticCodes.StrictBooleanCondition);
 
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\nset warns to {}\nset warns[\"p\"] to 5\nif (warns[\"p\"] or 0) > 2 then\nshow \"big\"\nend if\n");
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\nset warns to {}\nset warns[\"p\"] to 5\nif (warns[\"p\"] or 0) > 2 then\nshow \"big\"\nend if\n");
         Assert.DoesNotContain(engine.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
     }
 
@@ -111,7 +111,7 @@ public sealed class StrictnessTests
     {
         // Passes static check via call indirection, fails at runtime with the or-operand note.
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc",
+        engine.LoadSource("probe", "probe.bcn",
             "# beacon 1\nfunction getv()\nreturn warns[\"p\"] or 0\nend function\nset warns to {}\nif getv() then\nshow \"x\"\nend if\n");
         Assert.DoesNotContain(engine.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
@@ -125,7 +125,7 @@ public sealed class StrictnessTests
     {
         var host = new RecordingHost();
         var engine = new BeaconEngine(host, new VirtualClock(), new SeededRng(5), new FuelBudget());
-        engine.LoadSource("s", "s.mcc", "# beacon 1\nset player to \"Global\"\non join:\nshow player\nend on\n");
+        engine.LoadSource("s", "s.bcn", "# beacon 1\nset player to \"Global\"\non join:\nshow player\nend on\n");
         Assert.DoesNotContain(engine.Lint("s"), d => d.Severity == BeaconSeverity.Error);
         Assert.True((await engine.RunTopLevelAsync("s")).Success);
 
@@ -140,7 +140,7 @@ public sealed class StrictnessTests
     {
         var host = new RecordingHost { ServerTpsValue = 19.5, OnlinePlayersValue = ["A", "B", "C"] };
         var engine = new BeaconEngine(host, new VirtualClock(), new SeededRng(5), new FuelBudget());
-        engine.LoadSource("s", "s.mcc", "# beacon 1\nshow tps\nshow online_count\nshow me.name\nshow \"{server.tps}\"\n");
+        engine.LoadSource("s", "s.bcn", "# beacon 1\nshow tps\nshow online_count\nshow me.name\nshow \"{server.tps}\"\n");
         Assert.DoesNotContain(engine.Lint("s"), d => d.Severity == BeaconSeverity.Error);
         BeaconRunResult result = await engine.RunTopLevelAsync("s");
         Assert.True(result.Success);
@@ -151,7 +151,7 @@ public sealed class StrictnessTests
     public async Task NoBareHunger_ErrorsSuggestingFood()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\nshow hunger\n");
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\nshow hunger\n");
         // hunger is not a static failure (unknown names are runtime); execution must reject.
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
         Assert.False(result.Success);
@@ -184,7 +184,7 @@ public sealed class StrictnessTests
     public async Task Runtime_NonYesNoCondition_SuggestsFix()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc",
+        engine.LoadSource("probe", "probe.bcn",
             "# beacon 1\nfunction getfood()\nreturn 5\nend function\nif getfood() then\nshow \"x\"\nend if\n");
         Assert.DoesNotContain(engine.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
@@ -197,7 +197,7 @@ public sealed class StrictnessTests
     public async Task Runtime_ListCondition_SuggestsIsNotEmpty()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc",
+        engine.LoadSource("probe", "probe.bcn",
             "# beacon 1\nfunction getitems()\nreturn [1]\nend function\nif getitems() then\nshow \"x\"\nend if\n");
         Assert.DoesNotContain(engine.Lint("probe"), d => d.Severity == BeaconSeverity.Error);
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
@@ -210,7 +210,7 @@ public sealed class StrictnessTests
     public async Task UnknownName_CaseMismatch_SuggestsRightOne()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", "# beacon 1\nset player to \"Steve\"\nshow Player\n");
+        engine.LoadSource("probe", "probe.bcn", "# beacon 1\nset player to \"Steve\"\nshow Player\n");
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
         Assert.False(result.Success);
         Assert.Equal(BeaconDiagnosticCodes.UnknownName, result.Error!.Code);
@@ -221,7 +221,7 @@ public sealed class StrictnessTests
     public async Task ArityMismatch_NamesFunctionExpectedGot()
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc",
+        engine.LoadSource("probe", "probe.bcn",
             "# beacon 1\nfunction greet(name)\nreturn \"hi\"\nend function\nset x to greet(\"a\", \"b\")\n");
         BeaconRunResult result = await engine.RunTopLevelAsync("probe");
         Assert.False(result.Success);

@@ -119,7 +119,7 @@ public sealed class LiveDefectTests : IDisposable
         string root = Path.Combine(Path.GetTempPath(), "mcc-beacon-pump-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         _roots.Add(root);
-        string scriptPath = Path.Combine(root, "tick.mcc");
+        string scriptPath = Path.Combine(root, "tick.bcn");
         await File.WriteAllTextAsync(
             scriptPath,
             "# beacon 1\n# needs: chat.send\n\nevery 1 seconds\nsay \"tick\"\nend every\n");
@@ -161,7 +161,7 @@ public sealed class LiveDefectTests : IDisposable
         string root = Path.Combine(Path.GetTempPath(), "mcc-beacon-use-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         _roots.Add(root);
-        string scriptPath = Path.Combine(root, "touch.mcc");
+        string scriptPath = Path.Combine(root, "touch.bcn");
         await File.WriteAllTextAsync(
             scriptPath,
             "# beacon 1\n# needs: chat.send world.write\n\non start:\n  try\n"
@@ -223,7 +223,7 @@ public sealed class LiveDefectTests : IDisposable
         string root = Path.Combine(Path.GetTempPath(), "mcc-beacon-fail-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         _roots.Add(root);
-        string scriptPath = Path.Combine(root, "brittle.mcc");
+        string scriptPath = Path.Combine(root, "brittle.bcn");
         await File.WriteAllTextAsync(
             scriptPath,
             "# beacon 1\n# needs: world.read\n\non chat\n  set b to world.block_at(99999999, 64, 0)\nend on\n");

@@ -13,7 +13,7 @@ public sealed class ParserTests
     private static IReadOnlyList<BeaconDiagnostic> Lint(string source)
     {
         var engine = NewEngine();
-        engine.LoadSource("probe", "probe.mcc", source);
+        engine.LoadSource("probe", "probe.bcn", source);
         return engine.Lint("probe");
     }
 
@@ -36,8 +36,8 @@ public sealed class ParserTests
     {
         string source = "# beacon 1\n" + body;
         Assert.Empty(LintErrors(source));
-        BeaconLexResult lexed = BeaconLexer.Lex("probe.mcc", source);
-        BeaconParseResult parsed = BeaconParser.Parse("probe.mcc", lexed.Tokens);
+        BeaconLexResult lexed = BeaconLexer.Lex("probe.bcn", source);
+        BeaconParseResult parsed = BeaconParser.Parse("probe.bcn", lexed.Tokens);
         Assert.DoesNotContain(parsed.Diagnostics, d => d.Severity == BeaconSeverity.Error);
         Assert.NotNull(parsed.Script);
         Assert.Empty(BeaconStaticCheck.Check(parsed.Script!));
@@ -47,8 +47,8 @@ public sealed class ParserTests
     private static BeaconScript ParseAny(string body)
     {
         string source = "# beacon 1\n" + body;
-        BeaconLexResult lexed = BeaconLexer.Lex("probe.mcc", source);
-        BeaconParseResult parsed = BeaconParser.Parse("probe.mcc", lexed.Tokens);
+        BeaconLexResult lexed = BeaconLexer.Lex("probe.bcn", source);
+        BeaconParseResult parsed = BeaconParser.Parse("probe.bcn", lexed.Tokens);
         Assert.NotNull(parsed.Script);
         return parsed.Script!;
     }
@@ -269,7 +269,7 @@ public sealed class ParserTests
         BeaconScript desugared = BeaconDesugar.Desugar(ParseAny("if x is 1\nsay \"a\"\nend\n"));
         var desugaredIf = Assert.IsType<IfStmt>(((TopStatement)Assert.Single(desugared.Decls)).Statement);
         Assert.Equal("if", desugaredIf.EndLabel);
-        Assert.Equal("probe.mcc", desugaredIf.Span.Origin.File);
+        Assert.Equal("probe.bcn", desugaredIf.Span.Origin.File);
     }
 
     [Fact]
@@ -308,7 +308,7 @@ public sealed class ParserTests
     [Fact]
     public void Prologue_ImportExtern_Parse()
     {
-        BeaconScript script = MustParse("import \"lib/econ.mcc\" as econ\nsay \"hi\"\n");
+        BeaconScript script = MustParse("import \"lib/econ.bcn\" as econ\nsay \"hi\"\n");
         Assert.Single(script.Imports);
         Assert.Equal("econ", script.Imports[0].Alias);
         BeaconScript externScript = MustParse("extern price_of from \"shop\"\nsay \"hi\"\n");
@@ -318,7 +318,7 @@ public sealed class ParserTests
     [Fact]
     public void Import_AfterCode_IsParseError()
     {
-        LintHasCode("say \"hi\"\nimport \"lib/econ.mcc\" as econ\n", BeaconDiagnosticCodes.Parse);
+        LintHasCode("say \"hi\"\nimport \"lib/econ.bcn\" as econ\n", BeaconDiagnosticCodes.Parse);
     }
 
     #endregion
@@ -552,7 +552,7 @@ public sealed class ParserTests
         var stop = Assert.IsType<StopStmt>(Assert.Single(on.Body.Statements));
         Assert.False(stop.IsCancelAlias);
         Assert.NotNull(stop.Span.DesugaredFrom);
-        Assert.Equal("probe.mcc", stop.Span.Origin.File);
+        Assert.Equal("probe.bcn", stop.Span.Origin.File);
     }
 
     [Fact]
@@ -578,7 +578,7 @@ public sealed class ParserTests
     public void EveryNode_CarriesFileLineColumnSpan()
     {
         BeaconScript script = MustParse("say \"hi\"\n");
-        Assert.Equal("probe.mcc", script.Span.File);
+        Assert.Equal("probe.bcn", script.Span.File);
         TopStatement top = SingleTopStatement(script);
         Assert.Equal(2, top.Span.Line);
     }

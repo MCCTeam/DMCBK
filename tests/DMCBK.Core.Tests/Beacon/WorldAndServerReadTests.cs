@@ -90,9 +90,9 @@ public sealed class WorldAndServerReadTests : IDisposable
     [Fact]
     public async Task FindBlocks_InfersWorldSearchCapability()
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("f.mcc", WithHeader("show world.find_blocks(\"chest\", 16, 10)\n"));
-        BeaconHeaderResult header = BeaconHeader.Parse("f.mcc", lexed.NormalizedSource, 2, lexed.Comments);
-        BeaconParseResult parsed = BeaconParser.Parse("f.mcc", lexed.Tokens, header.Major);
+        BeaconLexResult lexed = BeaconLexer.Lex("f.bcn", WithHeader("show world.find_blocks(\"chest\", 16, 10)\n"));
+        BeaconHeaderResult header = BeaconHeader.Parse("f.bcn", lexed.NormalizedSource, 2, lexed.Comments);
+        BeaconParseResult parsed = BeaconParser.Parse("f.bcn", lexed.Tokens, header.Major);
         Assert.NotNull(parsed.Script);
         Assert.Contains(BeaconCapabilities.WorldSearch, BeaconCapabilityInference.Infer(parsed.Script));
         Assert.Contains(BeaconCapabilities.WorldSearch, BeaconCapabilities.KnownProviders);

@@ -36,11 +36,11 @@ public sealed class ConformanceTests
     [Fact]
     public void ShopBuy_UnknownHook_IsSingleWarning_NotError()
     {
-        string file = Path.Combine(TestDataDir("accept"), "sdk_shopbuy.mcc");
-        Assert.True(File.Exists(file), "Expected sdk_shopbuy.mcc accept fixture.");
+        string file = Path.Combine(TestDataDir("accept"), "sdk_shopbuy.bcn");
+        Assert.True(File.Exists(file), "Expected sdk_shopbuy.bcn accept fixture.");
         string source = File.ReadAllText(file);
 
-        IReadOnlyList<BeaconDiagnostic> diagnostics = LintSource("sdk_shopbuy.mcc", source);
+        IReadOnlyList<BeaconDiagnostic> diagnostics = LintSource("sdk_shopbuy.bcn", source);
 
         Assert.DoesNotContain(diagnostics, d => d.Severity == BeaconSeverity.Error);
         BeaconDiagnostic warning = Assert.Single(
@@ -69,7 +69,7 @@ public sealed class ConformanceTests
                 continue;
 
             fullScripts++;
-            IReadOnlyList<BeaconDiagnostic> errors = LintSource($"proposal-{index}.mcc", body)
+            IReadOnlyList<BeaconDiagnostic> errors = LintSource($"proposal-{index}.bcn", body)
                 .Where(d => d.Severity == BeaconSeverity.Error).ToList();
             if (errors.Count > 0)
             {

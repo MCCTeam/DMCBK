@@ -2129,7 +2129,7 @@ public sealed class BeaconInterpreter
                 throw new BeaconRuntimeException(
                     BeaconDiagnosticCodes.StrictMixedOperands,
                     $"I expected text, a list, or a map for emptiness, but found {DescribeValueKind(value)}.",
-                    (context?.Span ?? new SourceSpan("unknown.mcc", 1, 1, 0)).Origin,
+                    (context?.Span ?? new SourceSpan("unknown.bcn", 1, 1, 0)).Origin,
                     "Use 'is set' for presence, or compare numbers with > 0.");
         }
     }
@@ -2806,9 +2806,9 @@ public sealed class BeaconInterpreter
             throw new BeaconRuntimeException(
                 BeaconBridgeErrorCodes.BridgeCall,
                 $"call \"{target}\"() failed: script '{scriptId}' exports no function '{function}'. " +
-                $"Mark it visible with 'export function {function}()' in {scriptId}.mcc.",
+                $"Mark it visible with 'export function {function}()' in {scriptId}.bcn.",
                 prim.TargetSpan.Origin,
-                $"Add 'export function {function}()' to {scriptId}.mcc, or guard the call with try/catch err.");
+                $"Add 'export function {function}()' to {scriptId}.bcn, or guard the call with try/catch err.");
         }
 
         return await InvokeExportAsync(export, argValues, scope, verbs, prim.Span, ct).ConfigureAwait(false);
@@ -3551,7 +3551,7 @@ public sealed class BeaconInterpreter
             $"Unknown name '{ns}.{member}'.",
             origin,
             string.Equals(ns, "econ", StringComparison.Ordinal)
-                ? "The shop library arrives via import, not as a builtin: write import \"lib/econ.mcc\" as econ."
+                ? "The shop library arrives via import, not as a builtin: write import \"lib/econ.bcn\" as econ."
                 : $"Check the spelling of '{ns}.{member}'.");
     }
 

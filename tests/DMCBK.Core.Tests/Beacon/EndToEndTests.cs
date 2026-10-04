@@ -194,7 +194,7 @@ public sealed class EndToEndTests : IDisposable
         string scripts = Path.Combine(root, "scripts");
         string lib = Path.Combine(scripts, "lib");
         Directory.CreateDirectory(lib);
-        File.WriteAllText(Path.Combine(lib, "econ.mcc"),
+        File.WriteAllText(Path.Combine(lib, "econ.bcn"),
             "# beacon 1\n" +
             "function price(item)\n" +
             "  if item is \"bread\"\n" +
@@ -205,10 +205,10 @@ public sealed class EndToEndTests : IDisposable
             "function credit(player, item)\n" +
             "  return \"{player} earned {price(item)} coins for {item}.\"\n" +
             "end function\n");
-        string shopPath = Path.Combine(scripts, "shopkeeper.mcc");
+        string shopPath = Path.Combine(scripts, "shopkeeper.bcn");
         File.WriteAllText(shopPath,
             "# beacon 1\n# needs: chat.send econ.read\n" +
-            "import \"lib/econ.mcc\" as econ\n" +
+            "import \"lib/econ.bcn\" as econ\n" +
             "extern price_of from \"shop\"\n" +
             "command \"/price <item>\"\n" +
             "  set target to arg(\"item\")\n" +

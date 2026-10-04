@@ -84,7 +84,7 @@ public sealed class TemplateTests : IDisposable
     public void EveryScaffold_LintsClean(string name)
     {
         string source = BeaconTemplates.Get(name);
-        BeaconLintReport report = BeaconLint.LintSource(name + ".mcc", source);
+        BeaconLintReport report = BeaconLint.LintSource(name + ".bcn", source);
         Assert.Empty(report.Diagnostics);
     }
 
@@ -155,7 +155,7 @@ public sealed class TemplateTests : IDisposable
         _roots.Add(root);
 
         Assert.True(BeaconTemplates.TryWriteNew(scripts, "welcome", "mybot", out string path, out _));
-        Assert.Equal(Path.Combine(scripts, "mybot.mcc"), path);
+        Assert.Equal(Path.Combine(scripts, "mybot.bcn"), path);
         Assert.True(File.Exists(path));
 
         Assert.False(BeaconTemplates.TryWriteNew(scripts, "welcome", "mybot", out _, out string error));

@@ -120,11 +120,11 @@ public sealed class ConfigTests : IDisposable
         Directory.CreateDirectory(folder);
         string scripts = Path.Combine(root, "scripts");
         Directory.CreateDirectory(scripts);
-        File.WriteAllText(Path.Combine(scripts, "shop.mcc"), "# beacon 1\n");
-        File.WriteAllText(Path.Combine(scripts, "greeter.mcc"), "# beacon 1\n");
+        File.WriteAllText(Path.Combine(scripts, "shop.bcn"), "# beacon 1\n");
+        File.WriteAllText(Path.Combine(scripts, "greeter.bcn"), "# beacon 1\n");
         File.WriteAllText(Path.Combine(scripts, "README.txt"), "not a script\n");
         Directory.CreateDirectory(Path.Combine(scripts, "lib"));
-        File.WriteAllText(Path.Combine(scripts, "lib", "nested.mcc"), "# beacon 1\n");
+        File.WriteAllText(Path.Combine(scripts, "lib", "nested.bcn"), "# beacon 1\n");
 
         IReadOnlyList<BeaconScriptFile> found = BeaconScriptDiscovery.Discover(folder);
 

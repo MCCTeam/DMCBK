@@ -27,7 +27,7 @@ Header settings declare scalar defaults and comments. The host overlays user val
 
 ## Import a library
 
-1. Create `scripts/lib/math.mcc` with this content.
+1. Create `scripts/lib/math.bcn` with this content.
 
 ```beacon
 # beacon 1
@@ -36,11 +36,11 @@ function subtotal(price, count)
 end function
 ```
 
-2. Create `scripts/order.mcc` with this content.
+2. Create `scripts/order.bcn` with this content.
 
 ```beacon
 # beacon 1
-import "lib/math.mcc" as math
+import "lib/math.bcn" as math
 show math.subtotal(3, 4)
 ```
 

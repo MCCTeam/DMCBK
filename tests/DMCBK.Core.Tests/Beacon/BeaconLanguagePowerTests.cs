@@ -230,7 +230,7 @@ public sealed class BeaconLanguagePowerTests : IDisposable
     public async Task Settings_HeaderDeclaresSchema()
     {
         const string body = "# beacon 1\n# setting thirst = 5 ; seconds between sips\nshow 1\n";
-        BeaconHeaderResult header = BeaconHeader.Parse("s.mcc", body);
+        BeaconHeaderResult header = BeaconHeader.Parse("s.bcn", body);
         Assert.True(header.Ok);
         BeaconSettingDecl decl = Assert.Single(header.Settings);
         Assert.Equal("thirst", decl.Name);

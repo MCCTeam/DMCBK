@@ -72,7 +72,7 @@ public sealed class VerbTests
 
     private static async Task<BeaconRunResult> RunCleanAsync(BeaconEngine engine, string scriptId, string body)
     {
-        engine.LoadSource(scriptId, scriptId + ".mcc", "# beacon 1\n" + body);
+        engine.LoadSource(scriptId, scriptId + ".bcn", "# beacon 1\n" + body);
         IReadOnlyList<BeaconDiagnostic> errors = engine.Lint(scriptId)
             .Where(d => d.Severity == BeaconSeverity.Error).ToList();
         Assert.Empty(errors);
@@ -129,7 +129,7 @@ public sealed class VerbTests
         Assert.Equal(["/home"], host.Servers);
 
         var (engine2, host2) = NewEngine();
-        engine2.LoadSource("v4", "v4.mcc", "# beacon 1\nserver \"home\"\n");
+        engine2.LoadSource("v4", "v4.bcn", "# beacon 1\nserver \"home\"\n");
         BeaconRunResult bad = await engine2.RunTopLevelAsync("v4");
         Assert.False(bad.Success);
         Assert.Empty(host2.Servers);
@@ -266,7 +266,7 @@ public sealed class VerbTests
     public async Task SeamConformance_CustomDouble_WorksThroughInterface()
     {
         var engine = new BeaconEngine(new MinimalHost(), new VirtualClock(), new SeededRng(3), new FuelBudget());
-        engine.LoadSource("mini", "mini.mcc", "# beacon 1\nset a to mcc \"/list\"\nshow a\n");
+        engine.LoadSource("mini", "mini.bcn", "# beacon 1\nset a to mcc \"/list\"\nshow a\n");
         Assert.DoesNotContain(engine.Lint("mini"), d => d.Severity == BeaconSeverity.Error);
         BeaconRunResult result = await engine.RunTopLevelAsync("mini");
         Assert.True(result.Success);
@@ -277,7 +277,7 @@ public sealed class VerbTests
     public async Task WelcomeBot_Verbs_OnFakes()
     {
         var (engine, host) = NewEngine();
-        engine.LoadSource("welcome", "welcome.mcc",
+        engine.LoadSource("welcome", "welcome.bcn",
             "# beacon 1\n# needs: chat.send\non join:\nsay \"Welcome to the server, {player}!\"\nend on\n" +
             "on chat when message contains \"!rules\":\nwhisper player \"1. Be kind.\"\nend on\n");
         Assert.DoesNotContain(engine.Lint("welcome"), d => d.Severity == BeaconSeverity.Error);

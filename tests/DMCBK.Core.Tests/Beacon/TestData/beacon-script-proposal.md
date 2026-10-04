@@ -9,7 +9,7 @@ MCC 1.x had two scripting doors and both were half stuck. The `.txt` door was si
 
 The 2.0 refactor ported neither. That is actually good news. It gives us room to build the middle layer that was always missing: a language as easy to start as the old text scripts, with a ceiling high enough that most C# scripts never need C#.
 
-I am calling it Beacon. Short to type, easy to say on a voice call, and it fits the fantasy: something you place once and it keeps working for everyone in range. Files end in `.mcc` and live in a `scripts/` folder next to the configurations.
+I am calling it Beacon. Short to type, easy to say on a voice call, and it fits the fantasy: something you place once and it keeps working for everyone in range. Files end in `.bcn` and live in a `scripts/` folder next to the configurations.
 
 ## What I read before writing this
 
@@ -59,11 +59,11 @@ on chat when message contains "!rules":
 end on
 ```
 
-Save as `scripts/welcome.mcc`, run `/scripts run welcome` in the client. That is the entire onboarding.
+Save as `scripts/welcome.bcn`, run `/scripts run welcome` in the client. That is the entire onboarding.
 
 ## Files, headers, comments
 
-Scripts are UTF-8 text files ending in `.mcc`, kept in the `scripts/` folder beside the configurations. One file is one script with its own globals.
+Scripts are UTF-8 text files ending in `.bcn`, kept in the `scripts/` folder beside the configurations. One file is one script with its own globals.
 
 The first line is mandatory, not decorative:
 
@@ -323,7 +323,7 @@ save "warns" to warns
 One file stops being enough around week two, so week two gets `import`:
 
 ```
-import "lib/econ.mcc" as econ
+import "lib/econ.bcn" as econ
 say "Bread costs {econ.price("bread")} coins."
 ```
 
@@ -501,7 +501,7 @@ Timeouts name the handler, the line, and the locals at abort, and dump a task st
 Errors read like a person explaining, with the machine details one flag away:
 
 ```
-welcome.mcc:6:9
+welcome.bcn:6:9
   whisper player 1. Be kind.
                 ^
 I expected text after the player name, but found the number 1.
@@ -515,7 +515,7 @@ No spans jargon in the default view, no bare stack trace, and any "did you mean"
 Budget aborts get the same treatment, matching the classic mistakes by pattern:
 
 ```
-trace.mcc:11:3 fuel exhausted after 100,000 steps.
+trace.bcn:11:3 fuel exhausted after 100,000 steps.
 This loop has no 'wait' inside it, so it never yields.
 Try this: interval work belongs in an 'every' block.
 ```
@@ -539,14 +539,14 @@ It runs fully offline: no session, no network, pure. The engine lives in `Mcc.Co
 JSON goes to stdout as one document, human chatter to stderr, and the exit code is the contract agents script against: 0 means clean (warnings allowed), 1 means errors, 2 means usage failure. Every diagnostic carries a stable code (`B0001` parse, `B1xxx` manifests, `B2xxx` names and events, `B3xxx` strictness), file with line and span, severity, message, and a paste-ready suggestion. Codes are the agent's match surface, prose is the human's:
 
 ```json
-{"files": [{"path": "quiz.mcc", "ok": false}],
- "diagnostics": [{"code": "B1007", "severity": "error", "file": "quiz.mcc",
+{"files": [{"path": "quiz.bcn", "ok": false}],
+ "diagnostics": [{"code": "B1007", "severity": "error", "file": "quiz.bcn",
    "line": 4, "col": 1, "message": "script uses chat.send but the manifest lacks it",
    "suggestion": "# needs: chat.send"}],
  "summary": {"errors": 1, "warnings": 0}}
 ```
 
-`--strict` escalates unresolvable `extern`/`call` targets and missing capability providers from warnings to errors, for CI gates and pre-commit hooks. `--fix` applies only the safe mechanical set (completing `end` labels, `cancel event` to `stop event`) and prints a diff first; anything touching meaning (`=` versus `is`, a missing `wait`) stays a suggestion. `--stdin --stdin-name quiz.mcc` lints piped output, which closes the AI loop: generate, lint, read JSON, repair, repeat, without ever joining a server.
+`--strict` escalates unresolvable `extern`/`call` targets and missing capability providers from warnings to errors, for CI gates and pre-commit hooks. `--fix` applies only the safe mechanical set (completing `end` labels, `cancel event` to `stop event`) and prints a diff first; anything touching meaning (`=` versus `is`, a missing `wait`) stays a suggestion. `--stdin --stdin-name quiz.bcn` lints piped output, which closes the AI loop: generate, lint, read JSON, repair, repeat, without ever joining a server.
 
 Tests run headlessly in `Mcc.Core.Tests` against the in-memory fake server, with a virtual clock and seeded RNG injected behind the host seam, so script behavior is deterministic in CI. That requirement goes in now, while the seam is being drawn, not later when faking it costs a refactor.
 
@@ -626,7 +626,7 @@ A shopkeeper with real memory (imports, saved state, custom command):
 ```
 # beacon 1
 # needs: chat.send
-import "lib/econ.mcc" as econ
+import "lib/econ.bcn" as econ
 extern price_of from "shop"
 
 command "/price <item>"

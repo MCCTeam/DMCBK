@@ -55,8 +55,8 @@ public sealed class DialogBeaconTests : IDisposable
     [Fact]
     public void StaticCheck_AcceptsOnDialog()
     {
-        BeaconLexResult lexed = BeaconLexer.Lex("t.mcc", WithHeader("on dialog:\nshow title\nend on\n"));
-        BeaconParseResult parsed = BeaconParser.Parse("t.mcc", lexed.Tokens, 1);
+        BeaconLexResult lexed = BeaconLexer.Lex("t.bcn", WithHeader("on dialog:\nshow title\nend on\n"));
+        BeaconParseResult parsed = BeaconParser.Parse("t.bcn", lexed.Tokens, 1);
         Assert.NotNull(parsed.Script);
         IReadOnlyList<BeaconDiagnostic> diagnostics =
             BeaconStaticCheck.Check(BeaconDesugar.Desugar(parsed.Script!));
@@ -86,7 +86,7 @@ public sealed class DialogBeaconTests : IDisposable
     public void Capabilities_DialogVerbsInferDialogCaps()
     {
         var (engine, _) = NewEngine();
-        engine.LoadSource("d", "d.mcc", "# beacon 1\n# needs: chat.send\ndialog.show()\n");
+        engine.LoadSource("d", "d.bcn", "# beacon 1\n# needs: chat.send\ndialog.show()\n");
 
         BeaconDiagnostic refusal = Assert.Single(
             engine.Lint("d"), d => d.Code == BeaconDiagnosticCodes.ManifestNeedsMismatch);
@@ -99,7 +99,7 @@ public sealed class DialogBeaconTests : IDisposable
     {
         var (engine, _) = NewEngine();
         engine.LoadSource(
-            "d", "d.mcc",
+            "d", "d.bcn",
             "# beacon 1\n# needs: chat.send\non dialog:\nshow title\nend on\n");
 
         BeaconDiagnostic refusal = Assert.Single(
@@ -112,7 +112,7 @@ public sealed class DialogBeaconTests : IDisposable
     {
         var (engine, _) = NewEngine();
         engine.LoadSource(
-            "d", "d.mcc",
+            "d", "d.bcn",
             "# beacon 1\n# needs: dialog.read\ndialog.answer({a: \"b\"})\n");
 
         BeaconDiagnostic refusal = Assert.Single(

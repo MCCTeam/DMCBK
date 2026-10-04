@@ -1,6 +1,6 @@
 # beacon 1
 # needs: chat.send
-import "lib/econ.mcc" as econ
+import "lib/econ.bcn" as econ
 extern price_of from "shop"
 
 command "/price <item>"

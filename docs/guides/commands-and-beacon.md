@@ -2,7 +2,7 @@
 
 For the detailed guide and reference pages, see [the full documentation](../beacon/index.md).
 
-Commands route application input to registered actions. Beacon runs `.mcc` scripts with game events and scheduled work. Both are optional modules, and both belong to one client.
+Commands route application input to registered actions. Beacon runs `.bcn` scripts with game events and scheduled work. Both are optional modules, and both belong to one client.
 
 ## Use commands
 
@@ -38,7 +38,7 @@ The offline runner is useful for script editing and tests. It captures local `sh
 using DMCBK.Core.Beacon;
 
 var report = await BeaconOfflineRunner.RunSourceAsync(
-    "hello.mcc", "# beacon 1\n# needs: chat.send\nshow 2 + 3\n", seed: 42, tickSeconds: 0);
+    "hello.bcn", "# beacon 1\n# needs: chat.send\nshow 2 + 3\n", seed: 42, tickSeconds: 0);
 
 if (!report.Ok)
     throw new InvalidOperationException("The script failed.");
@@ -67,7 +67,7 @@ await using Client client = new ClientBuilder()
     .UseBeacon()
     .Build();
 
-var lint = client.Scripts.Lint("hello.mcc", "# beacon 1\n# needs: chat.send\nshow 2 + 3\n");
+var lint = client.Scripts.Lint("hello.bcn", "# beacon 1\n# needs: chat.send\nshow 2 + 3\n");
 if (lint.Ok)
     await client.Scripts.RunAsync("hello", "# beacon 1\n# needs: chat.send\nshow 2 + 3\n");
 ```
