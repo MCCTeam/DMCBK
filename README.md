@@ -9,6 +9,57 @@ Use the same client services in a background worker, desktop app or web backend.
 > [!WARNING]
 > DMCBK is still in heavy development. APIs, behavior, and documentation are subject to change. Pin the version or commit that your application uses.
 
+## Features
+
+- **Client hosting:** authentication, connection lifecycle, reconnects and independent clients in one process.
+- **Game API:** typed access to chat, player state, inventory, entities, terrain and movement through UMPK.
+- **Commands:** dispatch, completion and scoped registration for hosts and plugins.
+- **Beacon scripting:** event handlers, scheduled tasks, persistent state, linting, formatting and plugin extensions.
+- **Plugins:** C# source or compiled packages, lifecycle hooks, settings, storage, localization and shared contracts.
+- **Marketplace:** versioned releases, dependency resolution, platform-specific assets, pins and transactional installation with rollback.
+- **Configuration:** typed options and optional TOML loading, validation and persistence.
+- **Testing:** simulated script hosts and in-memory plugin sessions, with headless and web-backend samples.
+
+## Architecture
+
+```mermaid
+flowchart TB
+    Host["Host application: CLI, desktop, mobile or web backend"]
+    Builder["ClientBuilder: compose one client"]
+    Core["DMCBK.Core: lifecycle, game API and host contracts"]
+    UMPK["UMPK: protocol, authentication and game engine"]
+    Server["Minecraft Java server"]
+
+    subgraph Modules["Optional DMCBK modules"]
+        Config["Configuration: TOML"]
+        Commands["Commands: dispatch and completion"]
+        Beacon["Beacon: automation runtime"]
+        Plugins["Plugins: activation and loading"]
+        Market["Marketplace: releases and installation"]
+    end
+
+    SDK["PluginSdk: author contracts"]
+    Packages["Plugin packages and persistent user data"]
+    Testing["Testing: simulated hosts and sessions"]
+
+    Host --> Builder
+    Builder --> Core
+    Builder -->|selects| Modules
+    Modules -.->|extend the client| Core
+    Beacon -->|uses| Commands
+    Plugins -->|uses| Commands
+    Plugins -->|uses| SDK
+    Market -->|installs selected assets| Packages
+    Packages -->|loaded by| Plugins
+    Core -->|uses published packages| UMPK
+    UMPK -->|connects| Server
+    Testing -.->|exercises| Core
+    Testing -.->|exercises| Beacon
+    Testing -.->|exercises| Plugins
+```
+
+The diagram shows composition and runtime flow. Core defines module boundaries without referencing their implementations. Your host supplies presentation, paths and login prompts. Add Commands before Beacon or Plugins. The [package guide](docs/reference/packages.md) lists package dependencies.
+
 ## Start here
 
 1. Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
@@ -31,6 +82,14 @@ The preview uses UMPK `0.9.0-beta.4`. NuGet installation requires the DMCBK pack
 - [Configuration](docs/reference/configuration.md) and [limitations](docs/reference/limitations.md)
 - [Build and contribute](CONTRIBUTING.md)
 - [Publish to NuGet](docs/releases.md)
+
+## Roadmap
+
+- Improve documentation - WIP
+- Crowdin integration for translations
+- Documentation website
+- Extend the Game API with useful functionality
+- Benchmark and optimize the whole library and Beacon scripts
 
 ## Contributors
 
