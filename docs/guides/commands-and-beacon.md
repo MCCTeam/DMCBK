@@ -1,5 +1,7 @@
 # Commands and Beacon
 
+For the detailed guide and reference pages, see [the full documentation](../beacon/index.md).
+
 Commands route application input to registered actions. Beacon runs `.mcc` scripts with game events and scheduled work. Both are optional modules, and both belong to one client.
 
 ## Use commands

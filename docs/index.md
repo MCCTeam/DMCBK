@@ -12,6 +12,8 @@ Start with a small client. Add commands, scripts or plugins when your applicatio
 | Connect a bot and send chat | [Your first client](getting-started/first-client.md) |
 | Add a desktop, mobile or web interface | [Hosting](hosting.md) |
 | Route commands or run a script | [Commands and Beacon](guides/commands-and-beacon.md) |
+| Learn Beacon scripting in detail | [Beacon guides](beacon/index.md) |
+| Build plugins in detail | [Plugin guides](plugins/index.md) |
 | Write a C# plugin | [Plugin authoring and tests](guides/plugins.md) |
 | Install a particular plugin version | [Marketplace v2](marketplace-v2.md) |
 | Load TOML settings | [Configuration](reference/configuration.md) |

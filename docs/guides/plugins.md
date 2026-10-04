@@ -1,5 +1,7 @@
 # Write and test a plugin
 
+For the detailed guide and reference pages, see [the full documentation](../plugins/index.md).
+
 A plugin implements `DMCBK.PluginSdk.IPlugin`. The SDK contains author contracts. `DMCBK.Plugins` loads packages and compiles source entries. Plugin authors do not need MCC source.
 
 ## Write the entry class

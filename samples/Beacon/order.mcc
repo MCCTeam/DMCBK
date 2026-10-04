@@ -1,0 +1,3 @@
+# beacon 1
+import "lib/math.mcc" as math
+show math.subtotal(3, 4)

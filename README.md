@@ -36,3 +36,5 @@ The preview uses UMPK `0.9.0-beta.4`. NuGet installation requires the DMCBK pack
 ## License
 
 DMCBK uses the [MIT License](LICENSE.md).
+
+Detailed guides: [Beacon scripting](docs/beacon/index.md) and [plugin development](docs/plugins/index.md).
