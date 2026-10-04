@@ -39,6 +39,6 @@ Never commit account files, token caches, raw captures, downloaded game files or
 
 Describe the problem, resulting behavior and checks you ran. Keep each pull request focused. Read every changed line, including generated examples and tests.
 
-AI tools can help draft documentation and repetitive changes. Treat their output as a draft. Do not send credentials, session data or private captures to an external service. Follow [UMPK's contribution guide](https://github.com/MCCTeam/UMPK/blob/master/CONTRIBUTING.md) when a change belongs in the protocol engine.
+AI tools can help draft documentation and repetitive changes. Treat their output as a draft. Do not send credentials, session data or private captures to an external service.
 
 Read [NuGet release setup](docs/releases.md) before publishing a package version.
