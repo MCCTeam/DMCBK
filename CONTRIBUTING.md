@@ -41,4 +41,4 @@ Describe the problem, resulting behavior and checks you ran. Keep each pull requ
 
 AI tools can help draft documentation and repetitive changes. Treat their output as a draft. Do not send credentials, session data or private captures to an external service.
 
-Read [NuGet release setup](docs/releases.md) before publishing a package version.
+Read [release instructions](docs/releases.md) before publishing a package version.

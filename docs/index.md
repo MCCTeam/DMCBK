@@ -19,7 +19,7 @@ Start with a small client. Add commands, scripts or plugins when your applicatio
 | Load TOML settings | [Configuration](reference/configuration.md) |
 | Select packages | [Package reference](reference/packages.md) |
 | Diagnose a missing capability | [Limitations and troubleshooting](reference/limitations.md) |
-| Publish packages from GitHub | [NuGet release setup](releases.md) |
+| Publish packages from GitHub | [Create a release](releases.md) |
 
 ## Terms used in these guides
 
