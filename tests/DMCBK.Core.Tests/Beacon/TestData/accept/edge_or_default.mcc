@@ -1,0 +1,5 @@
+# beacon 1
+
+set seen to saved("seen") or {}
+set count to (seen[player] or 0) + 1
+say "count is {count}"

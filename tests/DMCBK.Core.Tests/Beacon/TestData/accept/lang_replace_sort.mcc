@@ -1,0 +1,11 @@
+# beacon 1
+
+set greeting to replace("Hello, old friend", "old", "new")
+show greeting
+show sort([3, 1, 2])
+show sort(["pear", "apple"])
+show reverse([1, 2, 3])
+show reverse("abc")
+show unique([1, 2, 2, 3, 1])
+assert(greeting is "Hello, new friend", "replace works")
+assert(len(unique([1, 1, 2])) is 2, "unique works")

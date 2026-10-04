@@ -1,0 +1,6 @@
+# beacon 1
+
+command "/price <item>"
+  set target to arg("item")
+  say "{target} costs {price_of(target)} coins."
+end command

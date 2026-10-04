@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>DMCBK.Core.Tests</AssemblyName><IsPackable>false</IsPackable><IsTestProject>true</IsTestProject><GenerateDocumentationFile>false</GenerateDocumentationFile></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../src/DMCBK.Core/DMCBK.Core.csproj"/>
+<ProjectReference Include="../../src/DMCBK.Marketplace/DMCBK.Marketplace.csproj"/>
+<ProjectReference Include="../../src/DMCBK.Commands/DMCBK.Commands.csproj"/>
+<ProjectReference Include="../../src/DMCBK.Configuration/DMCBK.Configuration.csproj"/>
+<ProjectReference Include="../../src/DMCBK.Beacon/DMCBK.Beacon.csproj"/>
+<ProjectReference Include="../../src/DMCBK.PluginSdk/DMCBK.PluginSdk.csproj"/>
+<ProjectReference Include="../../src/DMCBK.Plugins/DMCBK.Plugins.csproj"/>
+<ProjectReference Include="../../src/DMCBK.Testing/DMCBK.Testing.csproj"/>
+</ItemGroup>
+  <ItemGroup><PackageReference Include="Microsoft.NET.Test.Sdk"/><PackageReference Include="xunit"/><PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all"/></ItemGroup>
+  <ItemGroup><None Update="Beacon/TestData/**/*" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
+</Project>

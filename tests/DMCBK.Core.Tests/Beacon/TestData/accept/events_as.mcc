@@ -1,0 +1,5 @@
+# beacon 1
+
+on chat as e when e.message contains "!help"
+  whisper e.player "Try !rules, !spawn, !shop."
+end on

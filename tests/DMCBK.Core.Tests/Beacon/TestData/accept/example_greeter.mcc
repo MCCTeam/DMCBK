@@ -1,0 +1,14 @@
+# beacon 1
+# needs: chat.send
+
+on join
+  set seen to saved("seen") or {}
+  if seen[player] is set
+    say "Welcome back, {player}! Visit {seen[player]} times and counting."
+    set seen[player] to seen[player] + 1
+  else
+    say "Welcome for the first time, {player}! Type !rules to start."
+    set seen[player] to 1
+  end if
+  save "seen" to seen
+end on

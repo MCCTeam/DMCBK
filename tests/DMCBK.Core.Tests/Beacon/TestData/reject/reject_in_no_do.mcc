@@ -1,0 +1,5 @@
+# beacon 1
+in 30 seconds
+  say "Missing do."
+end in
+# expect: B0001

@@ -1,0 +1,8 @@
+# beacon 1
+
+export set shop_name to "Corner Shop"
+export set prices to {apple: 5, bread: 3}
+
+export function daily_report()
+  return "{shop_name} lists {len(prices)} items."
+end function

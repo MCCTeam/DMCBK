@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Deterministic plugin testing with real client sessions over in-memory UMPK transport.</Description>
+    <RootNamespace>DMCBK.Testing</RootNamespace>
+    <AssemblyName>DMCBK.Testing</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>DMCBK.Testing</PackageId>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DMCBK.Core/DMCBK.Core.csproj" />
+    <ProjectReference Include="../DMCBK.Beacon/DMCBK.Beacon.csproj" />
+    <ProjectReference Include="../DMCBK.Plugins/DMCBK.Plugins.csproj" />
+    <ProjectReference Include="../DMCBK.PluginSdk/DMCBK.PluginSdk.csproj" />
+    <PackageReference Include="Umpk.Client" />
+    <PackageReference Include="Umpk.Core" />
+    <PackageReference Include="Umpk.Data.Java" />
+    <PackageReference Include="Umpk.Protocol.Java" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="../DMCBK.PluginSdk/BannedSymbols.txt" />
+  </ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

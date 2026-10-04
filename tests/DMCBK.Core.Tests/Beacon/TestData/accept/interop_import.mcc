@@ -1,0 +1,4 @@
+# beacon 1
+
+import "lib/econ.mcc" as econ
+say "Bread costs {econ.price("bread")} coins."

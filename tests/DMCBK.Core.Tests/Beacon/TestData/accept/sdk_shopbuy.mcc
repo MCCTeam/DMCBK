@@ -1,0 +1,6 @@
+# beacon 1
+# needs: chat.send econ.read
+
+on shop_buy when item is "bread"
+  say "Thanks {player}! Bread is the staff pick today."
+end on

@@ -1,0 +1,6 @@
+# beacon 1
+
+on chat when message contains "badword"
+  stop event
+  whisper player "Please keep chat friendly."
+end on

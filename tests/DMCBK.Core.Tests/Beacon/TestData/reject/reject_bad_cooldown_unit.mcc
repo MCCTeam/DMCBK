@@ -1,0 +1,5 @@
+# beacon 1
+on tps cooldown 5 fortnights named "x"
+  say "bad unit"
+end on
+# expect: B3005

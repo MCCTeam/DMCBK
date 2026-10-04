@@ -1,0 +1,3 @@
+# beacon 1
+x = 5
+# expect: B3003

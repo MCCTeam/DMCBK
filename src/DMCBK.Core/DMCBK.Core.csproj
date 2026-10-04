@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Host-neutral client lifecycle, authentication and Minecraft game APIs.</Description>
+    <RootNamespace>DMCBK.Core</RootNamespace>
+    <AssemblyName>DMCBK.Core</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Umpk.Client" />
+    <PackageReference Include="Umpk.Auth" />
+    <PackageReference Include="Umpk.Realms" />
+    <PackageReference Include="Umpk.Data.Java" />
+    <PackageReference Include="Umpk.Text" />
+    <PackageReference Include="Umpk.Data.Lang" />
+    <PackageReference Include="Umpk.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DMCBK.Core.Tests" />
+    <InternalsVisibleTo Include="DMCBK.Plugins"/><InternalsVisibleTo Include="DMCBK.PluginSdk" />
+    <InternalsVisibleTo Include="DMCBK.Commands" />
+    <InternalsVisibleTo Include="DMCBK.Configuration" />
+    <InternalsVisibleTo Include="DMCBK.Beacon" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Localization/Resources/McStrings.resx">
+      <LogicalName>DMCBK.Core.Localization.Resources.McStrings.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="BannedSymbols.txt" />
+  </ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

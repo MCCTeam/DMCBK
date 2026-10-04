@@ -1,0 +1,5 @@
+# beacon 1
+
+set quiz to {running: no, q: "", a: "", wins: {}}
+set nested to {a: 1, b: [1, 2], c: {}}
+say "ready"

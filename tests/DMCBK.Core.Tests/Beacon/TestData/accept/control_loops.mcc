@@ -1,0 +1,15 @@
+# beacon 1
+
+repeat 3 times
+  say "Still here!"
+end repeat
+
+while food < 20
+  eat()
+  wait 2 seconds
+end while
+
+for each p in online_players
+  whisper p "The event starts in 5 minutes."
+  wait 1 second
+end for

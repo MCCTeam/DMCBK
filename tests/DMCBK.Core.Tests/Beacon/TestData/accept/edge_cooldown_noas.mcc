@@ -1,0 +1,5 @@
+# beacon 1
+
+on tps cooldown 300 seconds named "tps-warn" when tps < 15
+  say "Heads up: server TPS is {tps}."
+end on

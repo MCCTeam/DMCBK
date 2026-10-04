@@ -1,0 +1,11 @@
+# beacon 1
+
+set a to 1
+set b to 2
+if a is 1
+  show "a"
+else
+  if b is 2
+    show "b"
+  end if
+end if

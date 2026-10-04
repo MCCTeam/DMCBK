@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Explicit TOML configuration loading, profiles and persistence for DMCBK.</Description><RootNamespace>DMCBK.Configuration</RootNamespace><AssemblyName>DMCBK.Configuration</AssemblyName></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../DMCBK.Core/DMCBK.Core.csproj"/><PackageReference Include="Samboy063.Tomlet"/></ItemGroup>
+  <ItemGroup><InternalsVisibleTo Include="DMCBK.Core.Tests"/></ItemGroup>
+  <ItemGroup><EmbeddedResource Update="Configuration/Resources/ConfigComments.resx"><LogicalName>DMCBK.Configuration.Resources.ConfigComments.resources</LogicalName></EmbeddedResource></ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

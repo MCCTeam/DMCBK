@@ -1,0 +1,5 @@
+# beacon 1
+# needs: chat.send
+// slash comment beside a hash comment
+/* span comment */ say "see https://example.com for rules"
+wait 2 seconds

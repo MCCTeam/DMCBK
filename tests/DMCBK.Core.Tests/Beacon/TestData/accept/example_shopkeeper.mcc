@@ -1,0 +1,25 @@
+# beacon 1
+# needs: chat.send
+import "lib/econ.mcc" as econ
+extern price_of from "shop"
+
+command "/price <item>"
+  set target to arg("item")
+  set p to econ.price(target)
+  if p is set
+    say "{target} costs {p} coins today."
+  else
+    say "Sorry, I do not buy {target}."
+  end if
+end command
+
+on chat when message starts with "!sell "
+  set item to trim(slice(message, 6))
+  set p to econ.price(item)
+  if p is set
+    say "Sold! {econ.credit(player, item)}"
+    set ledger to saved("ledger") or {}
+    set ledger[player] to (ledger[player] or 0) + p
+    save "ledger" to ledger
+  end if
+end on

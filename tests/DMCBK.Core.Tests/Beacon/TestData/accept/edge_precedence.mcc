@@ -1,0 +1,6 @@
+# beacon 1
+
+set x to 1 + 2 * 3 - 10 / 2
+if not a is 1 and b is 2 or c is 3
+  say "precedence holds"
+end if

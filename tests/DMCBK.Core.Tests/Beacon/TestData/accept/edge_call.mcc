@@ -1,0 +1,5 @@
+# beacon 1
+
+set report to call "shopkeeper.daily_report"()
+set sized to call "shopkeeper.sized"(1, "x")
+say report

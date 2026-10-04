@@ -1,0 +1,5 @@
+# beacon 1
+if x is 1
+  say "a"
+end while
+# expect: B0001

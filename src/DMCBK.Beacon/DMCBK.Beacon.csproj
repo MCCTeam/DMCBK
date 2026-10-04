@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Per-client Beacon interpretation, scheduling, linting and formatting.</Description><RootNamespace>DMCBK.Beacon</RootNamespace><AssemblyName>DMCBK.Beacon</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DMCBK.Core/DMCBK.Core.csproj" />
+    <ProjectReference Include="../DMCBK.Commands/DMCBK.Commands.csproj" />
+  </ItemGroup>
+  <ItemGroup><PackageReference Include="Samboy063.Tomlet"/></ItemGroup>
+  <ItemGroup><InternalsVisibleTo Include="DMCBK.Core.Tests"/><InternalsVisibleTo Include="DMCBK.Plugins"/><InternalsVisibleTo Include="DMCBK.PluginSdk"/><InternalsVisibleTo Include="DMCBK.Beacon"/></ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

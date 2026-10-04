@@ -1,0 +1,3 @@
+# beacon 1
+say "oops
+# expect: B0001

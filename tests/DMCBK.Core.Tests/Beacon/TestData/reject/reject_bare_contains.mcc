@@ -1,0 +1,5 @@
+# beacon 1
+if message contains
+  say "missing right side"
+end if
+# expect: B0001

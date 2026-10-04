@@ -1,0 +1,14 @@
+# beacon 1
+
+set hay to "hello world"
+show index_of(hay, "world")
+show index_of(hay, "z")
+show replace_first("aaa", "a", "b")
+show trim_start("  hi  ")
+show trim_end("  hi  ")
+show pad_start("hi", 5)
+show pad_end("hi", 5, "0")
+show repeat_str("ab", 3)
+show escape_regex("a+b(c)")
+assert(index_of(hay, "world") is 6, "index finds")
+assert(repeat_str("ab", 3) is "ababab", "repeat_str works")

@@ -1,0 +1,10 @@
+# beacon 1
+
+start patrol()
+
+function patrol()
+  while yes
+    move_goto(120, 64, -40)
+    wait 3 seconds
+  end while
+end function

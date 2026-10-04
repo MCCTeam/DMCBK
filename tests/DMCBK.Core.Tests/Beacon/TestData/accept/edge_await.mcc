@@ -1,0 +1,8 @@
+# beacon 1
+
+start patrol()
+await job
+
+function patrol()
+  say "patrolling"
+end function

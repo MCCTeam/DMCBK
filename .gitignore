@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+artifacts/
+**/.cache/
+**/*.user
+.env
+**/userdata/
+
+TestResults/

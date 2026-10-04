@@ -1,0 +1,5 @@
+# beacon 1
+
+ON JOIN
+  SAY "Welcome, {player}!"
+END ON

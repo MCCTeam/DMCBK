@@ -1,0 +1,10 @@
+# beacon 1
+
+set hits to match_all("a1 b22 c333", /[0-9]+/)
+show len(hits)
+show hits[0]["0"]
+show hits[1]["0"]
+set found to match_all("n=42 m=7", /(?<n>[0-9]+)/)
+show found[0].n
+assert(len(hits) is 3, "three numbers")
+assert(len(match_all("abc", /z+/)) is 0, "no hits is empty")

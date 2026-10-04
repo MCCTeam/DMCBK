@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Portable command dispatch, registration scopes and completion for DMCBK.</Description><RootNamespace>DMCBK.Commands</RootNamespace><AssemblyName>DMCBK.Commands</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DMCBK.Core/DMCBK.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup><InternalsVisibleTo Include="DMCBK.Core.Tests"/><InternalsVisibleTo Include="DMCBK.Plugins"/><InternalsVisibleTo Include="DMCBK.PluginSdk"/><InternalsVisibleTo Include="DMCBK.Beacon"/></ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

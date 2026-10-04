@@ -1,0 +1,9 @@
+# beacon 1
+
+in 30 seconds do
+  say "Remind me once."
+end in
+
+in 1 minute do
+  show "One-shot fired."
+end in

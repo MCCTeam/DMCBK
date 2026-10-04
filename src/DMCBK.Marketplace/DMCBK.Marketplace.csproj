@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Versioned catalogues, dependency resolution and transactional plugin installation.</Description><RootNamespace>DMCBK.Marketplace</RootNamespace><AssemblyName>DMCBK.Marketplace</AssemblyName></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../DMCBK.Core/DMCBK.Core.csproj"/><ProjectReference Include="../DMCBK.PluginSdk/DMCBK.PluginSdk.csproj"/><PackageReference Include="Samboy063.Tomlet"/></ItemGroup>
+  <ItemGroup><InternalsVisibleTo Include="DMCBK.Core.Tests"/></ItemGroup>
+  <ItemGroup><EmbeddedResource Update="Resources/MarketplaceStrings.resx"><LogicalName>DMCBK.Marketplace.Resources.MarketplaceStrings.resources</LogicalName></EmbeddedResource></ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

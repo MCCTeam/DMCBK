@@ -1,0 +1,3 @@
+# beacon 1
+show
+# expect: B0001

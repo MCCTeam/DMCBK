@@ -1,0 +1,5 @@
+# beacon 1
+repeat 3 time
+  say "oops"
+end repeat
+# expect: B0001

@@ -1,0 +1,4 @@
+# beacon 1
+// slash comment beside a hash comment
+/* span comment */ say "see https://example.com for rules" # trailing comment
+say "bye" // done

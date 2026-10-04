@@ -1,0 +1,4 @@
+# beacon 1
+# wants: net.fetch
+
+say "graceful without the bridge"

@@ -1,0 +1,3 @@
+# beacon 1
+wait 2 fortnights
+# expect: B3005

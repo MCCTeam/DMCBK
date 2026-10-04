@@ -1,0 +1,16 @@
+# beacon 1
+# needs: chat.send
+
+every 60 seconds
+  if online_count > 0
+    say "Tip: use !help to see what I can do."
+  end if
+end every
+
+on login
+  say "Back online and ready."
+end on
+
+on disconnect
+  log "Lost connection, tasks parked."
+end on

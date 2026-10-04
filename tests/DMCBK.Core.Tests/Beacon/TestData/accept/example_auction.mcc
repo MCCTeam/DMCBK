@@ -1,0 +1,10 @@
+# beacon 1
+# needs: chat.send net.fetch
+
+on server_message when text matches /bought (?<n>[0-9]+)x (?<item>[a-z_ ]+) for \$(?<price>[0-9.]+)/
+  set deal to match(text, /(?<n>[0-9]+)x (?<item>[a-z_ ]+) for \$(?<price>[0-9.]+)/)
+  if deal is set and number(deal.price) < 20
+    say "Saw cheap {deal.item} ({deal.n}x for ${deal.price}). Logging it."
+    http_post("https://hooks.example.com/mcc-deals", json_stringify(deal))
+  end if
+end on

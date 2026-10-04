@@ -1,0 +1,9 @@
+# beacon 1
+
+if health < 10 then
+  say "I need food!"
+else if food < 6 then
+  eat()
+else
+  say "All good."
+end if

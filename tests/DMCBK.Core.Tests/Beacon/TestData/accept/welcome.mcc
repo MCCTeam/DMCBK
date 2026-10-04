@@ -1,0 +1,10 @@
+# beacon 1
+# needs: chat.send
+
+on join:
+  say "Welcome to the server, {player}!"
+end on
+
+on chat when message contains "!rules":
+  whisper player "1. Be kind. 2. No griefing. 3. Have fun."
+end on

@@ -1,0 +1,22 @@
+# beacon 1
+# needs: chat.send inventory.read inventory.write
+
+on health when health <= 6
+  if inv.has("totem_of_undying", 1)
+    inv.move(inv.find("totem_of_undying"), "offhand")
+    say "Totem equipped. That was close."
+  else
+    say "Low health and no totem! Logging out would be smart."
+  end if
+end on
+
+on hunger when food <= 6
+  eat_best()
+end on
+
+function eat_best()
+  if inv.has("cooked_beef", 1)
+    inv.select(inv.find("cooked_beef"))
+    use_in_hand()
+  end if
+end function

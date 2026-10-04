@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="catalogue.release-mutated" xml:space="preserve">
+    <value>Published payloads for '{0}' version {1} changed. The publisher must release a new version.</value>
+  </data>
+  <data name="compatibility.api" xml:space="preserve">
+    <value>This release requires plugin API {0}; the host provides {1}.</value>
+  </data>
+  <data name="compatibility.application" xml:space="preserve">
+    <value>Application '{0}' version {1} is outside the release's host constraints: {2}.</value>
+  </data>
+  <data name="compatibility.asset-unavailable" xml:space="preserve">
+    <value>Release {0} has no suitable asset for process target {1}.</value>
+  </data>
+  <data name="compatibility.capability" xml:space="preserve">
+    <value>This release requires unavailable capability: {0}.</value>
+  </data>
+  <data name="compatibility.dmcbk" xml:space="preserve">
+    <value>This release requires DMCBK {0}; the host provides {1}.</value>
+  </data>
+  <data name="compatibility.source-fallback-required" xml:space="preserve">
+    <value>Release {0} has no compiled asset for {1}. Explicitly enable source fallback to use its source asset.</value>
+  </data>
+  <data name="compatibility.umpk" xml:space="preserve">
+    <value>This release requires UMPK {0}; the host provides {1}.</value>
+  </data>
+  <data name="diagnostic.generic" xml:space="preserve">
+    <value>Marketplace operation failed ({0}): {1}</value>
+  </data>
+  <data name="installation.catalogue-manifest-mismatch" xml:space="preserve">
+    <value>Package '{0}' does not match its published release metadata.</value>
+  </data>
+  <data name="installation.development-source-required" xml:space="preserve">
+    <value>Use the explicit development-install API for source location: {0}.</value>
+  </data>
+  <data name="installation.hash-mismatch" xml:space="preserve">
+    <value>The downloaded archive does not match its published SHA-256 digest.</value>
+  </data>
+  <data name="installation.lock-dependency-invalid" xml:space="preserve">
+    <value>Plugin '{0}' requires a compatible enabled provider '{1}'.</value>
+  </data>
+  <data name="installation.plan-stale" xml:space="preserve">
+    <value>The installation selection changed after this plan was created. Create a new plan.</value>
+  </data>
+  <data name="installation.recovery-required" xml:space="preserve">
+    <value>Recover the interrupted installation before applying another plan.</value>
+  </data>
+  <data name="operation.cancelled" xml:space="preserve">
+    <value>Plugin operation cancelled.</value>
+  </data>
+  <data name="operation.catalogues-refreshed" xml:space="preserve">
+    <value>Refreshed {0} marketplace catalogues.</value>
+  </data>
+  <data name="operation.confirm" xml:space="preserve">
+    <value>Install {0} version {1} ({2}, target {3})? Other affected plugins: {4}. Plugins run in this process with access to your account, files and network. Install only trusted code.</value>
+  </data>
+  <data name="operation.disabled" xml:space="preserve">
+    <value>Disabled plugin '{0}'.</value>
+  </data>
+  <data name="operation.enabled" xml:space="preserve">
+    <value>Enabled plugin '{0}'.</value>
+  </data>
+  <data name="operation.failed" xml:space="preserve">
+    <value>Marketplace operation failed: {0}</value>
+  </data>
+  <data name="operation.installed" xml:space="preserve">
+    <value>Installed plugin '{0}' version {1}.</value>
+  </data>
+  <data name="operation.marketplace-added" xml:space="preserve">
+    <value>Added marketplace '{0}'.</value>
+  </data>
+  <data name="operation.marketplace-removed" xml:space="preserve">
+    <value>Removed marketplace '{0}'. Installed selections remain available locally.</value>
+  </data>
+  <data name="operation.pinned" xml:space="preserve">
+    <value>Pinned plugin '{0}'.</value>
+  </data>
+  <data name="operation.policy-updated" xml:space="preserve">
+    <value>Set marketplace '{0}' update policy to '{1}'.</value>
+  </data>
+  <data name="operation.rolled-back" xml:space="preserve">
+    <value>Restored the selection preceding transaction '{0}'.</value>
+  </data>
+  <data name="operation.uninstalled" xml:space="preserve">
+    <value>Uninstalled plugin '{0}'. User data is retained unless purge was requested.</value>
+  </data>
+  <data name="operation.unpinned" xml:space="preserve">
+    <value>Unpinned plugin '{0}'.</value>
+  </data>
+  <data name="operation.update-available" xml:space="preserve">
+    <value>An update is available for plugin '{0}'.</value>
+  </data>
+  <data name="operation.updated" xml:space="preserve">
+    <value>Finished checking {0} plugin update requests.</value>
+  </data>
+  <data name="resolution.publisher-selection-required" xml:space="preserve">
+    <value>Plugin '{0}' occurs in several marketplaces. Select its publisher explicitly.</value>
+  </data>
+  <data name="resolution.unsatisfied" xml:space="preserve">
+    <value>Cannot resolve plugin '{0}'. Rejected candidates: {1}.</value>
+  </data>
+  <data name="operation.update-deferred" xml:space="preserve">
+    <value>Update for plugin {0} is staged for the end of this session.</value>
+  </data>
+  <data name="operation.change" xml:space="preserve">
+    <value>{0}@{1}: {2} -&gt; {3}; {4}, target {5}; SHA-256 {6}</value>
+  </data>
+  <data name="operation.new-selection" xml:space="preserve">
+    <value>new installation</value>
+  </data>
+</root>

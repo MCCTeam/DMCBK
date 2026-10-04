@@ -1,0 +1,528 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="command.text.literal_0167d4168af1" xml:space="preserve">
+    <value>Realms requires a signed-in Microsoft account. Connect once with your Microsoft account, then select the Realm.</value>
+  </data>
+  <data name="command.text.literal_086a8440080d" xml:space="preserve">
+    <value>lint: {0}</value>
+  </data>
+  <data name="command.text.literal_0ab6b8f6c450" xml:space="preserve">
+    <value>Write world.sign_text(100, 64, -30).</value>
+  </data>
+  <data name="command.text.literal_0b8c4fd4f940" xml:space="preserve">
+    <value>open the live movable scoreboard window</value>
+  </data>
+  <data name="command.text.literal_0b9f703b4283" xml:space="preserve">
+    <value>open the live chunk map</value>
+  </data>
+  <data name="command.text.literal_0dd23322cec3" xml:space="preserve">
+    <value>Script '{0}' declares no settings (add '# setting name = default' lines).</value>
+  </data>
+  <data name="command.text.literal_0f6d77d80a8d" xml:space="preserve">
+    <value>Beacon script '{0}' not found. Looked for '{1}'.</value>
+  </data>
+  <data name="command.text.literal_10106dad2539" xml:space="preserve">
+    <value>No {0} to drop.</value>
+  </data>
+  <data name="command.text.literal_11fafabe45f6" xml:space="preserve">
+    <value>open the visual advancement browser</value>
+  </data>
+  <data name="command.text.literal_12dafdfd0547" xml:space="preserve">
+    <value>{0} entries</value>
+  </data>
+  <data name="command.text.literal_1323a294314d" xml:space="preserve">
+    <value>No anvil is open.</value>
+  </data>
+  <data name="command.text.literal_136114444fb8" xml:space="preserve">
+    <value>Reloaded {0} of {1} script(s).</value>
+  </data>
+  <data name="command.text.literal_14132dd4b88e" xml:space="preserve">
+    <value>{0} has no sendable place-recipe packet (it needs 1.13 or newer; 1.12 identifies recipes by a numeric crafting-manager id this build does not model), so nothing was sent.</value>
+  </data>
+  <data name="command.text.literal_162f0a1184b5" xml:space="preserve">
+    <value>Server TPS is unknown: no game-time broadcast to measure. The server may be paused, tick-frozen, or it may not have sent a second update yet.</value>
+  </data>
+  <data name="command.text.literal_17a2552ef847" xml:space="preserve">
+    <value>1 entry</value>
+  </data>
+  <data name="command.text.literal_17b9cb5fb152" xml:space="preserve">
+    <value>{0} No {1}.</value>
+  </data>
+  <data name="command.text.literal_1815a75a610a" xml:space="preserve">
+    <value>You have no unlocked recipes.</value>
+  </data>
+  <data name="command.text.literal_18a67142988b" xml:space="preserve">
+    <value>
+keepalive: turnaround={0:0.###}ms (client-side, not a round trip) interval={1:0.#}s</value>
+  </data>
+  <data name="command.text.literal_19182be544a7" xml:space="preserve">
+    <value>Usage: scripts format &lt;file&gt; [--check].</value>
+  </data>
+  <data name="command.text.literal_19cd24becb63" xml:space="preserve">
+    <value>the connection was closed</value>
+  </data>
+  <data name="command.text.literal_1a79775aadd3" xml:space="preserve">
+    <value>kicked by the server: {0}</value>
+  </data>
+  <data name="command.text.literal_1b3ebfc4be00" xml:space="preserve">
+    <value>Your recipe book is not empty, but on this Minecraft version the server sends recipe-book additions as a recipe-display tree this build does not decode, so no recipe can be named and the number unlocked is not known ({0} undecoded update(s) received).</value>
+  </data>
+  <data name="command.text.literal_1b4078a381d2" xml:space="preserve">
+    <value>Cannot write settings without a configurations folder.</value>
+  </data>
+  <data name="command.text.literal_1b74d4c1ce67" xml:space="preserve">
+    <value>[scripts] '{0}' on {1} failed: {2} ({3} {4}:{5})</value>
+  </data>
+  <data name="command.text.literal_1c7a3b6401f7" xml:space="preserve">
+    <value>open the visual recipe browser</value>
+  </data>
+  <data name="command.text.literal_1c90a9d88900" xml:space="preserve">
+    <value>Could not reach the destination: {0}</value>
+  </data>
+  <data name="command.text.literal_1d8d4a0bad20" xml:space="preserve">
+    <value>Realms rejected the session. Re-authenticate with your Microsoft account and retry.</value>
+  </data>
+  <data name="command.text.literal_1dbc204e36c3" xml:space="preserve">
+    <value>Movement by '{0}' to {1} timed out after {2:0.#}s without arriving. The steering call never completed and never failed, so the runner stopped waiting instead of parking the handler.</value>
+  </data>
+  <data name="command.text.literal_1f38cf190d0c" xml:space="preserve">
+    <value>the server transferred the connection to another host</value>
+  </data>
+  <data name="command.text.literal_211c582283ee" xml:space="preserve">
+    <value>No {0} in the hotbar.</value>
+  </data>
+  <data name="command.text.literal_22494eff59e6" xml:space="preserve">
+    <value>Unknown script '{0}'.</value>
+  </data>
+  <data name="command.text.literal_23805fffd6a4" xml:space="preserve">
+    <value>Sent a use interaction for the {0} hand at {1} {2} {3}; the server does not report the effect.</value>
+  </data>
+  <data name="command.text.literal_23f78c400c79" xml:space="preserve">
+    <value>Select a hotbar slot, by number or by the item in it.</value>
+  </data>
+  <data name="command.text.literal_264a31fc57cf" xml:space="preserve">
+    <value>Settings for '{0}':</value>
+  </data>
+  <data name="command.text.literal_28d809a4be80" xml:space="preserve">
+    <value>No Realms world named or numbered '{0}' is available on this account.</value>
+  </data>
+  <data name="command.text.literal_28dfa8aa40da" xml:space="preserve">
+    <value>The file still has lint errors; run 'scripts lint' for the list.</value>
+  </data>
+  <data name="command.text.literal_361c1148d84f" xml:space="preserve">
+    <value>lint: no input files. Usage: lint &lt;file...&gt; [--format text|json] [--target-lib N] [--strict] [--fix] [--stdin] [--stdin-name &lt;name&gt;]</value>
+  </data>
+  <data name="command.text.literal_3862f115ebc7" xml:space="preserve">
+    <value>Sent a use interaction for the {0} hand; the server does not report the effect.</value>
+  </data>
+  <data name="command.text.literal_3a5ba40c05d0" xml:space="preserve">
+    <value>Scoreboard objectives ({0}):</value>
+  </data>
+  <data name="command.text.literal_3d49a27eb311" xml:space="preserve">
+    <value>and {0} more (--all shows all)</value>
+  </data>
+  <data name="command.text.literal_3e77e2654dd5" xml:space="preserve">
+    <value>disconnected locally</value>
+  </data>
+  <data name="command.text.literal_42770597e748" xml:space="preserve">
+    <value>Note: this list is incomplete. {0} further recipe-book update(s) on this version could not be decoded, and how many recipes they carried is not known.</value>
+  </data>
+  <data name="command.text.literal_42f5e7431595" xml:space="preserve">
+    <value>
+--- trace ---
+</value>
+  </data>
+  <data name="command.text.literal_43d38d8a9409" xml:space="preserve">
+    <value>open the visual script workbench</value>
+  </data>
+  <data name="command.text.literal_43f78154e1d7" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+  <data name="command.text.literal_46617f70d094" xml:space="preserve">
+    <value>Selected hotbar slot {0}: {1}.</value>
+  </data>
+  <data name="command.text.literal_47b77cf4999d" xml:space="preserve">
+    <value>Renamed the item to '{0}'.</value>
+  </data>
+  <data name="command.text.literal_47be97b4e5be" xml:space="preserve">
+    <value>{0} identifies recipes by resource location, not by number, so '{1}' was not sent. Use a recipe id such as minecraft:torch; 'recipebook list' shows the unlocked ones.</value>
+  </data>
+  <data name="command.text.literal_48c0bc8bb800" xml:space="preserve">
+    <value>Nothing can stand in the block at {0}, so the walk stopped in the nearest block that can hold a body: {1}. That is not the destination you asked for.</value>
+  </data>
+  <data name="command.text.literal_4a420edf0530" xml:space="preserve">
+    <value>This command was dispatched from inside a session event handler, so it is running on the session loop and the work it waits for can never start. Do not dispatch a command inline from a session event handler: move the dispatch off the loop first (for example the session scheduler's RunOffLoop) and dispatch from there.</value>
+  </data>
+  <data name="command.text.literal_4cc5447fd458" xml:space="preserve">
+    <value>open the live entity browser</value>
+  </data>
+  <data name="command.text.literal_4d8eca55c1d2" xml:space="preserve">
+    <value>Could not write formatted '{0}': {1}</value>
+  </data>
+  <data name="command.text.literal_4dd337217759" xml:space="preserve">
+    <value> brand=unknown</value>
+  </data>
+  <data name="command.text.literal_4efcb9e07a2a" xml:space="preserve">
+    <value>Arrived at the destination.</value>
+  </data>
+  <data name="command.text.literal_4f4d29326201" xml:space="preserve">
+    <value> (+{0} more)</value>
+  </data>
+  <data name="command.text.literal_51be764e1ffc" xml:space="preserve">
+    <value>Cannot resolve a Realms world without a client version. Pin a Version on the realm entry, or connect to a server first.</value>
+  </data>
+  <data name="command.text.literal_520b5b4cca43" xml:space="preserve">
+    <value>Stopped {0} script(s).</value>
+  </data>
+  <data name="command.text.literal_5236ea994691" xml:space="preserve">
+    <value>Setting '{0}.{1}' set to {2} (live).</value>
+  </data>
+  <data name="command.text.literal_540b09915707" xml:space="preserve">
+    <value>No enchanting table is open.</value>
+  </data>
+  <data name="command.text.literal_54c2b7fe256c" xml:space="preserve">
+    <value>a protocol error ended the connection</value>
+  </data>
+  <data name="command.text.literal_5525fb0a2317" xml:space="preserve">
+    <value>Cannot watch scripts without a configurations folder.</value>
+  </data>
+  <data name="command.text.literal_57978472b342" xml:space="preserve">
+    <value>Known objectives: {0}.</value>
+  </data>
+  <data name="command.text.literal_580451fe3b14" xml:space="preserve">
+    <value>Manage Beacon scripts.</value>
+  </data>
+  <data name="command.text.literal_58129c8b2e59" xml:space="preserve">
+    <value>Plugins ({0}):</value>
+  </data>
+  <data name="command.text.literal_589523754169" xml:space="preserve">
+    <value>Sent a use interaction for the block at {0} {1} {2}; the server does not report the effect.</value>
+  </data>
+  <data name="command.text.literal_59c733469208" xml:space="preserve">
+    <value>No plugins were discovered.</value>
+  </data>
+  <data name="command.text.literal_5a73d20af0dc" xml:space="preserve">
+    <value>Beacon scripts (0): no entries.</value>
+  </data>
+  <data name="command.text.literal_5b13652afd44" xml:space="preserve">
+    <value>Deleted chunk ({0}, {1}).</value>
+  </data>
+  <data name="command.text.literal_5c4b1fe2bbfc" xml:space="preserve">
+    <value>
+keepalive: turnaround={0:0.###}ms (client-side, not a round trip)</value>
+  </data>
+  <data name="command.text.literal_5c6efcbd9d9e" xml:space="preserve">
+    <value>Server TPS: {0:0.00}</value>
+  </data>
+  <data name="command.text.literal_5d06cee79245" xml:space="preserve">
+    <value>Script '{0}' declares no setting '{1}'.</value>
+  </data>
+  <data name="command.text.literal_5d57d184b64c" xml:space="preserve">
+    <value>'{0}' is already formatted.</value>
+  </data>
+  <data name="command.text.literal_5e1254546ecc" xml:space="preserve">
+    <value>watch: off (manual reload only).</value>
+  </data>
+  <data name="command.text.literal_615983577fd3" xml:space="preserve">
+    <value>Usage: scripts config &lt;id&gt; [key value].</value>
+  </data>
+  <data name="command.text.literal_624696b85623" xml:space="preserve">
+    <value>Respawn request sent, but you are not dead: the server ignores a respawn request from a living player.</value>
+  </data>
+  <data name="command.text.literal_62ce8fa3db3d" xml:space="preserve">
+    <value>Setting '{0}.{1}' set to {2} (applies on next load).</value>
+  </data>
+  <data name="command.text.literal_65494f5dd924" xml:space="preserve">
+    <value>kicked by the server</value>
+  </data>
+  <data name="command.text.literal_682abf6769b8" xml:space="preserve">
+    <value>Could not place the recipe.</value>
+  </data>
+  <data name="command.text.literal_6a64794c5f67" xml:space="preserve">
+    <value>Script '{0}' failed with no diagnostic.</value>
+  </data>
+  <data name="command.text.literal_6af493561ec7" xml:space="preserve">
+    <value>Beacon script '{0}' not found (no configurations folder, so only file paths resolve).</value>
+  </data>
+  <data name="command.text.literal_6b4f83f7816f" xml:space="preserve">
+    <value>The Realms terms of service have not been accepted for this account. Accept them in the Minecraft launcher, then retry.</value>
+  </data>
+  <data name="command.text.literal_6b76d2a8ef07" xml:space="preserve">
+    <value>Cannot scaffold a script without a configurations folder.</value>
+  </data>
+  <data name="command.text.literal_6ff5a3ed436f" xml:space="preserve">
+    <value>Entity #{0} {1} '{2}' at {3:0.0} {4:0.0} {5:0.0} motion {6:0.#####} {7:0.#####} {8:0.#####}</value>
+  </data>
+  <data name="command.text.literal_7213e30b6403" xml:space="preserve">
+    <value>script was replaced with scripts. Use /scripts instead (for example /scripts list, /scripts run &lt;name&gt;).</value>
+  </data>
+  <data name="command.text.literal_72399ea47e64" xml:space="preserve">
+    <value>Unlocked recipes ({0}):</value>
+  </data>
+  <data name="command.text.literal_72610fdcffe0" xml:space="preserve">
+    <value>List unlocked recipes, or place one into the open menu.</value>
+  </data>
+  <data name="command.text.literal_7706d1531fc7" xml:space="preserve">
+    <value>This browser needs the TUI. Use the command without 'ui' for the text version.</value>
+  </data>
+  <data name="command.text.literal_78f5decaefe3" xml:space="preserve">
+    <value>Click an option in an open enchanting table.</value>
+  </data>
+  <data name="command.text.literal_794548f29d31" xml:space="preserve">
+    <value>Failed.</value>
+  </data>
+  <data name="command.text.literal_79501a809556" xml:space="preserve">
+    <value>Beacon scripts ({0}):</value>
+  </data>
+  <data name="command.text.literal_7afb74c89abe" xml:space="preserve">
+    <value>watch: on ({0}).</value>
+  </data>
+  <data name="command.text.literal_7ba91f1ac3c7" xml:space="preserve">
+    <value>ran '{0}'.</value>
+  </data>
+  <data name="command.text.literal_7c6fe7a4de33" xml:space="preserve">
+    <value>This Minecraft version can carry neither anvil rename route, so nothing was sent.</value>
+  </data>
+  <data name="command.text.literal_7eb0372d4826" xml:space="preserve">
+    <value>No running scripts to reload.</value>
+  </data>
+  <data name="command.text.literal_7f4ed44c6d2f" xml:space="preserve">
+    <value> tps=unknown</value>
+  </data>
+  <data name="command.text.literal_8954159d65a4" xml:space="preserve">
+    <value>Enchant option clicked.</value>
+  </data>
+  <data name="command.text.literal_8aa60c0f14f6" xml:space="preserve">
+    <value>
+chat: muted ({0} held)</value>
+  </data>
+  <data name="command.text.literal_8b10ef81353a" xml:space="preserve">
+    <value>Unknown scoreboard objective '{0}'.</value>
+  </data>
+  <data name="command.text.literal_8b8a66009721" xml:space="preserve">
+    <value>Marked chunk ({0}, {1}) as loading.</value>
+  </data>
+  <data name="command.text.literal_8e6e90761d76" xml:space="preserve">
+    <value>'{0}': failed with no diagnostic</value>
+  </data>
+  <data name="command.text.literal_90492758410f" xml:space="preserve">
+    <value>Marked chunk ({0}, {1}) as loaded.</value>
+  </data>
+  <data name="command.text.literal_931019866793" xml:space="preserve">
+    <value>Write world.use(100, 64, -30).</value>
+  </data>
+  <data name="command.text.literal_9438940e3471" xml:space="preserve">
+    <value>This command requires entity handling to be enabled.</value>
+  </data>
+  <data name="command.text.literal_967b33add709" xml:space="preserve">
+    <value>Resolving Realms world '{0}'...</value>
+  </data>
+  <data name="command.text.literal_96effa5f94d8" xml:space="preserve">
+    <value>The chunk at that position is not loaded.</value>
+  </data>
+  <data name="command.text.literal_98e281b9af62" xml:space="preserve">
+    <value>Selected hotbar slot {0}.</value>
+  </data>
+  <data name="command.text.literal_99957960a498" xml:space="preserve">
+    <value> brand={0}</value>
+  </data>
+  <data name="command.text.literal_9a1ff46ff229" xml:space="preserve">
+    <value>upgrade was removed. Update through your package/distribution.</value>
+  </data>
+  <data name="command.text.literal_9a460854e191" xml:space="preserve">
+    <value>Write world.find_signs("Storage", 16, 10).</value>
+  </data>
+  <data name="command.text.literal_9d24d6363570" xml:space="preserve">
+    <value>Open the TUI management menu.</value>
+  </data>
+  <data name="command.text.literal_a26455adbeb2" xml:space="preserve">
+    <value>This protocol snapshot does not expose structured advancement data.</value>
+  </data>
+  <data name="command.text.literal_a2ba5f3aeb93" xml:space="preserve">
+    <value>Runs the '{0}' block from its script.</value>
+  </data>
+  <data name="command.text.literal_a3435427a1f2" xml:space="preserve">
+    <value> latency={0}ms (server-measured)</value>
+  </data>
+  <data name="command.text.literal_a398927ccb95" xml:space="preserve">
+    <value>Reload failed: {0}</value>
+  </data>
+  <data name="command.text.literal_a67ff6649412" xml:space="preserve">
+    <value>{0} identifies recipes by numeric network id, not by name, so '{1}' was not sent. This build cannot translate a name into that id, because the recipe-book updates on this version arrive as a recipe-display tree it does not decode.</value>
+  </data>
+  <data name="command.text.literal_a6bfd8c3b8df" xml:space="preserve">
+    <value>The hotbar slot must be 1-9.</value>
+  </data>
+  <data name="command.text.literal_a7b5a7a2caed" xml:space="preserve">
+    <value>Created '{0}' from template '{1}'.</value>
+  </data>
+  <data name="command.text.literal_a7e527827766" xml:space="preserve">
+    <value>The Realms service is busy (it may still be starting the world). Try again in a moment.</value>
+  </data>
+  <data name="command.text.literal_ad1a5d44cf74" xml:space="preserve">
+    <value>No plugin host is attached.</value>
+  </data>
+  <data name="command.text.literal_ad6edf3eed4d" xml:space="preserve">
+    <value> tps={0:0.00}</value>
+  </data>
+  <data name="command.text.literal_b0216d912b58" xml:space="preserve">
+    <value>Placed recipe {0}.</value>
+  </data>
+  <data name="command.text.literal_b0bee51326c2" xml:space="preserve">
+    <value>world.sign_text({0}, {1}, {2}) failed: {3}</value>
+  </data>
+  <data name="command.text.literal_b0fa233657d9" xml:space="preserve">
+    <value>Function '{0}' expects 3 argument(s) but got {1}.</value>
+  </data>
+  <data name="command.text.literal_b129e451418b" xml:space="preserve">
+    <value>Objective '{0}' has no scores yet.</value>
+  </data>
+  <data name="command.text.literal_b2064cf35a2a" xml:space="preserve">
+    <value>Beacon script file '{0}' not found.</value>
+  </data>
+  <data name="command.text.literal_b6dfc4b395ea" xml:space="preserve">
+    <value>Usage: scripts repl [--seed &lt;n&gt;] &lt;line&gt;.</value>
+  </data>
+  <data name="command.text.literal_b716183fb3a1" xml:space="preserve">
+    <value>the connection timed out with no traffic from the server</value>
+  </data>
+  <data name="command.text.literal_b98a549b8409" xml:space="preserve">
+    <value> latency=unknown</value>
+  </data>
+  <data name="command.text.literal_baa0edc1be03" xml:space="preserve">
+    <value>Set %{0}% to {1}.</value>
+  </data>
+  <data name="command.text.literal_baefaf4e16ad" xml:space="preserve">
+    <value>Unknown flag '{0}'. {1}</value>
+  </data>
+  <data name="command.text.literal_bc7fe3c02244" xml:space="preserve">
+    <value>This command requires terrain and movement handling to be enabled.</value>
+  </data>
+  <data name="command.text.literal_bf872a4b7a92" xml:space="preserve">
+    <value>Realms rejected this client version as outdated. Report a newer version and retry.</value>
+  </data>
+  <data name="command.text.literal_c2ac0a41bb80" xml:space="preserve">
+    <value>
+Try this: {0}</value>
+  </data>
+  <data name="command.text.literal_c998038fdb23" xml:space="preserve">
+    <value>Server dialogs require Minecraft 1.21.6 or newer.</value>
+  </data>
+  <data name="command.text.literal_c9f615b11a6a" xml:space="preserve">
+    <value>world.find_signs("{0}", {1}, {2}) failed: {3}</value>
+  </data>
+  <data name="command.text.literal_cc150daad175" xml:space="preserve">
+    <value>Usage: scripts new &lt;template&gt; &lt;id&gt;. Templates: {0}.</value>
+  </data>
+  <data name="command.text.literal_ccdf973745e7" xml:space="preserve">
+    <value>watch: off.</value>
+  </data>
+  <data name="command.text.literal_cf131526baa3" xml:space="preserve">
+    <value>Connection lost: {0}</value>
+  </data>
+  <data name="command.text.literal_d1c5559807c6" xml:space="preserve">
+    <value>Usage: scripts run &lt;id|file&gt; [--trace].</value>
+  </data>
+  <data name="command.text.literal_d21a923866ad" xml:space="preserve">
+    <value>I expected a sign text needle for 'world.find_signs', but found something else.</value>
+  </data>
+  <data name="command.text.literal_d23ed0481702" xml:space="preserve">
+    <value>lint: usage error.</value>
+  </data>
+  <data name="command.text.literal_d2d2e9a3ce51" xml:space="preserve">
+    <value>List nearby entities, or attack/use one.</value>
+  </data>
+  <data name="command.text.literal_d557278f559f" xml:space="preserve">
+    <value>the server closed the connection</value>
+  </data>
+  <data name="command.text.literal_d6cab298695a" xml:space="preserve">
+    <value>Realms world '{0}' resolved to {1}:{2}.</value>
+  </data>
+  <data name="command.text.literal_d7c7b594923a" xml:space="preserve">
+    <value>open the main launcher for MCC management workspaces</value>
+  </data>
+  <data name="command.text.literal_dbaf0a71b8e0" xml:space="preserve">
+    <value>Usage: scripts stop &lt;id|all&gt;.</value>
+  </data>
+  <data name="command.text.literal_dbc5224cea5d" xml:space="preserve">
+    <value>This command requires inventory handling to be enabled.</value>
+  </data>
+  <data name="command.text.literal_de28ba30d2e3" xml:space="preserve">
+    <value>Respawn request sent, but the server did not respawn you.</value>
+  </data>
+  <data name="command.text.literal_de7e870d7e08" xml:space="preserve">
+    <value>Reloaded {0} of {1} script(s): {2}</value>
+  </data>
+  <data name="command.text.literal_de9591fa55fd" xml:space="preserve">
+    <value>Provide a name for the item.</value>
+  </data>
+  <data name="command.text.literal_df5c0f506268" xml:space="preserve">
+    <value>not loaded</value>
+  </data>
+  <data name="command.text.literal_dff5454ba5fb" xml:space="preserve">
+    <value>That chunk column is not present.</value>
+  </data>
+  <data name="command.text.literal_e03f692a118a" xml:space="preserve">
+    <value>No configuration folder is loaded; nothing to reload.</value>
+  </data>
+  <data name="command.text.literal_e05452e831be" xml:space="preserve">
+    <value>the connection was cancelled</value>
+  </data>
+  <data name="command.text.literal_e11562bff638" xml:space="preserve">
+    <value>The 'on {0}' handler failed: {1}</value>
+  </data>
+  <data name="command.text.literal_e17449d1eda2" xml:space="preserve">
+    <value>Open a crafting menu first.</value>
+  </data>
+  <data name="command.text.literal_e2d732929471" xml:space="preserve">
+    <value>Show scoreboard objectives and their scores.</value>
+  </data>
+  <data name="command.text.literal_e382221ae5fc" xml:space="preserve">
+    <value>Stopped '{0}'.</value>
+  </data>
+  <data name="command.text.literal_e3a35a17417f" xml:space="preserve">
+    <value>'{0}': could not read '{1}': {2}</value>
+  </data>
+  <data name="command.text.literal_e3f21c981717" xml:space="preserve">
+    <value>Could not read '{0}': {1}</value>
+  </data>
+  <data name="command.text.literal_e5b432311c00" xml:space="preserve">
+    <value>'{0}': not found on disk</value>
+  </data>
+  <data name="command.text.literal_e87790615388" xml:space="preserve">
+    <value>world.use({0}, {1}, {2}) failed: {3}</value>
+  </data>
+  <data name="command.text.literal_e99b2280dc91" xml:space="preserve">
+    <value>  {0}  §7{1}§r</value>
+  </data>
+  <data name="command.text.literal_ef17a38f2056" xml:space="preserve">
+    <value>The Realms service returned an error. Try again later.</value>
+  </data>
+  <data name="command.text.literal_f08e42afb061" xml:space="preserve">
+    <value>'{0}' would change (run without --check to apply).</value>
+  </data>
+  <data name="command.text.literal_f1ad454480e0" xml:space="preserve">
+    <value>Put an item in the anvil first.</value>
+  </data>
+  <data name="command.text.literal_f5009d0e8cda" xml:space="preserve">
+    <value>Beacon script command '{0}' (from script '{1}').</value>
+  </data>
+  <data name="command.text.literal_f764fcfbf32f" xml:space="preserve">
+    <value>Formatted '{0}'.</value>
+  </data>
+  <data name="command.text.literal_fa46b6b226cd" xml:space="preserve">
+    <value>Rename the item in an open anvil.</value>
+  </data>
+  <data name="command.text.literal_fb9596501fe0" xml:space="preserve">
+    <value>open the searchable command and manual browser</value>
+  </data>
+  <data name="command.text.literal_fc65e3fe5480" xml:space="preserve">
+    <value>Wrap it in try/catch err and read err.message.</value>
+  </data>
+  <data name="command.text.literal_fc7ef1828115" xml:space="preserve">
+    <value>Could not write settings '{0}': {1}</value>
+  </data>
+  <data name="command.text.literal_fed85da6109b" xml:space="preserve">
+    <value>mute: {0} ({1} held)</value>
+  </data>
+</root>

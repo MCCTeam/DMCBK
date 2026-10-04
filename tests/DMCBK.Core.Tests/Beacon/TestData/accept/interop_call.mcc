@@ -1,0 +1,4 @@
+# beacon 1
+
+set report to call "shopkeeper.daily_report"()
+say report

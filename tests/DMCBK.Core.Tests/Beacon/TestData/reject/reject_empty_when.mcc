@@ -1,0 +1,5 @@
+# beacon 1
+on chat when
+  say "no filter"
+end on
+# expect: B0001

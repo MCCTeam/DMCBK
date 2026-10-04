@@ -1,0 +1,5 @@
+# beacon 1
+if food
+  say "hungry?"
+end if
+# expect: B3001

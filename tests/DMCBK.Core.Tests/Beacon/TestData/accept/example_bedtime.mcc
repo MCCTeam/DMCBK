@@ -1,0 +1,16 @@
+# beacon 1
+# needs: chat.send movement
+
+every 60 seconds
+  if time.hour >= 22 or time.hour < 6
+    if me.pos.y < 60
+      say "Night shift over, heading to bed. Back at sunrise."
+      start go_sleep()
+    end if
+  end if
+end every
+
+function go_sleep()
+  move_goto(120, 65, -40)
+  say "Goodnight. {time.ago(time.stamp)} of work done."
+end function

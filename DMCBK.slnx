@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="src/DMCBK.Core/DMCBK.Core.csproj" />
+  <Project Path="src/DMCBK.PluginSdk/DMCBK.PluginSdk.csproj" />
+  <Project Path="src/DMCBK.Testing/DMCBK.Testing.csproj" />
+   <Project Path="src/DMCBK.Commands/DMCBK.Commands.csproj" />
+  <Project Path="src/DMCBK.Beacon/DMCBK.Beacon.csproj" />
+  <Project Path="src/DMCBK.Configuration/DMCBK.Configuration.csproj"/>
+  <Project Path="src/DMCBK.Plugins/DMCBK.Plugins.csproj"/>
+  <Project Path="tests/DMCBK.Core.Tests/DMCBK.Core.Tests.csproj"/>
+  <Project Path="src/DMCBK/DMCBK.csproj"/>
+  <Project Path="src/DMCBK.Marketplace/DMCBK.Marketplace.csproj"/>
+</Solution>

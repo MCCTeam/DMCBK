@@ -1,0 +1,7 @@
+# beacon 1
+
+say "Hello everyone!"
+whisper "Steve" "Meet at spawn?"
+server "/home"
+set answer to mcc "/list"
+say "Online now: {answer}"

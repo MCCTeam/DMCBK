@@ -1,0 +1,3 @@
+# beacon 1
+export set coins 5
+# expect: B0001

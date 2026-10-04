@@ -1,0 +1,7 @@
+# beacon 1
+
+function greet(name)
+  return "Hello, {name}!"
+end function
+
+say greet("Steve")

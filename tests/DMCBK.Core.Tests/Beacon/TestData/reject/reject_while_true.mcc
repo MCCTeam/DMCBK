@@ -1,0 +1,5 @@
+# beacon 1
+while true
+  say "spinning"
+end while
+# expect: B3001

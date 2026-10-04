@@ -1,0 +1,559 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="plugin.text.literal_003a2c794b0a" xml:space="preserve">
+    <value>The manifest entry '{0}' does not exist.</value>
+  </data>
+  <data name="plugin.text.literal_015c88880111" xml:space="preserve">
+    <value>{0} {1} needs plugin SDK API {2} (this client provides {3}). Update the client to install it.</value>
+  </data>
+  <data name="plugin.text.literal_01f9db238bcf" xml:space="preserve">
+    <value>Plugin '{0}' is up to date ({1}).</value>
+  </data>
+  <data name="plugin.text.literal_0238ad564cd9" xml:space="preserve">
+    <value>command '{0}'</value>
+  </data>
+  <data name="plugin.text.literal_037c07f3eb47" xml:space="preserve">
+    <value>'{0}' is in more than one marketplace. Name which one:
+  {1}</value>
+  </data>
+  <data name="plugin.text.literal_04573ba90c64" xml:space="preserve">
+    <value>Plugin '{0}' registered the service contract '{1}', whose type is private to load context '{2}'. No other plugin can look it up: a plugin-defined type does not unify across collectible load contexts. Export the assembly that declares it ([exports] assemblies) and require this plugin from the caller, or use a type from the MCC SDK or the BCL.</value>
+  </data>
+  <data name="plugin.text.literal_07c664e7b1b3" xml:space="preserve">
+    <value>Reloaded plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_0807a17ec42d" xml:space="preserve">
+    <value>Plugin '{0}' declares manual pages but has no '{1}' folder; its pages are not available.</value>
+  </data>
+  <data name="plugin.text.literal_098a41b8d083" xml:space="preserve">
+    <value>
+  market    {0}</value>
+  </data>
+  <data name="plugin.text.literal_0aee1a8de785" xml:space="preserve">
+    <value>Downloading {0} timed out.</value>
+  </data>
+  <data name="plugin.text.literal_0b7e8ae46ef8" xml:space="preserve">
+    <value>Created plugin '{0}' in {1}:
+  {2}
+It is disabled. Read it, then run 'plugins enable {0}'.</value>
+  </data>
+  <data name="plugin.text.literal_0de94660360c" xml:space="preserve">
+    <value>'{0}' names a plugin in a marketplace, and no marketplaces are added. Install it from a GitHub owner/repo, a Git or archive URL, or a local folder.</value>
+  </data>
+  <data name="plugin.text.literal_0fa73a4029bd" xml:space="preserve">
+    <value>Catalogue entry '{0}' has the source path '{1}', which leaves the marketplace folder.</value>
+  </data>
+  <data name="plugin.text.literal_0fd80ea64ada" xml:space="preserve">
+    <value>Plugin '{0}' requires plugin '{1}' {2}, which is not installed. Refusing to load it.</value>
+  </data>
+  <data name="plugin.text.literal_1033b947c138" xml:space="preserve">
+    <value>Plugin '{0}' failed to activate: {1}</value>
+  </data>
+  <data name="plugin.text.literal_10b4291260e6" xml:space="preserve">
+    <value>No plugins are discovered.</value>
+  </data>
+  <data name="plugin.text.literal_13dea4288253" xml:space="preserve">
+    <value>Catalogue entry '{0}' needs a source with exactly one of path, github, git or archive.</value>
+  </data>
+  <data name="plugin.text.literal_163dfa437245" xml:space="preserve">
+    <value>Plugin '{0}' is pinned at {1}; run 'plugins unpin {0}' to let it move.</value>
+  </data>
+  <data name="plugin.text.literal_16da53dde2fe" xml:space="preserve">
+    <value>The download does not match its sha256 pin. Expected {0}, got {1}. Refusing to install it.</value>
+  </data>
+  <data name="plugin.text.literal_1a0156126d19" xml:space="preserve">
+    <value>lang/ ships {0} and no en.toml. English is where every other language falls back, so a key missing from those shows on screen as its own name.</value>
+  </data>
+  <data name="plugin.text.literal_1c6c96757967" xml:space="preserve">
+    <value>Plugin '{0}' targets plugin API {1}, but this client provides {2}. Refusing to load it.</value>
+  </data>
+  <data name="plugin.text.literal_1fb423730a9a" xml:space="preserve">
+    <value>Could not rewrite settings.toml for plugin '{0}': {1}</value>
+  </data>
+  <data name="plugin.text.literal_20c18cbaa462" xml:space="preserve">
+    <value>No plugin folder or .cs entry at '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_21835d76e292" xml:space="preserve">
+    <value>Updated {0} in the background.</value>
+  </data>
+  <data name="plugin.text.literal_21fe83bd359b" xml:space="preserve">
+    <value>The download is neither a zip nor a tar.gz archive.</value>
+  </data>
+  <data name="plugin.text.literal_22962e4c7d77" xml:space="preserve">
+    <value>Its plugin.lock.toml does not read: {0}</value>
+  </data>
+  <data name="plugin.text.literal_23903a10ad58" xml:space="preserve">
+    <value>The catalogue lists '{0}' twice. Each plugin id appears once.</value>
+  </data>
+  <data name="plugin.text.literal_24b9a1dab455" xml:space="preserve">
+    <value>lang/{0}.toml does not parse: {1}. Every key in it falls back to English, or to its own name.</value>
+  </data>
+  <data name="plugin.text.literal_256046916f5d" xml:space="preserve">
+    <value>{0} {1} needs MCC {2} (this client is {3}). Update the client to install it.</value>
+  </data>
+  <data name="plugin.text.literal_2636d7538028" xml:space="preserve">
+    <value>This session scope has no owning plugin, so it cannot register a command that anything would later unregister. Use the ISessionScope handed to you by PluginContext.SessionStarted or PluginContext.Session.</value>
+  </data>
+  <data name="plugin.text.literal_263ae2f945fc" xml:space="preserve">
+    <value>'{0}' is not a usable plugin id. Use lower-case letters, digits and '-', starting with a letter.</value>
+  </data>
+  <data name="plugin.text.literal_2ae644e95570" xml:space="preserve">
+    <value>An update is held back: {0}</value>
+  </data>
+  <data name="plugin.text.literal_2b3b8256e17f" xml:space="preserve">
+    <value>Plugin '{0}' is required by loaded plugin(s): {1}. Unload those first:
+  {2}</value>
+  </data>
+  <data name="plugin.text.literal_2e1c80085c02" xml:space="preserve">
+    <value>{0} {1} needs UMPK {2} (this client has {3}). Update the client to install it.</value>
+  </data>
+  <data name="plugin.text.literal_2e2be98ae225" xml:space="preserve">
+    <value>Plugin '{0}' requires MCC {1}, but this client is {2}. Refusing to load it.</value>
+  </data>
+  <data name="plugin.text.literal_2ee493d8a3a1" xml:space="preserve">
+    <value>No plugins directory is configured.</value>
+  </data>
+  <data name="plugin.text.literal_2f04e8089732" xml:space="preserve">
+    <value>The '[{0}]' table has an entry with no plugin id.</value>
+  </data>
+  <data name="plugin.text.literal_2fb2d3d4826b" xml:space="preserve">
+    <value>Adding the marketplace at {0} failed: {1}</value>
+  </data>
+  <data name="plugin.text.literal_33bfdb1a2b6c" xml:space="preserve">
+    <value>The {0} strings are {1} key(s) behind English; those print in English.</value>
+  </data>
+  <data name="plugin.text.literal_37919ca51290" xml:space="preserve">
+    <value>{0} plugin update(s) available, run 'plugins outdated'.</value>
+  </data>
+  <data name="plugin.text.literal_3a15936027c7" xml:space="preserve">
+    <value>Removed marketplace '{0}'. {1} stay installed but are no longer managed: update and uninstall will not touch them.</value>
+  </data>
+  <data name="plugin.text.literal_3b91b140db57" xml:space="preserve">
+    <value>Installing from {0} failed: {1}</value>
+  </data>
+  <data name="plugin.text.literal_421213c750cb" xml:space="preserve">
+    <value>
+  requires  {0}</value>
+  </data>
+  <data name="plugin.text.literal_423534994bc4" xml:space="preserve">
+    <value>No marketplace named '{0}' is added.</value>
+  </data>
+  <data name="plugin.text.literal_4462c16e699b" xml:space="preserve">
+    <value>Could not delete '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_44a1a6980426" xml:space="preserve">
+    <value>Loaded plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_4768027f505f" xml:space="preserve">
+    <value>The archive entry '{0}' points outside the folder it would be extracted into; refusing it.</value>
+  </data>
+  <data name="plugin.text.literal_47b5a3e1cd32" xml:space="preserve">
+    <value>Loaded {0}/{1} plugin(s).</value>
+  </data>
+  <data name="plugin.text.literal_4a338396c457" xml:space="preserve">
+    <value>'{0}' is not a version.</value>
+  </data>
+  <data name="plugin.text.literal_4ae4b80e0b8d" xml:space="preserve">
+    <value>Marketplace '{0}' auto-update is now '{1}'.</value>
+  </data>
+  <data name="plugin.text.literal_4d9c44f31a77" xml:space="preserve">
+    <value>Refreshing '{0}' failed: {1}</value>
+  </data>
+  <data name="plugin.text.literal_5038e4541709" xml:space="preserve">
+    <value>Has thrown {0} time(s) since it loaded. {1}</value>
+  </data>
+  <data name="plugin.text.literal_50ba1ec14392" xml:space="preserve">
+    <value>Plugin '{0}' has no plugin.lock.toml, so MCC did not install it and will not {1} it. It is yours: edit or remove the folder yourself.</value>
+  </data>
+  <data name="plugin.text.literal_5168f7f7ebb4" xml:space="preserve">
+    <value>Rewrote settings.toml for plugin '{0}': values kept, comments in the current language.</value>
+  </data>
+  <data name="plugin.text.literal_51a3d5ee0186" xml:space="preserve">
+    <value>Plugin '{0}' already offers the service contract '{1}'. One plugin implements a contract; use the messenger for a broadcast that many can answer.</value>
+  </data>
+  <data name="plugin.text.literal_524f89d31bdf" xml:space="preserve">
+    <value>Plugin '{0}' threw {1} times in {2}s and has been disabled. Last error: {3}</value>
+  </data>
+  <data name="plugin.text.literal_52fb73aae549" xml:space="preserve">
+    <value>No mcc-marketplace.toml at '{0}'. A marketplace is a repository, folder or URL that serves that file from its root.</value>
+  </data>
+  <data name="plugin.text.literal_535634a9c42f" xml:space="preserve">
+    <value>Install {0} {1}?</value>
+  </data>
+  <data name="plugin.text.literal_53c9b585d437" xml:space="preserve">
+    <value>Invalid plugin.toml: {0}</value>
+  </data>
+  <data name="plugin.text.literal_570c95458daa" xml:space="preserve">
+    <value>Plugin '{0}' requires {1}, which is not installed. Install it first; resolving dependencies from a marketplace is not available until one is added.</value>
+  </data>
+  <data name="plugin.text.literal_58129c8b2e59" xml:space="preserve">
+    <value>Plugins ({0}):</value>
+  </data>
+  <data name="plugin.text.literal_5b291683fe66" xml:space="preserve">
+    <value>{verb} {d}</value>
+  </data>
+  <data name="plugin.text.literal_5b43c753902b" xml:space="preserve">
+    <value>
+  entry     {0} (source file, {1} lines you can read before you run it)</value>
+  </data>
+  <data name="plugin.text.literal_5c820c59051e" xml:space="preserve">
+    <value>No marketplaces are added.</value>
+  </data>
+  <data name="plugin.text.literal_5e13cec3b17b" xml:space="preserve">
+    <value>Uninstalled plugin '{0}'. Its settings and data were moved to {1}; add 'purge' to delete them.</value>
+  </data>
+  <data name="plugin.text.literal_5e87af09fd28" xml:space="preserve">
+    <value>
+  uses      {0} (declared by the author, not enforced)</value>
+  </data>
+  <data name="plugin.text.literal_60b063b5c9c5" xml:space="preserve">
+    <value>The code reads '{0}', and this line puts it in the [{1}] table, so it resolves as '{1}.{0}' and the plugin prints the bare key name. Keys outside a table come first in a TOML file.</value>
+  </data>
+  <data name="plugin.text.literal_625f8ca31f09" xml:space="preserve">
+    <value>no output</value>
+  </data>
+  <data name="plugin.text.literal_63b792ac9bcf" xml:space="preserve">
+    <value>git clone of {0} failed: {1}</value>
+  </data>
+  <data name="plugin.text.literal_6486213cc514" xml:space="preserve">
+    <value>Updating '{0}' failed: {1}</value>
+  </data>
+  <data name="plugin.text.literal_64c2e931f388" xml:space="preserve">
+    <value>The manifest declares the manual topic '{0}', and there is no man/en/{0}.md.</value>
+  </data>
+  <data name="plugin.text.literal_660d8ab0e956" xml:space="preserve">
+    <value>A catalogue entry has no 'id'.</value>
+  </data>
+  <data name="plugin.text.literal_67b6ea115e75" xml:space="preserve">
+    <value>Update {0} from {1} to {2}?</value>
+  </data>
+  <data name="plugin.text.literal_6952a26e3908" xml:space="preserve">
+    <value>Plugin '{0}' failed to compile:
+{1}</value>
+  </data>
+  <data name="plugin.text.literal_6a7cba404f6d" xml:space="preserve">
+    <value>The download from {0} is larger than {1} MB. Refusing it.</value>
+  </data>
+  <data name="plugin.text.literal_6b026d369d27" xml:space="preserve">
+    <value>Removed marketplace '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_6c8102e6ebe9" xml:space="preserve">
+    <value>Install of '{0}' was declined; nothing changed.</value>
+  </data>
+  <data name="plugin.text.literal_6e047dd94382" xml:space="preserve">
+    <value>Installing from an arbitrary Git URL needs '{0}' on PATH, and this host has none. Install Git, or use a GitHub owner/repo or an archive URL, which download over HTTPS.</value>
+  </data>
+  <data name="plugin.text.literal_6f480ea55e4e" xml:space="preserve">
+    <value>Unpinned plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_7032fd2b1cb8" xml:space="preserve">
+    <value>No installed plugin came from a marketplace or a URL, so there is nothing to update.</value>
+  </data>
+  <data name="plugin.text.literal_706f9f12c50c" xml:space="preserve">
+    <value>a scheduled callback</value>
+  </data>
+  <data name="plugin.text.literal_71b7ebc10285" xml:space="preserve">
+    <value>No plugin.toml found in '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_71d06c2ebf7a" xml:space="preserve">
+    <value>Added marketplace '{0}' from {1}: {2} plugin(s). Auto-update is off; search it with 'plugins search &lt;text&gt; in {0}'.</value>
+  </data>
+  <data name="plugin.text.literal_726370de4a29" xml:space="preserve">
+    <value>Plugin '{0}' declares no settings type, so it has no settings.toml.</value>
+  </data>
+  <data name="plugin.text.literal_76f652b16079" xml:space="preserve">
+    <value>Plugin '{0}' is not loaded.</value>
+  </data>
+  <data name="plugin.text.literal_774e810ee49b" xml:space="preserve">
+    <value>Plugin '{0}' registered the message contract '{1}', whose type is private to load context '{2}'. No other plugin can send or receive it: a plugin-defined type does not unify across collectible load contexts. Move the contract into a shared assembly listed in deps, or use a type from the MCC SDK or the BCL.</value>
+  </data>
+  <data name="plugin.text.literal_78af86891326" xml:space="preserve">
+    <value>'{0}' is reserved for MCC's own catalogue ({1}). Add this one under another name with 'as &lt;name&gt;'.</value>
+  </data>
+  <data name="plugin.text.literal_80eeb92fec3e" xml:space="preserve">
+    <value>
+  source    {0}</value>
+  </data>
+  <data name="plugin.text.literal_8344eae76341" xml:space="preserve">
+    <value>Plugin '{0}' is already loaded.</value>
+  </data>
+  <data name="plugin.text.literal_83cb472d9899" xml:space="preserve">
+    <value>plugins install {c}</value>
+  </data>
+  <data name="plugin.text.literal_8472f8260439" xml:space="preserve">
+    <value>Enabled plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_8524ec777f90" xml:space="preserve">
+    <value>Marketplace entry '{0}' says version {1}, but the plugin.toml that was fetched says {2}. The fetched manifest is what gets installed.</value>
+  </data>
+  <data name="plugin.text.literal_8528bfb5a2b5" xml:space="preserve">
+    <value>Plugin '{0}' is not loaded, so it has no settings file to rewrite.</value>
+  </data>
+  <data name="plugin.text.literal_85f1730ff770" xml:space="preserve">
+    <value>
+  also      {0} (fetched too)</value>
+  </data>
+  <data name="plugin.text.literal_86360ad47ecf" xml:space="preserve">
+    <value>Catalogue entry '{0}' has no 'version'.</value>
+  </data>
+  <data name="plugin.text.literal_870e9cb736ba" xml:space="preserve">
+    <value>Plugins run in-process with no sandbox; only load plugins you trust.</value>
+  </data>
+  <data name="plugin.text.literal_893c03cf01c4" xml:space="preserve">
+    <value>'{0}' is not a marketplace source. Use a GitHub owner/repo (optionally @ref), a Git URL, an HTTPS URL ending in mcc-marketplace.toml, or a local folder.</value>
+  </data>
+  <data name="plugin.text.literal_902322e3195b" xml:space="preserve">
+    <value>A responder for the message contract '{0}' is already registered.</value>
+  </data>
+  <data name="plugin.text.literal_90c97a9b4f66" xml:space="preserve">
+    <value>Ships no strings for {0}, so everything it says is in English.</value>
+  </data>
+  <data name="plugin.text.literal_9198cfd16503" xml:space="preserve">
+    <value>{verb} {id}</value>
+  </data>
+  <data name="plugin.text.literal_9381d40f8b40" xml:space="preserve">
+    <value>'{0}' is not a version range for '{1}'. Use npm syntax: *, 1.2.3, &gt;=1.2, ^1.2, ~1.2.3, a space for AND, || for OR.</value>
+  </data>
+  <data name="plugin.text.literal_941fb4a064e8" xml:space="preserve">
+    <value>That repository is a marketplace catalogue, not a plugin. Add it with 'plugins marketplace add &lt;source&gt;', then install a plugin from it by id.</value>
+  </data>
+  <data name="plugin.text.literal_94eef2eca946" xml:space="preserve">
+    <value>Catalogue entry '{0}' has '{1} = "{2}"', which is not an http, https, ssh or git URL. Refusing it: that value is handed to a fetcher.</value>
+  </data>
+  <data name="plugin.text.literal_96d4aa8e37cd" xml:space="preserve">
+    <value>Installing '{0}' failed while replacing the folder: {1}. The previous version was put back.</value>
+  </data>
+  <data name="plugin.text.literal_98b4c4e19d68" xml:space="preserve">
+    <value>Failed to load plugin '{0}': {1}</value>
+  </data>
+  <data name="plugin.text.literal_995be97668b2" xml:space="preserve">
+    <value>'{0}' is not a version range.</value>
+  </data>
+  <data name="plugin.text.literal_9bd2860d2ea5" xml:space="preserve">
+    <value>
+  entry     {0} (compiled assembly)</value>
+  </data>
+  <data name="plugin.text.literal_9cbc755ee985" xml:space="preserve">
+    <value>Plugin '{0}' is required by loaded plugin(s): {1}. Disable those first:
+  {2}</value>
+  </data>
+  <data name="plugin.text.literal_a13b8bbe8925" xml:space="preserve">
+    <value>No plugin named '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_a25e034cc25a" xml:space="preserve">
+    <value>Plugin '{0}' requires plugin '{1}' {2}, which is not installed and is in no added marketplace.</value>
+  </data>
+  <data name="plugin.text.literal_a4b5ce3cfcda" xml:space="preserve">
+    <value>Plugin '{0}' threw from its subscriber for message contract '{1}'.</value>
+  </data>
+  <data name="plugin.text.literal_a5ae22b79767" xml:space="preserve">
+    <value>Reloaded {0} plugin(s).</value>
+  </data>
+  <data name="plugin.text.literal_a769869e4a83" xml:space="preserve">
+    <value>Plugin '{0}' threw from DeactivateAsync: {1}. The unload continued.</value>
+  </data>
+  <data name="plugin.text.literal_a86dc467ed8a" xml:space="preserve">
+    <value>No IPlugin implementation found in '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_a9475ae61c62" xml:space="preserve">
+    <value>Plugin '{0}' exports '{1}', which is not in its folder; dependents will not see it.</value>
+  </data>
+  <data name="plugin.text.literal_ac37212dfc4b" xml:space="preserve">
+    <value>'{0}' is not a usable plugin id. Use letters, digits, '-', '_' or '.', and do not start with '.'.</value>
+  </data>
+  <data name="plugin.text.literal_b08a39242c87" xml:space="preserve">
+    <value>Installed plugin '{0}' {1}.</value>
+  </data>
+  <data name="plugin.text.literal_b2632e120900" xml:space="preserve">
+    <value>Was installed from marketplace '{0}', which is no longer added, so update cannot reach it. Add it again, or treat the plugin as local.</value>
+  </data>
+  <data name="plugin.text.literal_b299f68779df" xml:space="preserve">
+    <value>Plugin '{0}' is in a dependency cycle ({1}). Every plugin in a cycle is refused, because none of them can be loaded before the others.</value>
+  </data>
+  <data name="plugin.text.literal_b2ac90ec3c2e" xml:space="preserve">
+    <value>a command</value>
+  </data>
+  <data name="plugin.text.literal_b5b60e9231a8" xml:space="preserve">
+    <value>plugins disable</value>
+  </data>
+  <data name="plugin.text.literal_b8131314901f" xml:space="preserve">
+    <value>event {0}</value>
+  </data>
+  <data name="plugin.text.literal_b85eb111ae11" xml:space="preserve">
+    <value>A marketplace named '{0}' is already added. Remove it first, or add this one under another name with 'as &lt;name&gt;'.</value>
+  </data>
+  <data name="plugin.text.literal_b8bf8204dcc5" xml:space="preserve">
+    <value>Catalogue entry '{0}' points at '{1}', which this marketplace does not have. Refresh it, or tell its maintainer.</value>
+  </data>
+  <data name="plugin.text.literal_bb9cf61fd8e7" xml:space="preserve">
+    <value>Applying a staged plugin update after the session ended failed.</value>
+  </data>
+  <data name="plugin.text.literal_beb9a1e6df9a" xml:space="preserve">
+    <value>Duplicate plugin id '{0}'; skipping the later one.</value>
+  </data>
+  <data name="plugin.text.literal_c1251a4748b8" xml:space="preserve">
+    <value>{0} plugin update(s) are staged and will be applied when this session ends, or now if you run 'plugins update'.</value>
+  </data>
+  <data name="plugin.text.literal_c57b683ebcc5" xml:space="preserve">
+    <value>Plugin '{0}' threw from {1}</value>
+  </data>
+  <data name="plugin.text.literal_c8af96f2f95d" xml:space="preserve">
+    <value>Unloaded plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_c9e60f148360" xml:space="preserve">
+    <value>Plugin '{0}' {1} was asked for, but that source offers {2}.</value>
+  </data>
+  <data name="plugin.text.literal_cd5f6e9179ad" xml:space="preserve">
+    <value>Installed plugin '{0}' {1}, with {2}.</value>
+  </data>
+  <data name="plugin.text.literal_ce2bc8f9155c" xml:space="preserve">
+    <value>Requires plugin(s) that are not installed: {0}.</value>
+  </data>
+  <data name="plugin.text.literal_ce5cdb1d5916" xml:space="preserve">
+    <value>Plugin '{0}' requires plugin '{1}' {2}, but the installed '{1}' is {3}. Refusing to load it.</value>
+  </data>
+  <data name="plugin.text.literal_cf08df1127a0" xml:space="preserve">
+    <value>Invalid {0}: {1}</value>
+  </data>
+  <data name="plugin.text.literal_cf33f165d3da" xml:space="preserve">
+    <value>{0} stale compile output(s) in {1}. They are rebuilt when the source changes; delete the folder to reclaim the space.</value>
+  </data>
+  <data name="plugin.text.literal_d091df840796" xml:space="preserve">
+    <value>Disabled plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_d34207639b07" xml:space="preserve">
+    <value>plugins unload</value>
+  </data>
+  <data name="plugin.text.literal_d534f64609e9" xml:space="preserve">
+    <value>The swap of '{0}' failed AND the old folder could not be put back. It is at '{1}'; move it back by hand.</value>
+  </data>
+  <data name="plugin.text.literal_d6e6e97cf6e0" xml:space="preserve">
+    <value>Could not reach {0}: {1}</value>
+  </data>
+  <data name="plugin.text.literal_d836eb94555b" xml:space="preserve">
+    <value>Could not scaffold plugin '{0}': {1}</value>
+  </data>
+  <data name="plugin.text.literal_d961c41cc81a" xml:space="preserve">
+    <value>The fetched source has no plugin.toml at its root, in its single top folder, or one level below.</value>
+  </data>
+  <data name="plugin.text.literal_d96f2aba6ce5" xml:space="preserve">
+    <value>Plugin '{0}' requires UMPK {1}, but this client has {2}. Refusing to load it.</value>
+  </data>
+  <data name="plugin.text.literal_da5a42e18149" xml:space="preserve">
+    <value>'{0}' already exists. Choose another id, or remove the folder first.</value>
+  </data>
+  <data name="plugin.text.literal_dad737473512" xml:space="preserve">
+    <value>Name what to install: an id, owner/repo, a URL, or a folder.</value>
+  </data>
+  <data name="plugin.text.literal_db575c52e54c" xml:space="preserve">
+    <value>Plugin '{0}' was toggled for this run, but its plugin.toml could not be updated: {1}. The change is lost on the next start.</value>
+  </data>
+  <data name="plugin.text.literal_dbc8fab93bd6" xml:space="preserve">
+    <value>Reloaded plugin '{0}' and its dependent(s): {1}.</value>
+  </data>
+  <data name="plugin.text.literal_df238e31d26e" xml:space="preserve">
+    <value>Updated plugin '{0}' from {1} to {2}. Your settings.toml and data/ were kept.</value>
+  </data>
+  <data name="plugin.text.literal_e0276268e3c9" xml:space="preserve">
+    <value>Downloading {0} failed with HTTP {1}.</value>
+  </data>
+  <data name="plugin.text.literal_e0d5145990bb" xml:space="preserve">
+    <value>Refreshed '{0}': {1} plugin(s).</value>
+  </data>
+  <data name="plugin.text.literal_e539740e3751" xml:space="preserve">
+    <value>'{0}' has no plugin.toml, so nothing loads from it. Delete it, or give it a manifest.</value>
+  </data>
+  <data name="plugin.text.literal_e548dc65850c" xml:space="preserve">
+    <value>A settings comment references the placeholder ${0}$, which en.toml does not have, so plugin '{1}' writes the key name into settings.toml where the comment should be.</value>
+  </data>
+  <data name="plugin.text.literal_e62433e61c71" xml:space="preserve">
+    <value>Was disabled after throwing too often. {0}</value>
+  </data>
+  <data name="plugin.text.literal_e643ff34c6c2" xml:space="preserve">
+    <value>'{0}' is not a usable marketplace name. Use letters, digits, '-', '_' or '.'.</value>
+  </data>
+  <data name="plugin.text.literal_e74d69f576ee" xml:space="preserve">
+    <value>The message contract '{0}' does not unify across plugins: plugin '{1}' uses the copy from load context '{2}' while plugin '{3}' uses the copy from load context '{4}'. Each plugin loads into its own collectible AssemblyLoadContext, so two private copies of one declaration are two different runtime types and the payload cannot cross between them. Move the contract into a shared assembly listed in both manifests' deps, or use a type from the MCC SDK or the BCL.</value>
+  </data>
+  <data name="plugin.text.literal_e8b5da200c29" xml:space="preserve">
+    <value>'{0}' is not a policy. Use off, check or apply.</value>
+  </data>
+  <data name="plugin.text.literal_ea2f15794efc" xml:space="preserve">
+    <value>Invalid mcc-marketplace.toml: {0}</value>
+  </data>
+  <data name="plugin.text.literal_eb006328fb7c" xml:space="preserve">
+    <value>The swap of '{0}' failed, so the previous folder was restored.</value>
+  </data>
+  <data name="plugin.text.literal_eb8f5916c74c" xml:space="preserve">
+    <value>Uninstalled plugin '{0}'.</value>
+  </data>
+  <data name="plugin.text.literal_edd979044b5c" xml:space="preserve">
+    <value>Catalogue entry '{0}' has '{1} = "{2}"', which is not a version range.</value>
+  </data>
+  <data name="plugin.text.literal_ee47c1b65807" xml:space="preserve">
+    <value>Plugin '{0}' requires plugin '{1}', which is not loaded. Load it first: plugins enable {1}</value>
+  </data>
+  <data name="plugin.text.literal_ef8d23db63f2" xml:space="preserve">
+    <value>Pinned plugin '{0}' at {1}.</value>
+  </data>
+  <data name="plugin.text.literal_f056362f85ec" xml:space="preserve">
+    <value>Marketplace '{0}' lists no plugin named '{1}'.</value>
+  </data>
+  <data name="plugin.text.literal_f186f479f8d0" xml:space="preserve">
+    <value>Name where the marketplace is: a GitHub owner/repo, a Git or catalogue URL, or a folder.</value>
+  </data>
+  <data name="plugin.text.literal_f2cafcea8c9d" xml:space="preserve">
+    <value>No plugins to reload.</value>
+  </data>
+  <data name="plugin.text.literal_f3990eb3f10f" xml:space="preserve">
+    <value>'{0}' is not something this client can install. Use a plugin id, a plugin id@marketplace, a GitHub owner/repo (optionally @ref), a Git or archive URL, or a local folder.</value>
+  </data>
+  <data name="plugin.text.literal_f5949d0a30b9" xml:space="preserve">
+    <value>Reloaded the plugin(s) that require it: {0}.</value>
+  </data>
+  <data name="plugin.text.literal_f67bec1be939" xml:space="preserve">
+    <value>Reset settings.toml for plugin '{0}' to its defaults.</value>
+  </data>
+  <data name="plugin.text.literal_f7d21c37d5aa" xml:space="preserve">
+    <value>The code reads '{0}', which en.toml does not have; it will print as its own name.</value>
+  </data>
+  <data name="plugin.text.literal_f7fe75652421" xml:space="preserve">
+    <value>Plugin '{0}' has a lock file with no source, so there is nowhere to update it from.</value>
+  </data>
+  <data name="plugin.text.literal_fa46316087b2" xml:space="preserve">
+    <value>Plugin '{0}' did not finish DeactivateAsync within {1}s. Its cancellation token was signalled and the unload continued; anything it still holds open is leaked until the process exits.</value>
+  </data>
+  <data name="plugin.text.literal_fc241eb8568c" xml:space="preserve">
+    <value>No added marketplace lists a plugin named '{0}'. Refresh with 'plugins marketplace refresh', or install it from a GitHub owner/repo, a Git or archive URL, or a local folder.</value>
+  </data>
+  <data name="plugin.text.literal_ff2f1d29816c" xml:space="preserve">
+    <value>The UMPK engine assembly carries no version this client can read ('{0}'); treating it as 0.0.0. A plugin declaring a 'umpk' range will be refused until the engine is versioned.</value>
+  </data>
+  <data name="compatibility.api" xml:space="preserve">
+    <value>This release requires plugin API {0}; the host provides {1}.</value>
+  </data>
+  <data name="compatibility.application" xml:space="preserve">
+    <value>Application '{0}' version {1} is outside the release's host constraints: {2}.</value>
+  </data>
+  <data name="compatibility.asset-unavailable" xml:space="preserve">
+    <value>Release {0} has no suitable asset for process target {1}.</value>
+  </data>
+  <data name="compatibility.capability" xml:space="preserve">
+    <value>This release requires unavailable capability: {0}.</value>
+  </data>
+  <data name="compatibility.dmcbk" xml:space="preserve">
+    <value>This release requires DMCBK {0}; the host provides {1}.</value>
+  </data>
+  <data name="compatibility.source-fallback-required" xml:space="preserve">
+    <value>Release {0} has no compiled asset for {1}. Explicitly enable source fallback to use its source asset.</value>
+  </data>
+  <data name="compatibility.umpk" xml:space="preserve">
+    <value>This release requires UMPK {0}; the host provides {1}.</value>
+  </data>
+  <data name="compatibility.framework" xml:space="preserve">
+    <value>This release requires unsupported framework {0}.</value>
+  </data>
+  <data name="compatibility.target" xml:space="preserve">
+    <value>This release targets {0}; the process target is {1}.</value>
+  </data>
+</root>

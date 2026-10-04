@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>Collectible compiled and single-file source plugin runtime for DMCBK.</Description><RootNamespace>DMCBK.Plugins</RootNamespace><AssemblyName>DMCBK.Plugins</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DMCBK.Core/DMCBK.Core.csproj"/>
+    <ProjectReference Include="../DMCBK.Commands/DMCBK.Commands.csproj"/>
+    <ProjectReference Include="../DMCBK.PluginSdk/DMCBK.PluginSdk.csproj"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
+  </ItemGroup>
+  <ItemGroup><InternalsVisibleTo Include="DMCBK.Testing"/><InternalsVisibleTo Include="DMCBK.Core.Tests"/></ItemGroup>
+<ItemGroup><InternalsVisibleTo Include="DMCBK.OfficialPlugins.Tests"/><InternalsVisibleTo Include="Mcc.Cli.Tests"/></ItemGroup>
+</Project>

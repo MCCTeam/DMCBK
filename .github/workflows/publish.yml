@@ -1,0 +1,58 @@
+name: Publish
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing annotated v<version> tag
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: publish-${{ inputs.release_tag || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  validation:
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ inputs.release_tag || github.ref_name }}
+  publish:
+    name: Publish NuGet packages
+    needs: validation
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.401
+      - name: Check release tag and package version
+        shell: bash
+        run: |
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]
+          git fetch origin master
+          test "$(git cat-file -t "refs/tags/$RELEASE_TAG")" = tag
+          git merge-base --is-ancestor "$(git rev-list -n 1 "$RELEASE_TAG")" origin/master
+          version=$(dotnet msbuild src/DMCBK/DMCBK.csproj -nologo -getProperty:Version)
+          test "v$version" = "$RELEASE_TAG"
+      - name: Pack
+        run: dotnet pack DMCBK.slnx -c Release -o artifacts/packages
+      - name: Obtain a temporary NuGet key
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+      - name: Publish
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: dotnet nuget push "artifacts/packages/*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate

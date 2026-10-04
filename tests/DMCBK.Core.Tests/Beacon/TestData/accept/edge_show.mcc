@@ -1,0 +1,4 @@
+# beacon 1
+
+set answer to mcc "/list"
+show "would say: Online now: {answer}"

@@ -1,0 +1,4 @@
+# beacon 1
+
+extern price_of from "shop"
+say price_of("bread")

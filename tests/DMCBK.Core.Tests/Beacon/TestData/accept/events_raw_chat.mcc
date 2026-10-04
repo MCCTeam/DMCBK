@@ -1,0 +1,12 @@
+# beacon 1
+
+on raw_chat
+  show raw
+  show category
+  show body
+  show verified
+end on
+
+on raw_chat when category is "player"
+  show "{sender}: {body}"
+end on

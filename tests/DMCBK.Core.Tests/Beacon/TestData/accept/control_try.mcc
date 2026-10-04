@@ -1,0 +1,7 @@
+# beacon 1
+
+try
+  server "/home"
+catch err
+  say "Could not go home: {err.message}"
+end try

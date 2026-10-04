@@ -1,0 +1,5 @@
+# beacon 1
+
+on whisper
+  show "{player}|{message}|{raw}"
+end on

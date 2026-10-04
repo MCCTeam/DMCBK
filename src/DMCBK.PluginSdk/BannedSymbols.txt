@@ -1,0 +1,1 @@
+T:System.Console; The plugin contract assembly must not touch the console. Console I/O belongs in a host (Mcc.Cli).

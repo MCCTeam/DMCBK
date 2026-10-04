@@ -1,0 +1,20 @@
+# beacon 1
+
+set log to "start"
+try
+  set log to "try"
+  server "/home"
+catch err
+  set log to "catch"
+finally
+  set log to "{log}+finally"
+end try
+show log
+
+try
+  set x to 1
+catch err
+  show "unreached"
+finally
+  show "cleanup runs"
+end try

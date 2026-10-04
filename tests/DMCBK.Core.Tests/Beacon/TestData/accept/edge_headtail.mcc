@@ -1,0 +1,13 @@
+# beacon 1
+
+if health < 10 then:
+  say "low"
+end if
+
+on join:
+  say "hi"
+end on
+
+every 60 seconds:
+  say "tick"
+end every

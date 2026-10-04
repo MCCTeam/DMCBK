@@ -1,0 +1,5 @@
+# beacon 1
+
+set warns to saved("warns") or {}
+set warns[player] to (warns[player] or 0) + 1
+save "warns" to warns

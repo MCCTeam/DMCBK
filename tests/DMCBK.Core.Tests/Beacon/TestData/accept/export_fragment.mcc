@@ -1,0 +1,5 @@
+# beacon 1
+
+export function daily_report()
+  return "Sales today: {saved("sales_total") or 0} coins."
+end function

@@ -1,0 +1,2 @@
+# expect: B0001
+say "no header here"

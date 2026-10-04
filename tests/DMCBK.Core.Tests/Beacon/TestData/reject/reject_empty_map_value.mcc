@@ -1,0 +1,3 @@
+# beacon 1
+set x to {name: }
+# expect: B0001

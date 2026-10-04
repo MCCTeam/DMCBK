@@ -1,0 +1,7 @@
+# beacon 1
+# setting thirst = 5 ; seconds between sips
+# setting nick = "bot" ; display name
+
+show settings.thirst
+show settings.nick
+assert(settings.thirst is 5, "default applies")
