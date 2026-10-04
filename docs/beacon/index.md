@@ -7,6 +7,7 @@ You can test calculations without a Minecraft server. Game actions need a live s
 | Start here | What it covers |
 | --- | --- |
 | [First script](getting-started.md) | Files, headers, host composition and offline execution |
+| [Recipes from MCC](recipes.md) | Complete practical scripts and a simulated event test |
 | [Language](language.md) | Values, expressions, blocks, functions, tasks and errors |
 | [Events and game APIs](events-and-game.md) | Event fields, timers, chat, inventory, world, movement and dialogs |
 | [State and integrations](state-and-integrations.md) | Settings, persistence, imports, exports, files, network and plugins |
