@@ -48,7 +48,7 @@ The guide text defines technical terms as they appear. Instructions use short, d
 | RID | A runtime identifier, such as `win-x64`, that describes an operating system and process architecture. |
 | Asset | One source or compiled archive for a plugin release. |
 
-The examples use DMCBK `0.1.0-preview.1`, UMPK `0.9.0-beta.4`, .NET 10 and C# 14. Former `Mcc`-prefixed types now use `Dmcbk`. Plugin authors do not need MCC source.
+The examples use DMCBK `0.1.0-preview.2`, UMPK `0.9.0-beta.4`, .NET 10 and C# 14. Former `Mcc`-prefixed types now use `Dmcbk`. Plugin authors do not need MCC source.
 
 ## Use examples correctly
 
@@ -76,7 +76,7 @@ The runnable samples use pinned package versions. The tutorial verification prog
 | Hash | A digest used to check that downloaded bytes match expected bytes |
 | Immutable | Fixed after publication or installation, rather than edited in place |
 | Pin | A local policy that prevents changing a selected plugin version |
-| Prerelease | A version such as `0.1.0-preview.1` that precedes a stable release |
+| Prerelease | A version such as `0.1.0-preview.2` that precedes a stable release |
 
 ## Report a documentation problem
 

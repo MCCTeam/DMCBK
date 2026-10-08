@@ -3,14 +3,14 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="DMCBK.Core" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.Commands" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.Configuration" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.Beacon" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.PluginSdk" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.Plugins" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.Marketplace" Version="0.1.0-preview.1"/>
-    <PackageVersion Include="DMCBK.Testing" Version="0.1.0-preview.1"/>
+    <PackageVersion Include="DMCBK.Core" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.Commands" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.Configuration" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.Beacon" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.PluginSdk" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.Plugins" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.Marketplace" Version="0.1.0-preview.2"/>
+    <PackageVersion Include="DMCBK.Testing" Version="0.1.0-preview.2"/>
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.11" />

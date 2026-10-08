@@ -31,7 +31,7 @@ try
         entry = "Probe.cs"
         framework = "net10.0"
         api-version = "1.0"
-        dmcbk = ">=0.1.0-preview.1 <0.2.0"
+        dmcbk = ">=0.1.0-preview.2 <0.2.0"
         umpk = ">=0.9.0-beta.4 <0.10.0"
         """);
     string output = Path.Combine(workspace, "packages");

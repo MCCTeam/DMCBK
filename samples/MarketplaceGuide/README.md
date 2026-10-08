@@ -6,7 +6,7 @@ The custom HTTP handler serves the generated archive from disk. The example URL 
 
 ## Run the sample
 
-1. Restore DMCBK `0.1.0-preview.1` from your configured NuGet sources.
+1. Restore DMCBK `0.1.0-preview.2` from your configured NuGet sources.
 2. Run the program from the repository root.
 
 ```bash

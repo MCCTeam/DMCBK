@@ -9,7 +9,7 @@ For a small plugin, one C# file can serve both purposes. A larger plugin can use
 1. Install the .NET 10 SDK.
 2. Check the installation with `dotnet --version`.
 3. Select an empty work directory.
-4. Check that your NuGet source contains DMCBK `0.1.0-preview.1`.
+4. Check that your NuGet source contains DMCBK `0.1.0-preview.2`.
 
 If this preview is not available on your configured feed, use the [local package instructions](../../getting-started/installation.md). Do not replace the package reference with a reference to MCC source.
 
@@ -20,7 +20,7 @@ Run these commands from your work directory:
 ```sh
 dotnet new classlib --framework net10.0 --name SessionJournal
 cd SessionJournal
-dotnet add package DMCBK.PluginSdk --version 0.1.0-preview.1
+dotnet add package DMCBK.PluginSdk --version 0.1.0-preview.2
 ```
 
 1. Remove `Class1.cs`.
@@ -76,7 +76,7 @@ target = "any"
 entry = "SessionJournal.cs"
 framework = "net10.0"
 api-version = "1.0"
-dmcbk = ">=0.1.0-preview.1 <0.2.0"
+dmcbk = ">=0.1.0-preview.2 <0.2.0"
 umpk = ">=0.9.0-beta.4 <0.10.0"
 needs = ["commands"]
 ```
