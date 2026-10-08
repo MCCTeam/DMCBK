@@ -121,7 +121,9 @@ public sealed class SessionCreatedTests
         if (!File.Exists(storagePath))
             return null;
 
-        var store = TomletMain.To<Dictionary<string, string>>(File.ReadAllText(storagePath));
+        using var reader = new StreamReader(new FileStream(
+            storagePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
+        var store = TomletMain.To<Dictionary<string, string>>(reader.ReadToEnd());
         return store.TryGetValue(key, out string? value) ? value : null;
     }
 

@@ -59,7 +59,7 @@ A malformed user file produces a warning and validated defaults. It does not mak
 3. Serialize concurrent counter updates in your plugin.
 4. Keep files out of immutable package and source-cache directories.
 
-The key/value file is `data/storage.toml`. Changing the in-memory store without saving does not persist it.
+The key/value file is `data/storage.toml`. Changing the in-memory store without saving does not persist it. Each save writes a complete temporary file and then replaces `storage.toml`. Concurrent saves from the same storage instance are serialized. A read sees a complete saved snapshot. Custom file readers on Windows must allow file replacement with `FileShare.Delete`.
 
 ## Translate user-facing text
 

@@ -38,6 +38,7 @@ internal sealed class PluginStorage : IPluginStorage
 
     private readonly string _dataDirectory;
     private readonly ILogger _logger;
+    private readonly Lock _saveGate = new();
     private readonly ConcurrentDictionary<string, string> _kv = new(StringComparer.Ordinal);
 
     internal PluginStorage(string dataDirectory, ILogger logger)
@@ -101,22 +102,35 @@ internal sealed class PluginStorage : IPluginStorage
     /// <inheritdoc/>
     public void Save()
     {
-        Directory.CreateDirectory(_dataDirectory);
-        var snapshot = new Dictionary<string, string>(_kv, StringComparer.Ordinal);
-
-        CultureInfo previous = Thread.CurrentThread.CurrentCulture;
-        string toml;
-        try
+        lock (_saveGate)
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            toml = snapshot.Count == 0 ? string.Empty : TomletMain.TomlStringFrom(snapshot);
-        }
-        finally
-        {
-            Thread.CurrentThread.CurrentCulture = previous;
-        }
+            Directory.CreateDirectory(_dataDirectory);
+            var snapshot = new Dictionary<string, string>(_kv, StringComparer.Ordinal);
 
-        File.WriteAllText(Path.Combine(_dataDirectory, StoreFileName), toml);
+            CultureInfo previous = Thread.CurrentThread.CurrentCulture;
+            string toml;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                toml = snapshot.Count == 0 ? string.Empty : TomletMain.TomlStringFrom(snapshot);
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = previous;
+            }
+
+            // Replace a complete file on the same volume so readers never observe a partial write.
+            string temporaryPath = Path.Combine(_dataDirectory, $".{StoreFileName}.{Guid.NewGuid():N}.tmp");
+            try
+            {
+                File.WriteAllText(temporaryPath, toml);
+                File.Move(temporaryPath, Path.Combine(_dataDirectory, StoreFileName), overwrite: true);
+            }
+            finally
+            {
+                File.Delete(temporaryPath);
+            }
+        }
     }
 
     private void LoadStore()
