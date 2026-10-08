@@ -124,7 +124,11 @@ internal sealed class PluginStorage : IPluginStorage
             try
             {
                 File.WriteAllText(temporaryPath, toml);
-                File.Move(temporaryPath, Path.Combine(_dataDirectory, StoreFileName), overwrite: true);
+                string destinationPath = Path.Combine(_dataDirectory, StoreFileName);
+                if (File.Exists(destinationPath))
+                    File.Replace(temporaryPath, destinationPath, destinationBackupFileName: null);
+                else
+                    File.Move(temporaryPath, destinationPath);
             }
             finally
             {

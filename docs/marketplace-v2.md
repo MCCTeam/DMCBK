@@ -29,7 +29,7 @@ id = "example-plugin"
 [[releases]]
 version = "2.0.0"
 api-version = "1.0"
-dmcbk = ">=0.1.0-preview.2 <0.2.0"
+dmcbk = ">=0.1.0-preview.3 <0.2.0"
 umpk = ">=0.9.0-beta.4 <0.10.0"
 framework = "net10.0"
 needs = ["commands"]
@@ -69,7 +69,7 @@ target = "win-x64"
 entry = "ExamplePlugin.dll"
 framework = "net10.0"
 api-version = "1.0"
-dmcbk = ">=0.1.0-preview.2 <0.2.0"
+dmcbk = ">=0.1.0-preview.3 <0.2.0"
 umpk = ">=0.9.0-beta.4 <0.10.0"
 needs = ["commands"]
 deps = ["lib/ExampleHelpers.dll"]

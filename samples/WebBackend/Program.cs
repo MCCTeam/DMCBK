@@ -7,7 +7,7 @@ builder.Services.AddSingleton(_ => new ClientBuilder()
     .UseServer(builder.Configuration["Client:Host"] ?? "localhost",
         ushort.TryParse(builder.Configuration["Client:Port"], out ushort port) ? port : (ushort)25565)
     .UseCommands().UseBeacon()
-    .UseApplication(new HostApplication("web-backend-sample", "0.1.0-preview.2", new HashSet<string>()))
+    .UseApplication(new HostApplication("web-backend-sample", "0.1.0-preview.3", new HashSet<string>()))
     .Build());
 
 await using var app = builder.Build();

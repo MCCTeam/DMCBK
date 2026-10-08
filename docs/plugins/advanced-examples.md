@@ -4,7 +4,7 @@ These examples follow the [chaptered plugin guide](tutorial/index.md). They show
 
 Use the complete [AdvancedExamples sample](../../samples/PluginAuthoring/AdvancedExamples/README.md) to execute the checks. Each C# block below identifies its source file. The sample includes the manifests and project files.
 
-All projects target .NET 10 and DMCBK `0.1.0-preview.2`. Build the verifier in Release configuration. It uses pinned NuGet packages rather than DMCBK or MCC source references.
+All projects target .NET 10 and DMCBK `0.1.0-preview.3`. Build the verifier in Release configuration. It uses pinned NuGet packages rather than DMCBK or MCC source references.
 
 ## Example 1: A service and typed messages between plugins
 
@@ -86,7 +86,7 @@ target = "any"
 entry = "Guide.Provider.dll"
 framework = "net10.0"
 api-version = "1.0"
-dmcbk = ">=0.1.0-preview.2 <0.2.0"
+dmcbk = ">=0.1.0-preview.3 <0.2.0"
 umpk = ">=0.9.0-beta.4 <0.10.0"
 needs = ["commands"]
 deps = ["Guide.Contracts.dll"]
@@ -157,7 +157,7 @@ target = "any"
 entry = "Guide.Consumer.dll"
 framework = "net10.0"
 api-version = "1.0"
-dmcbk = ">=0.1.0-preview.2 <0.2.0"
+dmcbk = ">=0.1.0-preview.3 <0.2.0"
 umpk = ">=0.9.0-beta.4 <0.10.0"
 needs = ["commands"]
 

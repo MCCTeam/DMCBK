@@ -7,7 +7,7 @@ A plugin implements `DMCBK.PluginSdk.IPlugin`. The SDK contains author contracts
 ## Write the entry class
 
 1. Create a .NET 10 class library.
-2. Add `DMCBK.PluginSdk` version `0.1.0-preview.2`.
+2. Add `DMCBK.PluginSdk` version `0.1.0-preview.3`.
 3. Add an entry class that implements `IPlugin`.
 4. Add the matching `plugin.toml` manifest.
 
@@ -54,7 +54,7 @@ target = "any"
 entry = "SessionCounter.cs"
 framework = "net10.0"
 api-version = "1.0"
-dmcbk = ">=0.1.0-preview.2 <0.2.0"
+dmcbk = ">=0.1.0-preview.3 <0.2.0"
 umpk = ">=0.9.0-beta.4 <0.10.0"
 needs = ["commands"]
 ```
