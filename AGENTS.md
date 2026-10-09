@@ -4,7 +4,7 @@
 
 DMCBK is a .NET 10 library for building Minecraft Java clients on top of UMPK. It owns client hosting, game API adapters, commands, Beacon scripting, plugins and marketplace installation. UMPK owns the protocol and game engine. UI frameworks belong to host applications.
 
-The repository uses MIT for DMCBK code. The current package version is `0.1.0-preview.3`, plugin API version is `1.0`, and marketplace schema version is `2`. Read `Directory.Build.props`, `Directory.Packages.props` and `global.json` for current versions before editing.
+The repository uses MIT for DMCBK code. The current package version is `0.1.0-preview.4`, plugin API version is `1.0`, and marketplace schema version is `2`. Read `Directory.Build.props`, `Directory.Packages.props` and `global.json` for current versions before editing.
 
 ## Local skills
 

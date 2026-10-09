@@ -7,8 +7,8 @@ A package makes code available to your project. A builder extension attaches tha
 1. Add both packages.
 
 ```bash
-dotnet add package DMCBK.Commands --version 0.1.0-preview.3
-dotnet add package DMCBK.Beacon --version 0.1.0-preview.3
+dotnet add package DMCBK.Commands --version 0.1.0-preview.4
+dotnet add package DMCBK.Beacon --version 0.1.0-preview.4
 ```
 
 2. Attach Commands before Beacon.

@@ -1,6 +1,6 @@
 # Package reference
 
-All DMCBK packages use version `0.1.0-preview.3`. They target .NET 10. Internal packages share one release version. Plugin releases have their own versions.
+All DMCBK packages use version `0.1.0-preview.4`. They target .NET 10. Internal packages share one release version. Plugin releases have their own versions.
 
 | Package | Responsibility | DMCBK dependencies |
 | --- | --- | --- |
@@ -46,9 +46,9 @@ A preview version can change its public API in a later release. Pin the DMCBK pa
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="DMCBK.Core" Version="0.1.0-preview.3" />
-  <PackageReference Include="DMCBK.Commands" Version="0.1.0-preview.3" />
-  <PackageReference Include="DMCBK.Beacon" Version="0.1.0-preview.3" />
+  <PackageReference Include="DMCBK.Core" Version="0.1.0-preview.4" />
+  <PackageReference Include="DMCBK.Commands" Version="0.1.0-preview.4" />
+  <PackageReference Include="DMCBK.Beacon" Version="0.1.0-preview.4" />
 </ItemGroup>
 ```
 

@@ -67,7 +67,7 @@ The diagram shows composition and runtime flow. Core defines module boundaries w
 3. Select modules from the [package guide](docs/reference/packages.md).
 
 ```bash
-dotnet add package DMCBK --version 0.1.0-preview.3
+dotnet add package DMCBK --version 0.1.0-preview.4
 ```
 
 The preview uses UMPK `0.9.0-beta.5`. NuGet installation requires the DMCBK packages to be published. Until then, use the [local package procedure](docs/getting-started/installation.md#use-local-packages).
