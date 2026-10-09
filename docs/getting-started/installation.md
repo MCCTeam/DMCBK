@@ -1,6 +1,6 @@
 # Install DMCBK
 
-DMCBK targets .NET 10. This repository pins SDK `10.0.401`. Its UMPK packages use `0.9.0-beta.4`.
+DMCBK targets .NET 10. This repository pins SDK `10.0.401`. Its UMPK packages use `0.9.0-beta.5`.
 
 A package contains compiled library code. NuGet restores that code and its dependencies. You need the .NET SDK to compile your application.
 
