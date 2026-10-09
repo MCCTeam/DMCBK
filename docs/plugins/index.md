@@ -41,3 +41,13 @@ A package manifest describes a release asset. A descriptor describes the entry c
 Plugins run inside the host process with normal .NET access. They are not isolated from files or network resources by a security sandbox. Install code that you trust.
 
 [Advanced working examples](advanced-examples.md) cover exported contracts, typed services and messages, Beacon events and snapshots, and scoped packet work.
+
+## Agent skills
+
+Install the [plugins authoring skill](https://github.com/MCCTeam/MCC-Skills/tree/master/skills/dmcbk-plugin-authoring) for your coding agent:
+
+```bash
+npx skills add MCCTeam/MCC-Skills --skill dmcbk-plugin-authoring
+```
+
+The skill includes standalone references and examples. Read [agent skill installation](../agent-skills.md) for agent selection and installation scope.

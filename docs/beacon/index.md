@@ -38,3 +38,13 @@ An event handler runs later when an event matches. A command body runs when the 
 | Test double | A simulated host that records actions instead of contacting a server |
 
 The host and the Minecraft server are separate programs. The host can accept a request that the server later refuses. Inspect both the local result and the observed server result for game actions.
+
+## Agent skills
+
+Install the [Beacon scripts authoring skill](https://github.com/MCCTeam/MCC-Skills/tree/master/skills/beacon-scripting) for your coding agent:
+
+```bash
+npx skills add MCCTeam/MCC-Skills --skill beacon-scripting
+```
+
+The skill includes standalone references and examples. Read [agent skill installation](../agent-skills.md) for agent selection and installation scope.
