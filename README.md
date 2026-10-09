@@ -75,6 +75,7 @@ The preview uses UMPK `0.9.0-beta.4`. NuGet installation requires the DMCBK pack
 ## Documentation
 
 - [Documentation home](docs/index.md)
+- [Agent skills and installation](docs/agent-skills.md) from [MCC Skills](https://github.com/MCCTeam/MCC-Skills)
 - [Build a client, chapter by chapter](docs/client/index.md)
 - [Host a client](docs/hosting.md), including desktop, mobile and web guidance
 - [Write Beacon scripts, chapter by chapter](docs/beacon/guide/index.md)

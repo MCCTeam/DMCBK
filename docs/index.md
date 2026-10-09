@@ -22,6 +22,7 @@ The guide text defines technical terms as they appear. Instructions use short, d
 
 | Goal | Guide |
 | --- | --- |
+| Use a coding agent for scripts or plugins | [Agent skills](agent-skills.md) |
 | Restore packages or build the repository | [Installation](getting-started/installation.md) |
 | Connect a bot and send chat | [Client chapters](client/index.md) or [first-client overview](getting-started/first-client.md) |
 | Add a desktop, mobile or web interface | [Hosting](hosting.md) |

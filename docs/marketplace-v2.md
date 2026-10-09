@@ -337,3 +337,13 @@ A previous package graph cannot reverse server commands, network requests or plu
 The [MarketplaceGuide sample](../samples/MarketplaceGuide/README.md) packs a plugin, plans an exact version, downloads one archive through a local HTTP handler and runs a real plugin callback. It also checks the lock hash, pinning and uninstall.
 
 It needs no account, external publisher or Minecraft server. Its in-memory protocol session checks the modeled lifecycle. Use a live private server for additional game behavior.
+
+## Agent skills
+
+Install the [marketplaces authoring skill](https://github.com/MCCTeam/MCC-Skills/tree/master/skills/dmcbk-marketplace-authoring) for your coding agent:
+
+```bash
+npx skills add MCCTeam/MCC-Skills --skill dmcbk-marketplace-authoring
+```
+
+The skill includes standalone references and examples. Read [agent skill installation](agent-skills.md) for agent selection and installation scope.
