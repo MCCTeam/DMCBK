@@ -8,17 +8,26 @@ The repository uses MIT for DMCBK code. The current package version is `0.1.0-pr
 
 ## Local skills
 
+Initialize the shared skills before using them:
+
+```bash
+git submodule update --init MCC-Skills
+```
+
 | Skill | Use for |
 | --- | --- |
+| `.skills/beacon-scripting/SKILL.md` | Beacon syntax, examples and script checks |
+| `.skills/dmcbk-plugin-authoring/SKILL.md` | Plugin contracts, lifecycle, packaging and tests |
+| `.skills/dmcbk-marketplace-authoring/SKILL.md` | Schema-2 catalogues, assets and release procedures |
 | `.skills/csharp-best-practices/SKILL.md` | C# implementation, naming and async review |
 | `.skills/csharp-solid-principles/SKILL.md` | Design, refactoring and API boundaries |
 | `.skills/asd-ste100/SKILL.md` | Clear procedures, diagnostics and agent instructions |
 | `.skills/dotnet-performance-profiling-and-optimization/SKILL.md` | Measured performance diagnosis |
 | `.skills/dotnet-security-review/SKILL.md` | Security and dependency review |
 
-Read the relevant `SKILL.md` before applying a skill. Resolve relative references from its directory. These skills come from UMPK. Its integration-testing skill is intentionally excluded because DMCBK has different test infrastructure.
+Read the relevant `SKILL.md` before applying a skill. Resolve relative references from its directory. Seven `.skills` entries link to the pinned [MCC Skills](https://github.com/MCCTeam/MCC-Skills) submodule under `MCC-Skills/skills`. ASD-STE100 remains a local skill.
 
-`.skills` is the canonical directory. `.claude/skills`, `.agents/skills` and `.codex/skill` link to it. `.codex/skills` also links to it for tools that discover the plural path.
+`.skills` is the discovery directory. `.claude/skills`, `.agents/skills`, `.codex/skill` and `.codex/skills` link to it. Edit shared skills in MCC Skills rather than creating another local copy. Read [the skill guide](docs/agent-skills.md) before updating the submodule revision.
 
 ## Commands
 

@@ -4,6 +4,14 @@ Small changes are easier to review. Explain the behavior you want to change and 
 
 ## Before you start
 
+Initialize the shared agent skills from the repository directory:
+
+```bash
+git submodule update --init MCC-Skills
+```
+
+The [.skills](docs/agent-skills.md#use-skills-in-this-checkout) entries link to that submodule. Keep shared skill changes in [MCC Skills](https://github.com/MCCTeam/MCC-Skills).
+
 1. Read the [documentation](docs/index.md).
 2. Check existing issues and pull requests.
 3. Open an issue before a large API or dependency change.

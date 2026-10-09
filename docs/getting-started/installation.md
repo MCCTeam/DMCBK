@@ -32,14 +32,14 @@ Use the [chaptered client guide](../client/index.md) for the complete procedure.
 5. Run unit tests.
 
 ```bash
-git clone https://github.com/MCCTeam/DMCBK.git
+git clone --recurse-submodules https://github.com/MCCTeam/DMCBK.git
 cd DMCBK
 dotnet restore DMCBK.slnx
 dotnet build DMCBK.slnx -c Release --no-restore
 dotnet test DMCBK.slnx -c Release --no-build
 ```
 
-The repository is private. Cloning requires repository access. A build does not require MCC or UMPK source checkouts.
+The clone includes MCC Skills for agent guidance. Library dependencies restore through NuGet. In an existing checkout, run `git submodule update --init MCC-Skills` to prepare the shared skills. See [agent skills](../agent-skills.md) for symbolic links and Windows setup.
 
 The final command uses `--no-build` because the previous command already built the test assembly. Do not use it after changing source without another build.
 
@@ -119,5 +119,5 @@ A release should use a new package version instead of replacing published archiv
 | Package not found | The selected feed lacks the preview. | Use the local feed or check the published version. |
 | SDK cannot target .NET 10 | The computer has only an older SDK or runtime. | Install the .NET 10 SDK. |
 | Sample uses an old API | The same preview version exists in a package cache. | Restore with a fresh cache. |
-| Private clone fails | Repository access is absent. | Use an account with repository permission. |
+| Shared skill links do not open | The submodule is uninitialized or Git did not create symbolic links. | Initialize MCC Skills and follow the [skill setup](../agent-skills.md#use-skills-in-this-checkout). |
 | UMPK restore fails | Public NuGet access is unavailable. | Check sources and network access. |
