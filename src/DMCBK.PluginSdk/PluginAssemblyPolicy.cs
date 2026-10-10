@@ -11,6 +11,12 @@ public static class PluginAssemblyPolicy
         "Microsoft.Extensions.Logging.Abstractions", "Tomlet"
     };
 
+    // SDK packages with System names are private dependencies, not runtime assemblies.
+    private static readonly HashSet<string> PrivateSdkAssemblies = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "System.ClientModel", "System.Memory.Data"
+    };
+
     private static readonly HashSet<string> SharedFramework = new(
         (AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES") as string ?? string.Empty)
             .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
@@ -25,7 +31,7 @@ public static class PluginAssemblyPolicy
             || name.StartsWith("Microsoft.JSInterop", StringComparison.Ordinal)
             || name == "Microsoft.Net.Http.Headers"))
         || name.StartsWith("Umpk.", StringComparison.OrdinalIgnoreCase)
-        || name == "System" || name.StartsWith("System.", StringComparison.Ordinal)
+        || name == "System" || (name.StartsWith("System.", StringComparison.Ordinal) && !PrivateSdkAssemblies.Contains(name))
         || name is "netstandard" or "mscorlib" or "Microsoft.CSharp";
 
     /// <summary>Rejects bundled host contracts instead of silently accepting duplicate identities.</summary>

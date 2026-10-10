@@ -28,7 +28,7 @@ The DMCBK repository uses SDK `10.0.401`. A runtime installation alone cannot co
 ```bash
 dotnet new console --framework net10.0 --name GuideClient
 cd GuideClient
-dotnet add package DMCBK.Core --version 0.1.0-preview.5
+dotnet add package DMCBK.Core --version 0.1.0-preview.6
 ```
 
 The generated `GuideClient.csproj` describes the application. `Program.cs` contains its entry point. NuGet restores DMCBK.Core and its UMPK dependencies.
@@ -62,7 +62,7 @@ A minimal project outside this repository looks like this:
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DMCBK.Core" Version="0.1.0-preview.5" />
+    <PackageReference Include="DMCBK.Core" Version="0.1.0-preview.6" />
   </ItemGroup>
 </Project>
 ```

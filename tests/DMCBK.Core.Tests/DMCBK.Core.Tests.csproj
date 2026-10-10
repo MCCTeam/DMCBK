@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><AssemblyName>DMCBK.Core.Tests</AssemblyName><IsPackable>false</IsPackable><IsTestProject>true</IsTestProject><GenerateDocumentationFile>false</GenerateDocumentationFile></PropertyGroup>
-  <ItemGroup><ProjectReference Include="../../src/DMCBK.Core/DMCBK.Core.csproj"/>
+  <ItemGroup>
+    <PackageReference Include="System.ClientModel" /><ProjectReference Include="../../src/DMCBK.Core/DMCBK.Core.csproj"/>
 <ProjectReference Include="../../src/DMCBK.Marketplace/DMCBK.Marketplace.csproj"/>
 <ProjectReference Include="../../src/DMCBK.Commands/DMCBK.Commands.csproj"/>
 <ProjectReference Include="../../src/DMCBK.Configuration/DMCBK.Configuration.csproj"/>

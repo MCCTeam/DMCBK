@@ -6,7 +6,7 @@ Read [the advanced guide](../../../docs/plugins/advanced-examples.md) for the ex
 
 ## Run the checks
 
-1. Restore DMCBK `0.1.0-preview.5` from your configured feed.
+1. Restore DMCBK `0.1.0-preview.6` from your configured feed.
 2. Open a terminal in this directory.
 3. Run the verifier in Release configuration.
 
