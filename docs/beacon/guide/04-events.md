@@ -30,7 +30,7 @@ Running this file with the offline runner produces no greeting. Loading register
 1. Add `DMCBK.Testing` to the runner project.
 
 ```sh
-dotnet add package DMCBK.Testing --version 0.1.0-preview.4
+dotnet add package DMCBK.Testing --version 0.1.0-preview.5
 ```
 
 2. Replace `Program.cs` with this complete test program.

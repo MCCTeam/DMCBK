@@ -14,7 +14,7 @@ A package contains compiled library code. NuGet restores that code and its depen
 ```bash
 dotnet new console --framework net10.0 --name MyClient
 cd MyClient
-dotnet add package DMCBK --version 0.1.0-preview.4
+dotnet add package DMCBK --version 0.1.0-preview.5
 ```
 
 The convenience package includes Core, Commands and Configuration. Beacon, plugin activation and marketplace installation require separate packages.
@@ -92,7 +92,7 @@ dotnet build -c Release --no-restore
 
 ## Avoid stale preview packages
 
-NuGet caches packages by ID and version. Replacing a local `0.1.0-preview.4` archive does not guarantee that a restore reads the new archive.
+NuGet caches packages by ID and version. Replacing a local `0.1.0-preview.5` archive does not guarantee that a restore reads the new archive.
 
 Use a fresh cache for a local validation run. Choose a new directory for each replaced package set.
 
