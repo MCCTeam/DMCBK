@@ -26,6 +26,7 @@ internal sealed class DmcbkSessionFactory : IClientSessionFactory
     private static readonly TimeSpan DisplayPingTimeout = TimeSpan.FromSeconds(5);
 
     private readonly string? _tokenStorePath;
+    private readonly ITokenStore _memoryTokenStore = new InMemoryTokenStore();
     private readonly ClientFeatures _features;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ILogger _logger;
@@ -260,7 +261,7 @@ internal sealed class DmcbkSessionFactory : IClientSessionFactory
             // See OnlineModeSigningGate for the vanilla citations and for why the guard belongs here and not in UMPK.
             IChatSigningProvider provider = new AuthFlowCertificateProvider(auth.Flow, auth.Session);
             if (OnlineModeSigningGate.AppliesTo(version.Features.ChatSigning))
-                provider = new OnlineModeSigningGate(provider, () => built?.IsConnectionEncrypted ?? false);
+                provider = new OnlineModeSigningGate(provider, () => built?.Session?.IsAuthenticated ?? false);
 
             umpkBuilder.UseChatSigning(provider);
         }
@@ -541,10 +542,15 @@ internal sealed class DmcbkSessionFactory : IClientSessionFactory
         return session;
     }
 
-    private ITokenStore CreateTokenStore()
+    internal ITokenStore CreateTokenStore()
     {
         if (_tokenStorePath is null)
-            return new InMemoryTokenStore();
+        {
+            // Memory caching belongs to the client lifetime, not to a single connection attempt. Explicitly disabled caching still starts empty on each attempt.
+            return _configuration?.Accounts.SessionCache == CacheMode.None
+                ? new InMemoryTokenStore()
+                : _memoryTokenStore;
+        }
 
         ILogger logger = _loggerFactory.CreateLogger("DMCBK.Core.Auth.TokenStore");
         return new FileTokenStore(_tokenStorePath, TokenProtectors.CreateDefault(logger), logger);
