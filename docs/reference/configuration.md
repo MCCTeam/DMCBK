@@ -85,6 +85,10 @@ Strings need quotation marks. Boolean values are `true` or `false`. A line that 
 
 Use an offline account only with a private server that permits offline login. Microsoft account authentication needs a host authentication interface.
 
+With `SessionCache = "memory"`, one client retains cached sessions across connection attempts and reconnects. Separate clients use separate memory caches. `SessionCache = "disk"` retains sessions across client restarts. `SessionCache = "none"` starts each attempt without a cached session.
+
+On Minecraft 1.19.3 and later, DMCBK announces profile certificates only when the server required session authentication during login. An offline server can request encryption on 1.20.5 and later; encryption alone does not enable profile signing.
+
 1. Create a separate configuration directory.
 2. Generate the default files with the earlier example.
 3. Replace `accounts.toml` with this content.
