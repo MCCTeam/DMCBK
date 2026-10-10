@@ -22,7 +22,7 @@ dotnet test DMCBK.slnx -c Release --no-build
 
 ```bash
 git add Directory.Build.props Directory.Packages.props
-git commit -m "chore: prepare release 0.1.0-preview.6"
+git commit -m "chore: prepare release 0.1.0-preview.7"
 git push origin master
 ```
 
@@ -34,8 +34,8 @@ Replace the example version with your release version.
 2. Push the tag.
 
 ```bash
-git tag -a v0.1.0-preview.6 -m "DMCBK 0.1.0-preview.6"
-git push origin v0.1.0-preview.6
+git tag -a v0.1.0-preview.7 -m "DMCBK 0.1.0-preview.7"
+git push origin v0.1.0-preview.7
 ```
 
 3. Open [GitHub Actions](https://github.com/MCCTeam/DMCBK/actions/workflows/publish.yml).

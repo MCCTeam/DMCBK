@@ -9,6 +9,6 @@
     <GenerateDependencyFile>true</GenerateDependencyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DMCBK.PluginSdk" Version="0.1.0-preview.6" />
+    <PackageReference Include="DMCBK.PluginSdk" Version="0.1.0-preview.7" />
   </ItemGroup>
 </Project>

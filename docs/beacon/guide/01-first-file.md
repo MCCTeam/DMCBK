@@ -12,7 +12,7 @@ You need the .NET 10 SDK and access to the DMCBK packages. For unpublished packa
 
 ```sh
 dotnet new console --framework net10.0
-dotnet add package DMCBK.Beacon --version 0.1.0-preview.6
+dotnet add package DMCBK.Beacon --version 0.1.0-preview.7
 ```
 
 4. Replace `Program.cs` with this complete program.

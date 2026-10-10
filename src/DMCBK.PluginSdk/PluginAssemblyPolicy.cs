@@ -11,10 +11,11 @@ public static class PluginAssemblyPolicy
         "Microsoft.Extensions.Logging.Abstractions", "Tomlet"
     };
 
-    // SDK packages with System names are private dependencies, not runtime assemblies.
+    // SDK package names can resemble framework names, but their assemblies stay private.
     private static readonly HashSet<string> PrivateSdkAssemblies = new(StringComparer.OrdinalIgnoreCase)
     {
-        "System.ClientModel", "System.Memory.Data"
+        "System.ClientModel", "System.Memory.Data",
+        "Microsoft.Extensions.AI", "Microsoft.Extensions.AI.Abstractions"
     };
 
     private static readonly HashSet<string> SharedFramework = new(
@@ -25,7 +26,8 @@ public static class PluginAssemblyPolicy
 
     /// <summary>Whether an assembly belongs to the framework or public host contracts.</summary>
     public static bool IsShared(string name, bool includeAspNetCore = false) => Contracts.Contains(name)
-        || (includeAspNetCore && (SharedFramework.Contains(name)
+        || (includeAspNetCore && !PrivateSdkAssemblies.Contains(name) && (SharedFramework.Contains(name)
+            || name == "Microsoft.AspNetCore"
             || name.StartsWith("Microsoft.AspNetCore.", StringComparison.Ordinal)
             || name.StartsWith("Microsoft.Extensions.", StringComparison.Ordinal)
             || name.StartsWith("Microsoft.JSInterop", StringComparison.Ordinal)
@@ -47,4 +49,3 @@ public static class PluginAssemblyPolicy
         }
     }
 }
-

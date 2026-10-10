@@ -7,7 +7,7 @@ A plugin implements `DMCBK.PluginSdk.IPlugin`. The SDK contains author contracts
 ## Write the entry class
 
 1. Create a .NET 10 class library.
-2. Add `DMCBK.PluginSdk` version `0.1.0-preview.6`.
+2. Add `DMCBK.PluginSdk` version `0.1.0-preview.7`.
 3. Add an entry class that implements `IPlugin`.
 4. Add the matching `plugin.toml` manifest.
 
