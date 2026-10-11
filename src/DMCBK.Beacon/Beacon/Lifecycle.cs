@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace DMCBK.Core.Beacon;
 
 /// <summary>Which session moment a lifecycle hook runs at.</summary>
@@ -49,11 +51,11 @@ public sealed class BeaconEveryTimer
     /// <summary>Next scheduled fire time on the scheduler clock.</summary>
     public DateTimeOffset NextFire { get; internal set; }
 
-    internal bool TryFire(DateTimeOffset now, out BeaconEveryFire fire)
+    internal bool TryFire(DateTimeOffset now, [NotNullWhen(true)] out BeaconEveryFire? fire)
     {
         if (now < NextFire)
         {
-            fire = new BeaconEveryFire(Name, WasCatchUp: false, MissedIntervals: 0);
+            fire = null;
             return false;
         }
 
@@ -228,20 +230,20 @@ public sealed class BeaconLifecycle
     public IReadOnlyList<BeaconEveryFire> EveryTick()
     {
         DateTimeOffset now = Clock.UtcNow;
-        var due = new List<BeaconEveryFire>();
+        List<BeaconEveryFire>? due = null;
         lock (_gate)
         {
             foreach (BeaconEveryTimer timer in _timers)
             {
-                if (timer.TryFire(now, out BeaconEveryFire fire))
+                if (timer.TryFire(now, out BeaconEveryFire? fire))
                 {
-                    due.Add(fire);
+                    (due ??= []).Add(fire);
                     _log.Add($"every {timer.Name} fire catchup={fire.WasCatchUp} missed={fire.MissedIntervals}");
                 }
             }
         }
 
-        return due;
+        return due ?? (IReadOnlyList<BeaconEveryFire>)Array.Empty<BeaconEveryFire>();
     }
 
     /// <summary>
@@ -278,7 +280,7 @@ public sealed class BeaconLifecycle
     public IReadOnlyList<BeaconOneShot> OnceTick()
     {
         DateTimeOffset now = Clock.UtcNow;
-        var due = new List<BeaconOneShot>();
+        List<BeaconOneShot>? due = null;
         lock (_gate)
         {
             foreach (BeaconOneShot oneShot in _oneShots)
@@ -286,7 +288,7 @@ public sealed class BeaconLifecycle
                 if (!oneShot.Settled && now >= oneShot.FireAt)
                 {
                     oneShot.Settled = true;
-                    due.Add(oneShot);
+                    (due ??= []).Add(oneShot);
                     _log.Add($"once {oneShot.Name} fire");
                 }
             }
@@ -294,7 +296,7 @@ public sealed class BeaconLifecycle
             _oneShots.RemoveAll(o => o.Settled);
         }
 
-        return due;
+        return due ?? (IReadOnlyList<BeaconOneShot>)Array.Empty<BeaconOneShot>();
     }
 
     /// <summary>Pending one-shot count (unfired timers).</summary>
