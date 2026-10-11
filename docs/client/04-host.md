@@ -7,7 +7,7 @@ The application owns its configuration directory, command presentation and login
 1. Add the configuration package.
 
 ```bash
-dotnet add package DMCBK.Configuration --version 0.1.0-preview.7
+dotnet add package DMCBK.Configuration --version 0.1.0-preview.8
 ```
 
 2. Select an application data directory.
