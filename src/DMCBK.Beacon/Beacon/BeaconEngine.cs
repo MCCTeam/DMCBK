@@ -62,6 +62,7 @@ public sealed class BeaconEngine : IBeaconEngine
     private readonly BeaconSharedState _sharedState = new();
     private BeaconSavedState? _savedState;
     private string? _configFolder;
+    private TimerPlan[]? _timerPlan;
 
     /// <summary>Builds an engine over injectable host IO, clock, RNG, and fuel seams.</summary>
     public BeaconEngine(
@@ -206,6 +207,7 @@ public sealed class BeaconEngine : IBeaconEngine
         {
             WithdrawCommandSpecs(scriptId);
             _scripts[scriptId] = new ScriptRecord(scriptId, fileName, source);
+            _timerPlan = null;
         }
     }
 
@@ -234,6 +236,7 @@ public sealed class BeaconEngine : IBeaconEngine
             Bridge.WithdrawScript(scriptId);
             _onceRegs.Remove(scriptId);
             removed = _scripts.Remove(scriptId);
+            _timerPlan = null;
         }
 
         // Outside the gate: stopping must settle running work, not just forget the registrations.
@@ -707,6 +710,7 @@ public sealed class BeaconEngine : IBeaconEngine
         {
             WithdrawCommandSpecs(scriptId);
             _scripts[scriptId] = new ScriptRecord(scriptId, resolvedFile, source);
+            _timerPlan = null;
         }
 
         lint = Lint(scriptId);
@@ -731,6 +735,7 @@ public sealed class BeaconEngine : IBeaconEngine
                     replacement.RestoreSaved(existing.Interpreter.SnapshotSaved());
 
                 _runtimes[scriptId] = new RuntimeState(replacement);
+                _timerPlan = null;
             }
 
             interpreter = GetOrCreateInterpreter(record);
@@ -864,6 +869,7 @@ public sealed class BeaconEngine : IBeaconEngine
             }
 
             _onceRegs[scriptId] = onceRegs;
+            _timerPlan = null;
             if (detachedCt.CanBeCanceled)
                 scheduler.BindDetached(detachedCt);
         }
@@ -1001,25 +1007,13 @@ public sealed class BeaconEngine : IBeaconEngine
     public async Task<IReadOnlyList<BeaconEveryRun>> TickEveryAsync(CancellationToken ct = default)
     {
         using IDisposable environmentScope = Environment.Enter();
-        List<(string ScriptId, BeaconScheduler Scheduler, BeaconLifecycle Lifecycle, BeaconInterpreter Interpreter, List<EveryRegistration> Regs)> plan;
-        lock (_gate)
+        TimerPlan[] plan = GetTimerPlan();
+        List<BeaconEveryRun>? runs = null;
+        foreach (TimerPlan entry in plan)
         {
-            plan = [];
-            foreach (string id in _scripts.Keys.OrderBy(k => k, StringComparer.Ordinal))
-            {
-                if (_schedulers.TryGetValue(id, out BeaconScheduler? scheduler)
-                    && _lifecycles.TryGetValue(id, out BeaconLifecycle? lifecycle)
-                    && _runtimes.TryGetValue(id, out RuntimeState? runtime)
-                    && runtime is not null
-                    && _everyRegs.TryGetValue(id, out List<EveryRegistration>? regs))
-                    plan.Add((id, scheduler, lifecycle, runtime.Interpreter, regs.ToList()));
-            }
-        }
-
-        var runs = new List<BeaconEveryRun>();
-        foreach ((string scriptId, BeaconScheduler scheduler, BeaconLifecycle lifecycle, BeaconInterpreter interpreter, List<EveryRegistration> regs) in plan)
-        {
-            IReadOnlyList<BeaconEveryFire> fires = lifecycle.EveryTick();
+            if (entry.EveryRegs is not { } regs)
+                continue;
+            IReadOnlyList<BeaconEveryFire> fires = entry.Lifecycle.EveryTick();
             foreach (BeaconEveryFire fire in fires)
             {
                 ct.ThrowIfCancellationRequested();
@@ -1027,20 +1021,13 @@ public sealed class BeaconEngine : IBeaconEngine
                 if (reg is null)
                     continue;
 
-                BeaconRunResult result = await scheduler.EnqueueAsync(
-                    async runCt =>
-                    {
-                        using var linked = CancellationTokenSource.CreateLinkedTokenSource(runCt, ct);
-                        Fuel.Reset();
-                        return await interpreter.InvokeEveryAsync(reg.Block, linked.Token).ConfigureAwait(false);
-                    },
-                    ct).ConfigureAwait(false);
-                FlushSaved(scriptId);
-                runs.Add(new BeaconEveryRun(scriptId, fire, result));
+                BeaconRunResult result = await RunEveryAsync(entry, reg, ct).ConfigureAwait(false);
+                FlushSaved(entry.ScriptId);
+                (runs ??= []).Add(new BeaconEveryRun(entry.ScriptId, fire, result));
             }
         }
 
-        return runs;
+        return runs ?? (IReadOnlyList<BeaconEveryRun>)Array.Empty<BeaconEveryRun>();
     }
 
     /// <summary>
@@ -1051,25 +1038,13 @@ public sealed class BeaconEngine : IBeaconEngine
     public async Task<IReadOnlyList<BeaconOnceRun>> TickOnceAsync(CancellationToken ct = default)
     {
         using IDisposable environmentScope = Environment.Enter();
-        List<(string ScriptId, BeaconScheduler Scheduler, BeaconLifecycle Lifecycle, BeaconInterpreter Interpreter, List<OnceRegistration> Regs)> plan;
-        lock (_gate)
+        TimerPlan[] plan = GetTimerPlan();
+        List<BeaconOnceRun>? runs = null;
+        foreach (TimerPlan entry in plan)
         {
-            plan = [];
-            foreach (string id in _scripts.Keys.OrderBy(k => k, StringComparer.Ordinal))
-            {
-                if (_schedulers.TryGetValue(id, out BeaconScheduler? scheduler)
-                    && _lifecycles.TryGetValue(id, out BeaconLifecycle? lifecycle)
-                    && _runtimes.TryGetValue(id, out RuntimeState? runtime)
-                    && runtime is not null
-                    && _onceRegs.TryGetValue(id, out List<OnceRegistration>? regs))
-                    plan.Add((id, scheduler, lifecycle, runtime.Interpreter, regs.ToList()));
-            }
-        }
-
-        var runs = new List<BeaconOnceRun>();
-        foreach ((string scriptId, BeaconScheduler scheduler, BeaconLifecycle lifecycle, BeaconInterpreter interpreter, List<OnceRegistration> regs) in plan)
-        {
-            IReadOnlyList<BeaconOneShot> due = lifecycle.OnceTick();
+            if (entry.OnceRegs is not { } regs)
+                continue;
+            IReadOnlyList<BeaconOneShot> due = entry.Lifecycle.OnceTick();
             foreach (BeaconOneShot oneShot in due)
             {
                 ct.ThrowIfCancellationRequested();
@@ -1077,21 +1052,59 @@ public sealed class BeaconEngine : IBeaconEngine
                 if (reg is null)
                     continue;
 
-                BeaconRunResult result = await scheduler.EnqueueAsync(
-                    async runCt =>
-                    {
-                        using var linked = CancellationTokenSource.CreateLinkedTokenSource(runCt, ct);
-                        Fuel.Reset();
-                        return await interpreter.InvokeOnceAsync(reg.Block, linked.Token).ConfigureAwait(false);
-                    },
-                    ct).ConfigureAwait(false);
-                FlushSaved(scriptId);
-                runs.Add(new BeaconOnceRun(scriptId, oneShot.Name, result));
+                BeaconRunResult result = await RunOnceAsync(entry, reg, ct).ConfigureAwait(false);
+                FlushSaved(entry.ScriptId);
+                (runs ??= []).Add(new BeaconOnceRun(entry.ScriptId, oneShot.Name, result));
             }
         }
 
-        return runs;
+        return runs ?? (IReadOnlyList<BeaconOnceRun>)Array.Empty<BeaconOnceRun>();
     }
+
+    private TimerPlan[] GetTimerPlan()
+    {
+        lock (_gate)
+        {
+            if (_timerPlan is not null)
+                return _timerPlan;
+
+            // Registrations change on load, reload and removal; each tick keeps its immutable snapshot across awaits.
+            var plan = new List<TimerPlan>(_scripts.Count);
+            foreach (string id in _scripts.Keys.OrderBy(k => k, StringComparer.Ordinal))
+            {
+                if (_schedulers.TryGetValue(id, out BeaconScheduler? scheduler)
+                    && _lifecycles.TryGetValue(id, out BeaconLifecycle? lifecycle)
+                    && _runtimes.TryGetValue(id, out RuntimeState? runtime)
+                    && runtime is not null)
+                {
+                    _everyRegs.TryGetValue(id, out List<EveryRegistration>? every);
+                    _onceRegs.TryGetValue(id, out List<OnceRegistration>? once);
+                    plan.Add(new TimerPlan(id, scheduler, lifecycle, runtime.Interpreter, every?.ToArray(), once?.ToArray()));
+                }
+            }
+
+            return _timerPlan = plan.ToArray();
+        }
+    }
+
+    // Keep captured dispatch state on the due path, rather than allocating a closure for every idle script.
+    private Task<BeaconRunResult> RunEveryAsync(TimerPlan entry, EveryRegistration reg, CancellationToken ct)
+        => entry.Scheduler.EnqueueAsync(
+            async runCt =>
+            {
+                using var linked = CancellationTokenSource.CreateLinkedTokenSource(runCt, ct);
+                Fuel.Reset();
+                return await entry.Interpreter.InvokeEveryAsync(reg.Block, linked.Token).ConfigureAwait(false);
+            }, ct);
+
+    private Task<BeaconRunResult> RunOnceAsync(TimerPlan entry, OnceRegistration reg, CancellationToken ct)
+        => entry.Scheduler.EnqueueAsync(
+            async runCt =>
+            {
+                using var linked = CancellationTokenSource.CreateLinkedTokenSource(runCt, ct);
+                Fuel.Reset();
+                return await entry.Interpreter.InvokeOnceAsync(reg.Block, linked.Token).ConfigureAwait(false);
+            }, ct);
 
     /// <summary>Drops all sessions: pending sleeps abort and dispatches are refused until reconnect.</summary>
     public void HandleDisconnect(string reason = "disconnect")
@@ -1215,6 +1228,7 @@ public sealed class BeaconEngine : IBeaconEngine
                 {
                     _everyRegs[id] = regs;
                     _onceRegs[id] = onceRegs;
+                    _timerPlan = null;
                 }
             }
 
@@ -1462,6 +1476,7 @@ public sealed class BeaconEngine : IBeaconEngine
                 state = new RuntimeState(interpreter);
                 interpreter.Movement = SharedMovement;
                 _runtimes[record.ScriptId] = state;
+                _timerPlan = null;
             }
             else
             {
@@ -1484,6 +1499,7 @@ public sealed class BeaconEngine : IBeaconEngine
             {
                 scheduler = new BeaconScheduler(scriptId, Clock, Fuel, Rng);
                 _schedulers[scriptId] = scheduler;
+                _timerPlan = null;
             }
 
             return scheduler;
@@ -1499,6 +1515,7 @@ public sealed class BeaconEngine : IBeaconEngine
             {
                 lifecycle = new BeaconLifecycle(Clock);
                 _lifecycles[scriptId] = lifecycle;
+                _timerPlan = null;
             }
 
             return lifecycle;
@@ -1559,6 +1576,8 @@ public sealed class BeaconEngine : IBeaconEngine
         public BeaconMovementRunner Movement { get; } = new(
             new BeaconFreeMovementScope(), BeaconGameplayGates.AllOn);
     }
+
+    private sealed record TimerPlan(string ScriptId, BeaconScheduler Scheduler, BeaconLifecycle Lifecycle, BeaconInterpreter Interpreter, EveryRegistration[]? EveryRegs, OnceRegistration[]? OnceRegs);
 
     private sealed record EveryRegistration(BeaconEveryTimer Timer, EveryBlock Block);
 

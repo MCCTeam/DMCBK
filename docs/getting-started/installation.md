@@ -1,6 +1,6 @@
 # Install DMCBK
 
-DMCBK targets .NET 10. This repository pins SDK `10.0.401`. Its UMPK packages use `0.9.0-beta.6`.
+DMCBK targets .NET 10. This repository pins SDK `10.0.401`. Its UMPK packages use `0.9.0-beta.7`.
 
 A package contains compiled library code. NuGet restores that code and its dependencies. You need the .NET SDK to compile your application.
 
@@ -14,7 +14,7 @@ A package contains compiled library code. NuGet restores that code and its depen
 ```bash
 dotnet new console --framework net10.0 --name MyClient
 cd MyClient
-dotnet add package DMCBK --version 0.1.0-preview.7
+dotnet add package DMCBK --version 0.1.0-preview.8
 ```
 
 The convenience package includes Core, Commands and Configuration. Beacon, plugin activation and marketplace installation require separate packages.
@@ -92,7 +92,7 @@ dotnet build -c Release --no-restore
 
 ## Avoid stale preview packages
 
-NuGet caches packages by ID and version. Replacing a local `0.1.0-preview.7` archive does not guarantee that a restore reads the new archive.
+NuGet caches packages by ID and version. Replacing a local `0.1.0-preview.8` archive does not guarantee that a restore reads the new archive.
 
 Use a fresh cache for a local validation run. Choose a new directory for each replaced package set.
 
