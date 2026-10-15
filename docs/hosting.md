@@ -33,7 +33,7 @@ The default `NullHostInterface` has no interaction. Offline clients can still co
 
 Commands return a `CmdResult` and can write longer body text to `ICommandOutput`. Display both. Use `DispatchCapturedAsync` for a sequential request/response operation.
 
-The `dig` command starts a held block attack and returns control to the host. Use `dig stop` to release it. The Commands module owns that work, observes later failures through `CommandFaulted` and the client output sink, and awaits cancellation during disposal. The game API `World.DigBlockAsync` still awaits the operation and accepts caller cancellation.
+The `dig` command starts a held block attack and returns control to the host. Use `dig stop` to release it. The command mines one block and also releases when that block leaves the block view ray or reach. The Commands module owns that work, observes later failures through `CommandFaulted` and the client output sink, and awaits cancellation during disposal. The game API `World.DigBlockAsync` still awaits the operation and accepts caller cancellation.
 
 A host can implement `IHostUi` for images, inventory views, books, dialogs and manuals. Report unsupported views through their documented return values. Keep framework objects within your application.
 

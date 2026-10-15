@@ -91,7 +91,7 @@ public sealed class DigCommand : CommandBase, IAsyncDisposable
             return ctx.Result.Fail(McStrings.Get("cmd.dig.too_far"));
 
         // Legacy Dig.cs:79: the look-at form reports the block's own coordinates, not the centred ones.
-        return Send(ctx, h.Position, h.Face, h.BlockId, h.Position.X, h.Position.Y, h.Position.Z);
+        return Send(ctx, h.Position, h.BlockId, h.Position.X, h.Position.Y, h.Position.Z);
     }
 
     private int DigAt(CommandContext ctx, CommandLocation location)
@@ -123,7 +123,7 @@ public sealed class DigCommand : CommandBase, IAsyncDisposable
             return ctx.Result.Fail(McStrings.Get("cmd.dig.too_far"));
 
         // Preserve the coordinate form's reported position (X/Z centred, Y untouched).
-        return Send(ctx, block, h.Face, info.BlockId, Math.Floor(target.X) + 0.5, target.Y, Math.Floor(target.Z) + 0.5);
+        return Send(ctx, block, info.BlockId, Math.Floor(target.X) + 0.5, target.Y, Math.Floor(target.Z) + 0.5);
     }
 
     private int? RejectBusy(CommandContext ctx)
@@ -135,7 +135,7 @@ public sealed class DigCommand : CommandBase, IAsyncDisposable
         }
     }
 
-    private int Send(CommandContext ctx, BlockPos block, Direction face, string blockId, double reportX, double reportY, double reportZ)
+    private int Send(CommandContext ctx, BlockPos block, string blockId, double reportX, double reportY, double reportZ)
     {
         Attack attack;
         ctx.Cancellation.ThrowIfCancellationRequested();
@@ -149,7 +149,7 @@ public sealed class DigCommand : CommandBase, IAsyncDisposable
             try
             {
                 // Resolve and start the facade action now, before returning control to a host that may reconnect. The observer waits until its task has an owner.
-                Task<DigOutcome> work = ctx.Game.World.DigBlockAsync(block, face, attack.Cancellation.Token);
+                Task<DigOutcome> work = ctx.Game.World.DigBlockInViewAsync(block, ct: attack.Cancellation.Token);
                 attack.Work = ObserveAsync(ctx, attack, work);
             }
             catch

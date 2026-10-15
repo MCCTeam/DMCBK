@@ -340,6 +340,10 @@ public sealed class WorldApi
     public Task<DigOutcome> DigBlockAsync(BlockPos position, Direction face = Direction.Up, CancellationToken ct = default)
         => _session.RunAsync(client => client.Actions.Interaction.DigBlockVerifiedAsync(position, face, confirmationWindow: null, ct));
 
+    /// <summary>Mines one block while it remains under the block view ray, releasing the attack if the view or reach changes. Reports the server's observed result after mining completes.</summary>
+    public Task<DigOutcome> DigBlockInViewAsync(BlockPos position, double maxDistance = PlayerReach.SurvivalBlockReach, CancellationToken ct = default)
+        => _session.RunAsync(client => client.Actions.Interaction.DigBlockInViewVerifiedAsync(position, maxDistance, confirmationWindow: null, ct));
+
     /// <summary>
     /// Places / uses the held item against a block face at a hit position.
     /// Completion is the send (plus the 1.19+ action acknowledgement where the version has one), NOT the effect: a use-on-block is whatever the target block decides it is, and vanilla reports nothing back that says which of "opened a container", "flipped a lever", "planted a crop", "placed a block" and "did nothing at all" happened.
