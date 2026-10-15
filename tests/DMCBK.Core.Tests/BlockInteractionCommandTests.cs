@@ -92,14 +92,14 @@ public sealed class BlockInteractionCommandTests
         }
     }
 
-    private sealed class Fixture(FakeJavaServer server, Client client, BlockRaycastHit hit) : IAsyncDisposable
+    internal sealed class Fixture(FakeJavaServer server, Client client, BlockRaycastHit hit) : IAsyncDisposable
     {
         public static readonly BlockPos Target = new(2, 64, 1);
         public FakeJavaServer Server { get; } = server;
         public Client Client { get; } = client;
         public BlockRaycastHit Hit { get; } = hit;
 
-        public static async Task<Fixture> CreateAsync(Vec3d position, CancellationToken ct, bool contiguousFloor = false)
+        public static async Task<Fixture> CreateAsync(Vec3d position, CancellationToken ct, bool contiguousFloor = false, bool survival = false, string block = "stone")
         {
             FakeJavaServer server = FakeJavaServer.Create();
             string plugins = Path.Combine(Path.GetTempPath(), "dmcbk-block-face-" + Guid.NewGuid().ToString("N"));
@@ -112,15 +112,15 @@ public sealed class BlockInteractionCommandTests
                 await McPluginSessionHarness.DriveLoginAsync(server, ct);
                 await starting.WaitAsync(McPluginSessionHarness.Budget, ct);
                 Assert.NotNull(session);
-                var spawn = new CommonPlayerSpawnInfo(0, "minecraft:overworld", 0, 1, -1, false, true, null, 0, 64);
+                var spawn = new CommonPlayerSpawnInfo(0, "minecraft:overworld", 0, survival ? (sbyte)0 : (sbyte)1, -1, false, true, null, 0, 64);
                 await McPluginSessionHarness.SendAsync(server, ProtocolPhase.Play,
                     new ClientboundLoginPacket(1, false, ["minecraft:overworld"], 5, 4, 4, false, true, false, spawn, OnlineMode: false, EnforcesSecureChat: false, Legacy: null), ct);
                 await McPluginSessionHarness.SendAsync(server, ProtocolPhase.Play,
-                    new ClientboundPlayerAbilitiesPacket(8, 0.05F, 0.1F), ct);
+                    new ClientboundPlayerAbilitiesPacket(survival ? (byte)0 : (byte)8, 0.05F, 0.1F), ct);
                 await McPluginSessionHarness.SendAsync(server, ProtocolPhase.Play,
                     new ClientboundPlayerPositionPacket(position.X, position.Y, position.Z, 180, 29, 0, 1,
                         new PositionMoveRotation(position, default, 180, 29)), ct);
-                Assert.True(JavaGameData.Registries(770).Blocks.TryGetValue(Identifier.Minecraft("stone"), out var stone));
+                Assert.True(JavaGameData.Registries(770).Blocks.TryGetValue(Identifier.Minecraft(block), out var stone));
                 await McPluginSessionHarness.SendAsync(server, ProtocolPhase.Play,
                     new ClientboundBlockUpdatePacket(Target, stone.DefaultStateId), ct);
                 if (contiguousFloor)
