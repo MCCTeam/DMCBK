@@ -35,6 +35,8 @@ Commands return a `CmdResult` and can write longer body text to `ICommandOutput`
 
 The `dig` command starts a held block attack and returns control to the host. Use `dig stop` to release it. The command mines one block and also releases when that block leaves the block view ray or reach. The Commands module owns that work, observes later failures through `CommandFaulted` and the client output sink, and awaits cancellation during disposal. The game API `World.DigBlockAsync` still awaits the operation and accepts caller cancellation.
 
+From Minecraft 1.21.11, piercing weapons follow their charged attack behavior. Holding the attack does not repeatedly mine the block. Switching to a regular tool allows ordinary mining to resume. The stop command releases the held input; vanilla can defer the mining-stop packet while a piercing weapon remains equipped.
+
 A host can implement `IHostUi` for images, inventory views, books, dialogs and manuals. Report unsupported views through their documented return values. Keep framework objects within your application.
 
 See [configuration and host interaction](client/04-host.md) for practical examples.
