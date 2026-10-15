@@ -76,7 +76,7 @@ public sealed class DigCommand : CommandBase
             return ctx.Result.Fail(McStrings.Get("cmd.dig.too_far"));
 
         // Legacy Dig.cs:79: the look-at form reports the block's own coordinates, not the centred ones.
-        return Send(ctx, h.Position, h.BlockId, h.Position.X, h.Position.Y, h.Position.Z);
+        return Send(ctx, h.Position, h.Face, h.BlockId, h.Position.X, h.Position.Y, h.Position.Z);
     }
 
     private int DigAt(CommandContext ctx, CommandLocation location)
@@ -99,16 +99,21 @@ public sealed class DigCommand : CommandBase
         if (info.IsAir)
             return ctx.Result.Fail(McStrings.Get("cmd.dig.no_block"));
 
-        // Legacy Dig.cs:64: the coordinate form reports the centred position (X/Z centred, Y untouched).
-        return Send(ctx, block, info.BlockId, Math.Floor(target.X) + 0.5, target.Y, Math.Floor(target.Z) + 0.5);
+        // Aim through the same view ray as the look-at form so the transmitted face matches the visible surface and an intervening block prevents the dig.
+        ctx.Run(ct => ctx.Game.Movement.LookAtAsync(block.Center, ct));
+        BlockRaycastHit? hit = ctx.Run(ct => ctx.Game.World.RaycastAsync(4.5, false, ct));
+        if (hit is not { } h || h.Position != block)
+            return ctx.Result.Fail(McStrings.Get("cmd.dig.too_far"));
+
+        // Preserve the coordinate form's reported position (X/Z centred, Y untouched).
+        return Send(ctx, block, h.Face, info.BlockId, Math.Floor(target.X) + 0.5, target.Y, Math.Floor(target.Z) + 0.5);
     }
 
-    private static int Send(CommandContext ctx, BlockPos block, string blockId, double reportX, double reportY, double reportZ)
+    private static int Send(CommandContext ctx, BlockPos block, Direction face, string blockId, double reportX, double reportY, double reportZ)
     {
         try
         {
-            // Direction.Down is the face the legacy command always dug against (Dig.cs:61 and :81).
-            _ = ctx.Run(ct => ctx.Game.World.DigBlockAsync(block, Direction.Down, ct));
+            _ = ctx.Run(ct => ctx.Game.World.DigBlockAsync(block, face, ct));
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

@@ -255,7 +255,7 @@ public sealed class WorldApi
                 return (BlockRaycastHit?)null;
 
             BlockSnapshot block = await client.Snapshots.BlockAsync(h.BlockPos, ct).ConfigureAwait(false);
-            return new BlockRaycastHit(h.BlockPos, h.Face, h.Point, h.Distance, block.State.StateId, block.State.Block.Id.ToString());
+            return new BlockRaycastHit(h.BlockPos, h.Face, h.Point, h.Distance, block.State.StateId, block.State.Block.Id.ToString()) { InsideBlock = h.InsideBlock };
         });
     }
 
@@ -348,6 +348,14 @@ public sealed class WorldApi
     public Task PlaceBlockAsync(
         BlockPos position, Direction face, Vec3d cursor, Hand hand = Hand.Main, CancellationToken ct = default)
         => _session.RunAsync(client => client.Actions.Interaction.PlaceBlockAsync(position, face, cursor, hand, false, ct));
+
+    /// <summary>Uses the held item at a measured raycast hit, retaining the hit point, face and native origin-inside flag. Completion confirms the send and applicable action acknowledgement.</summary>
+    public Task PlaceBlockHitAsync(BlockRaycastHit hit, Hand hand = Hand.Main, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(hit);
+        Vec3d cursor = hit.Point - new Vec3d(hit.Position.X, hit.Position.Y, hit.Position.Z);
+        return _session.RunAsync(client => client.Actions.Interaction.PlaceBlockAsync(hit.Position, hit.Face, cursor, hand, hit.InsideBlock, ct));
+    }
 
     /// <summary>
     /// Uses the held item in the air (right-click with no target).
@@ -510,7 +518,11 @@ public sealed record BlockInfo(
 
 /// <summary>The first block a view raycast entered.</summary>
 public sealed record BlockRaycastHit(
-    BlockPos Position, Direction Face, Vec3d Point, double Distance, int StateId, string BlockId);
+    BlockPos Position, Direction Face, Vec3d Point, double Distance, int StateId, string BlockId)
+{
+    /// <summary>Whether the native voxel-shape ray probe began inside the targeted outline.</summary>
+    public bool InsideBlock { get; init; }
+}
 
 /// <summary>Server-reported weather.</summary>
 /// <param name="RainLevel">The rain level, 0 (clear) to 1, vanilla-mapped from the game events.</param>
