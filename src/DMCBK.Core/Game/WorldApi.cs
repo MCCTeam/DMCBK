@@ -289,7 +289,7 @@ public sealed class WorldApi
             if (!client.State.HasWorld || client.Session is null)
                 return true;
 
-            Vec3d eye = PlayerReach.EyePosition(client.State.Self.Position);
+            Vec3d eye = client.SelfEyePosition;
             IBlockShapeSource shapes = JavaGameData.BlockShapes(client.Session.Version.Version.Protocol);
             return !IsOccluded(client.State.World, eye, targetFeet, shapes);
         }, ct);

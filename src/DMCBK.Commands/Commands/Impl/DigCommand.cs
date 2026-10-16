@@ -108,7 +108,7 @@ public sealed class DigCommand : CommandBase, IAsyncDisposable
         Vec3d target = location.ToAbsolute(pose.Position, pose.Yaw, pose.Pitch);
 
         // Legacy Dig.cs:57-58: eye-to-target squared distance against a flat 25, measured on the requested (unfloored) coordinates.
-        if ((target - PlayerReach.EyePosition(pose.Position)).LengthSqr() > 25)
+        if ((target - pose.EyePosition).LengthSqr() > 25)
             return ctx.Result.Fail(McStrings.Get("cmd.dig.too_far"));
 
         BlockPos block = BlockPos.Containing(target);

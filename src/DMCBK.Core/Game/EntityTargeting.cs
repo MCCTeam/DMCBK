@@ -12,7 +12,7 @@ public static class EntityTargeting
     /// </summary>
     public static bool IsInFront(PlayerPose self, Vec3d target)
     {
-        Vec3d eye = PlayerReach.EyePosition(self.Position);
+        Vec3d eye = self.EyePosition;
         Vec3d delta = target.Subtract(eye);
         if (delta.LengthSqr() < 1e-9)
             return true;

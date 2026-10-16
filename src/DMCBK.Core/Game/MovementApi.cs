@@ -1,4 +1,5 @@
 using Umpk.Client.Navigation;
+using Umpk.Game.Players;
 using Umpk.Geometry;
 using Umpk.Pathfinding;
 using Umpk.Pathfinding.Goals;
@@ -78,7 +79,7 @@ public sealed class MovementApi
         => _session.ReadAsync(client =>
         {
             var self = client.State.Self;
-            return new PlayerPose(self.Position, self.Yaw, self.Pitch, self.OnGround, self.Sneaking, self.Sprinting);
+            return new PlayerPose(self.Position, self.Yaw, self.Pitch, self.OnGround, self.Sneaking, self.Sprinting) { EyeHeight = client.SelfEyeHeight };
         }, ct);
 
     /// <summary>
@@ -106,16 +107,7 @@ public sealed class MovementApi
 
     /// <summary>Rotates to face a world position without sending a standalone packet.</summary>
     public Task LookAt(Vec3d target, CancellationToken ct = default)
-        => _session.RunAsync(client =>
-        {
-            Vec3d eye = client.State.Self.Position.Add(0, 1.62, 0);
-            Vec3d delta = target.Subtract(eye);
-            double h = Math.Sqrt(delta.X * delta.X + delta.Z * delta.Z);
-            float yaw = (float)(Math.Atan2(-delta.X, delta.Z) * 180.0 / Math.PI);
-            float pitch = (float)(-Math.Atan2(delta.Y, h) * 180.0 / Math.PI);
-            client.Actions.Movement.SetRotation(yaw, pitch);
-            return Task.CompletedTask;
-        });
+        => _session.RunAsync(client => client.Actions.Movement.LookAtLocalAsync(target, ct));
 
     /// <summary>Toggles the sneak input state and notifies the server.</summary>
     public Task SetSneakingAsync(bool sneaking, CancellationToken ct = default)
@@ -143,4 +135,11 @@ public sealed class MovementApi
 /// <param name="OnGround">Whether the player is on the ground.</param>
 /// <param name="Sneaking">Whether the sneak input is held.</param>
 /// <param name="Sprinting">Whether the sprint input is held.</param>
-public sealed record PlayerPose(Vec3d Position, float Yaw, float Pitch, bool OnGround, bool Sneaking, bool Sprinting);
+public sealed record PlayerPose(Vec3d Position, float Yaw, float Pitch, bool OnGround, bool Sneaking, bool Sprinting)
+{
+    /// <summary>The observed pose eye height, or standing height when physics is unavailable.</summary>
+    public double EyeHeight { get; init; } = PlayerReach.StandingEyeHeight;
+
+    /// <summary>The eye position at these feet coordinates and the captured eye height.</summary>
+    public Vec3d EyePosition => Position.Add(0, EyeHeight, 0);
+}
