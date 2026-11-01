@@ -17,9 +17,6 @@ public sealed class LookCommand : CommandBase
     /// <summary>The legacy inspection range of the bare <c>look</c> command (Look.cs:74).</summary>
     private const double MaxDistance = 8.0;
 
-    /// <summary>The legacy eye offset above the feet position (<c>Location.EyesLocation</c>, Location.cs:299-302).</summary>
-    private const double EyeHeight = 1.62;
-
     /// <inheritdoc/>
     public override string CmdName => "look";
 
@@ -102,7 +99,7 @@ public sealed class LookCommand : CommandBase
         if (hit is not { } block)
             return ctx.Result.Fail(McStrings.Format("cmd.look.noinspection", MaxDistance));
 
-        Vec3d current = ctx.Run(ct => ctx.Game.Movement.GetPoseAsync(ct)).Position;
+        PlayerPose current = ctx.Run(ct => ctx.Game.Movement.GetPoseAsync(ct));
 
         // Legacy Location.ToCenter() (Location.cs:202-205) centres X and Z only; Y stays the block's own.
         var targetCenter = new Vec3d(block.Position.X + 0.5, block.Position.Y, block.Position.Z + 0.5);
@@ -113,8 +110,8 @@ public sealed class LookCommand : CommandBase
             block.Position.X,
             block.Position.Y,
             block.Position.Z,
-            current.Subtract(targetCenter).Length(),
-            current.Add(0, EyeHeight, 0).Subtract(targetCenter).Length()));
+            current.Position.Subtract(targetCenter).Length(),
+            current.EyePosition.Subtract(targetCenter).Length()));
     }
 
     /// <summary>

@@ -16,7 +16,7 @@ namespace DMCBK.Core.Commands.Impl;
 ///
 /// <para>
 /// The bare form is the legacy one and it is not a plain "use in the air": with no hand named it prefers an off-hand food over a non-food main hand, and otherwise it uses the item ON the block in front of it when the view raycast finds one (UseItem.cs:70-95).
-/// Both branches swing the arm, as legacy did.
+/// Block use preserves the eye-ray hit. UMPK chooses the animation from the interaction result.
 /// </para>
 /// </summary>
 public sealed class UseItemCommand : CommandBase
@@ -122,7 +122,7 @@ public sealed class UseItemCommand : CommandBase
             BlockRaycastHit? hit = ctx.Run(ct => ctx.Game.World.RaycastAsync(4.5, false, ct));
             if (hit is { } h)
             {
-                UseOnBlock(ctx, h.Position, hand);
+                UseOnBlock(ctx, h, hand);
                 return ctx.Result.Ok(McStrings.Get("cmd.useitem.use"));
             }
         }
@@ -140,21 +140,18 @@ public sealed class UseItemCommand : CommandBase
             return ctx.Result.Fail(WorldCommandText.NotConnected(ctx));
 
         PlayerPose pose = ctx.Run(ct => ctx.Game.Movement.GetPoseAsync(ct));
-        UseOnBlock(ctx, BlockPos.Containing(location.ToAbsolute(pose.Position, pose.Yaw, pose.Pitch)), hand);
+        BlockPos block = BlockPos.Containing(location.ToAbsolute(pose.Position, pose.Yaw, pose.Pitch));
+        ctx.Run(ct => ctx.Game.Movement.LookAtAsync(block.Center, ct));
+        BlockRaycastHit? hit = ctx.Run(ct => ctx.Game.World.RaycastAsync(4.5, false, ct));
+        if (hit is not { } reached || reached.Position != block)
+            return ctx.Result.Fail();
+        UseOnBlock(ctx, reached, hand);
         return ctx.Result.Ok(McStrings.Get("cmd.useitem.use"));
     }
 
-    /// <summary>
-    /// Legacy UseItem.cs:87-89 and :105-107: look at the block, place/use against its top face, swing.
-    /// The face is <see cref="Direction.Up"/> in both legacy call sites regardless of where the player stands, so the cursor is the top-face centre.
-    /// </summary>
-    private static void UseOnBlock(CommandContext ctx, BlockPos block, Hand hand)
-    {
-        ctx.Run(ct => ctx.Game.Movement.LookAtAsync(WorldCommandText.BlockCenter(block), ct));
-        ctx.Run(ct => ctx.Game.World.PlaceBlockAsync(
-            block, Direction.Up, WorldCommandText.FaceHitCursor(Direction.Up), hand, ct));
-        ctx.Run(ct => ctx.Game.Movement.SwingAsync(hand == Hand.Main, ct));
-    }
+    /// <summary>Sends the eye-ray hit through the interaction API, which owns use and animation ordering.</summary>
+    private static void UseOnBlock(CommandContext ctx, BlockRaycastHit hit, Hand hand)
+        => ctx.Run(ct => ctx.Game.World.PlaceBlockHitAsync(hit, hand, ct));
 
     /// <summary>
     /// Legacy UseItem.cs:59-72: with no hand named, an off-hand food beats a main hand that is not food.

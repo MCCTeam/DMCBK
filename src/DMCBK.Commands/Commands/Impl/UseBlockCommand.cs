@@ -15,7 +15,7 @@ namespace DMCBK.Core.Commands.Impl;
 /// The <c>useblock</c> command: right-click (use) a block at a coordinate.
 ///
 /// <para>
-/// Legacy aimed at the face nearest the player and turned to look at the block first (Useblock.cs:53-56), both of which decide what the server does with the interaction, so both are restored here.
+/// Uses the surface and hit point reached by the player's eye ray after turning toward the requested block.
 /// </para>
 /// </summary>
 public sealed class UseBlockCommand : CommandBase
@@ -72,14 +72,19 @@ public sealed class UseBlockCommand : CommandBase
         PlayerPose pose = ctx.Run(ct => ctx.Game.Movement.GetPoseAsync(ct));
         BlockPos block = BlockPos.Containing(location.ToAbsolute(pose.Position, pose.Yaw, pose.Pitch));
         Vec3d center = WorldCommandText.BlockCenter(block);
-        Direction face = FaceNearestPlayer(pose.Position, center);
 
         bool used;
         try
         {
-            ctx.Run(ct => ctx.Game.Movement.LookAtAsync(center, ct));
-            ctx.Run(ct => ctx.Game.World.PlaceBlockAsync(block, face, WorldCommandText.FaceHitCursor(face), hand, ct));
-            used = true;
+            ctx.Run(ct => ctx.Game.Movement.LookAtAsync(block.Center, ct));
+            BlockRaycastHit? hit = ctx.Run(ct => ctx.Game.World.RaycastAsync(4.5, false, ct));
+            if (hit is { } h && h.Position == block)
+            {
+                ctx.Run(ct => ctx.Game.World.PlaceBlockHitAsync(h, hand, ct));
+                used = true;
+            }
+            else
+                used = false;
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
@@ -91,25 +96,4 @@ public sealed class UseBlockCommand : CommandBase
         return used ? ctx.Result.Ok(message) : ctx.Result.Fail(message);
     }
 
-    /// <summary>
-    /// The face of the block that points at the player, the port of legacy <c>Useblock.GetFaceNearestPlayer</c> (Useblock.cs:60-77).
-    /// </summary>
-    internal static Direction FaceNearestPlayer(Vec3d playerPosition, Vec3d blockCenter)
-    {
-        double dx = playerPosition.X - blockCenter.X;
-        double dy = playerPosition.Y - blockCenter.Y;
-        double dz = playerPosition.Z - blockCenter.Z;
-
-        double absX = Math.Abs(dx);
-        double absY = Math.Abs(dy);
-        double absZ = Math.Abs(dz);
-
-        if (absX >= absY && absX >= absZ)
-            return dx >= 0 ? Direction.East : Direction.West;
-
-        if (absY >= absZ)
-            return dy >= 0 ? Direction.Up : Direction.Down;
-
-        return dz >= 0 ? Direction.South : Direction.North;
-    }
 }

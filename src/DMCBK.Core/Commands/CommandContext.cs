@@ -75,6 +75,8 @@ public sealed class CommandContext : ICommandSource
     /// <summary>The mutable result the command sets; read by the command service after dispatch.</summary>
     public CmdResult Result { get; } = new();
 
+    internal Action<Exception>? ReportBackgroundFault { get; set; }
+
     /// <summary>True when the client is in a live play session.</summary>
     public bool InSession => Client.Status == ClientStatus.Playing;
 

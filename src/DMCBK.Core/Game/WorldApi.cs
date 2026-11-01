@@ -255,7 +255,7 @@ public sealed class WorldApi
                 return (BlockRaycastHit?)null;
 
             BlockSnapshot block = await client.Snapshots.BlockAsync(h.BlockPos, ct).ConfigureAwait(false);
-            return new BlockRaycastHit(h.BlockPos, h.Face, h.Point, h.Distance, block.State.StateId, block.State.Block.Id.ToString());
+            return new BlockRaycastHit(h.BlockPos, h.Face, h.Point, h.Distance, block.State.StateId, block.State.Block.Id.ToString()) { InsideBlock = h.InsideBlock };
         });
     }
 
@@ -289,7 +289,7 @@ public sealed class WorldApi
             if (!client.State.HasWorld || client.Session is null)
                 return true;
 
-            Vec3d eye = PlayerReach.EyePosition(client.State.Self.Position);
+            Vec3d eye = client.SelfEyePosition;
             IBlockShapeSource shapes = JavaGameData.BlockShapes(client.Session.Version.Version.Protocol);
             return !IsOccluded(client.State.World, eye, targetFeet, shapes);
         }, ct);
@@ -340,6 +340,10 @@ public sealed class WorldApi
     public Task<DigOutcome> DigBlockAsync(BlockPos position, Direction face = Direction.Up, CancellationToken ct = default)
         => _session.RunAsync(client => client.Actions.Interaction.DigBlockVerifiedAsync(position, face, confirmationWindow: null, ct));
 
+    /// <summary>Mines one block while it remains under the block view ray, releasing the attack if the view or reach changes. Reports the server's observed result after mining completes.</summary>
+    public Task<DigOutcome> DigBlockInViewAsync(BlockPos position, double maxDistance = PlayerReach.SurvivalBlockReach, CancellationToken ct = default)
+        => _session.RunAsync(client => client.Actions.Interaction.DigBlockInViewVerifiedAsync(position, maxDistance, confirmationWindow: null, ct));
+
     /// <summary>
     /// Places / uses the held item against a block face at a hit position.
     /// Completion is the send (plus the 1.19+ action acknowledgement where the version has one), NOT the effect: a use-on-block is whatever the target block decides it is, and vanilla reports nothing back that says which of "opened a container", "flipped a lever", "planted a crop", "placed a block" and "did nothing at all" happened.
@@ -348,6 +352,14 @@ public sealed class WorldApi
     public Task PlaceBlockAsync(
         BlockPos position, Direction face, Vec3d cursor, Hand hand = Hand.Main, CancellationToken ct = default)
         => _session.RunAsync(client => client.Actions.Interaction.PlaceBlockAsync(position, face, cursor, hand, false, ct));
+
+    /// <summary>Uses the held item at a measured raycast hit, retaining the hit point, face and native origin-inside flag. Completion confirms the send and applicable action acknowledgement.</summary>
+    public Task PlaceBlockHitAsync(BlockRaycastHit hit, Hand hand = Hand.Main, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(hit);
+        Vec3d cursor = hit.Point - new Vec3d(hit.Position.X, hit.Position.Y, hit.Position.Z);
+        return _session.RunAsync(client => client.Actions.Interaction.PlaceBlockAsync(hit.Position, hit.Face, cursor, hand, hit.InsideBlock, ct));
+    }
 
     /// <summary>
     /// Uses the held item in the air (right-click with no target).
@@ -510,7 +522,11 @@ public sealed record BlockInfo(
 
 /// <summary>The first block a view raycast entered.</summary>
 public sealed record BlockRaycastHit(
-    BlockPos Position, Direction Face, Vec3d Point, double Distance, int StateId, string BlockId);
+    BlockPos Position, Direction Face, Vec3d Point, double Distance, int StateId, string BlockId)
+{
+    /// <summary>Whether the native voxel-shape ray probe began inside the targeted outline.</summary>
+    public bool InsideBlock { get; init; }
+}
 
 /// <summary>Server-reported weather.</summary>
 /// <param name="RainLevel">The rain level, 0 (clear) to 1, vanilla-mapped from the game events.</param>

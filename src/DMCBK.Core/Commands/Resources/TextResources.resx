@@ -528,4 +528,13 @@ Try this: {0}</value>
   <data name="cmd.scripts.command_already_registered" xml:space="preserve">
     <value>Command '/{0}' is already registered. Rename the script command.</value>
   </data>
+  <data name="command.dig.not_running" xml:space="preserve">
+    <value>There is no active block attack.</value>
+  </data>
+  <data name="command.dig.already_running" xml:space="preserve">
+    <value>A block attack is already running. Use {0}dig stop to release it.</value>
+  </data>
+  <data name="command.dig.stop_help" xml:space="preserve">
+    <value>release the current block attack</value>
+  </data>
 </root>

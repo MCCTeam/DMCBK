@@ -13,6 +13,10 @@ internal static class CommandStrings
     private static string F(string format, params object?[] args)
         => string.Format(CultureInfo.InvariantCulture, format, args);
 
+    public static string DigNotRunning => TextResources.Get("command.dig.not_running");
+    public static string DigStopHelp => TextResources.Get("command.dig.stop_help");
+    public static string DigAlreadyRunning(string prefix) => F(TextResources.Get("command.dig.already_running"), prefix);
+
     public static string GeneralFail => TextResources.Get("command.text.literal_794548f29d31");
     public static string NeedTerrain => TextResources.Get("command.text.literal_bc7fe3c02244");
     public static string NeedInventory => TextResources.Get("command.text.literal_dbc5224cea5d");

@@ -20,7 +20,7 @@ namespace DMCBK.Core.Commands;
 /// UMPK owns all unregistration itself (dispose a scope, it rebuilds the dispatcher from the surviving scopes); this class does none of that bookkeeping anymore.
 /// </para>
 /// </summary>
-public sealed class CommandService : ICommandDispatcher
+public sealed class CommandService : ICommandDispatcher, IAsyncDisposable
 {
     private readonly Client _client;
     private readonly ICommandOutput _output;
@@ -32,6 +32,7 @@ public sealed class CommandService : ICommandDispatcher
     private readonly UmpkCommands.CommandService<CommandContext> _service = new();
     private readonly ICommandRegistrationScope<CommandContext> _hostScope;
     private readonly object _gate = new();
+    private readonly DigCommand _digCommand = new();
 
     private DmcbkConfiguration? _config;
     private char _prefix;
@@ -357,6 +358,7 @@ public sealed class CommandService : ICommandDispatcher
     /// </summary>
     private async Task DispatchCoreAsync(string command, CommandContext ctx, CancellationToken ct)
     {
+        ctx.ReportBackgroundFault = error => RaiseCommandFaulted(command, error);
         using IDisposable culture = DMCBK.Core.Localization.UiCulture.Enter(_client.UiCulture);
         try
         {
@@ -805,7 +807,7 @@ public sealed class CommandService : ICommandDispatcher
             new MoveCommand(),
             new LookCommand(),
             new BlockInfoCommand(),
-            new DigCommand(),
+            _digCommand,
             new UseBlockCommand(),
             new UseItemCommand(),
             new ChunkCommand(),
@@ -844,4 +846,8 @@ public sealed class CommandService : ICommandDispatcher
 
         _registered.AddRange(commands);
     }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync() => _digCommand.DisposeAsync();
+
 }
